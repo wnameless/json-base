@@ -7,7 +7,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 
 	<name>json-base</name>
-	<description>A set of Java interfaces defines JSON data and decouples JSON implementations such as Jackson, Gson...</description>
+	<description>A set of Java interfaces which decouples JSON implementations such as Jackson, Gson and minimal-json...</description>
 	<url>https://github.com/wnameless/json-base</url>
 
 	<licenses>

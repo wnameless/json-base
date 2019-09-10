@@ -3,10 +3,10 @@
 
 json-base
 =============
-A set of Java interfaces which defines JSON data and decouples JSON implementations such as Jackson, Gson and minimal-json...
+A set of Java interfaces which decouples JSON implementations such as Jackson, Gson and minimal-json...
 
 ## Purpose
-To avoid json conversion between different JSON libararies in any JSON cosuming method by accepting a general JSON data inteface which wraps all kind of common JSON libararies.
+To avoid JSON conversion between different JSON libararies(Jackson, Gson...) in any JSON cosuming Java method by creating generic JSON data intefaces which cover the common JSON data behavior.
 
 ## Maven Repo
 ```xml
@@ -20,31 +20,31 @@ To avoid json conversion between different JSON libararies in any JSON cosuming 
 ## Quick Start
 ```java
 // You can let user to wrap their JSON implementation with JsonValueBase interface
-public void acceptJsonVal(JsonValueBase  val) {
+public void acceptJsonVal(JsonValueBase val) {
 	...
 }
 
-// Or you can accept the GSON JsonElement and wrap it by GsonJsonValue within your labrary
-public void  acceptJsonVal(JsonElement jsonElement) {
+// Or you can accept the Gson JsonElement and wrap it by GsonJsonValue within your library
+public void  acceptGsonVal(JsonElement jsonElement) {
 	JsonValueBase val = new GsonJsonValue(jsonElement);
 	...
 }
 
-// Or you can accept the Jackson JsonNode and wrap it by JacksonJsonValue within your labrary
-public void  acceptJsonVal(JsonNode jsonNode) {
+// Or you can accept the Jackson JsonNode and wrap it by JacksonJsonValue within your library
+public void  acceptJacksonVal(JsonNode jsonNode) {
 	JsonValueBase val = new JacksonJsonValue(jsonNode);
 	...
 }
 
-// Or you can accept the Minimal-JSON JsonValue and wrap it by MinimalJsonValue within your labrary
-public void  acceptJsonVal(JsonValue jsonValue) {
+// Or you can accept the minimal-json JsonValue and wrap it by MinimalJsonValue within your library
+public void  acceptMinimalJsonVal(JsonValue jsonValue) {
 	JsonValueBase val = new MinimalJsonValue(jsonValue);
 	...
 }
 ```
 
 ## Important
-Althought this labrary privides wrappers for GSON, Jackson and minimal-json, you should  include the JSON impletation labrary you used in your dependencies.
+Althought this labrary privides wrappers for Gson, Jackson and minimal-json, you should  include the JSON impletation library you used in your dependencies.
 
 ## JSON data common interfaces
 ### JsonValueBase
