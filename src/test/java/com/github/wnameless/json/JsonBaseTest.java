@@ -15,10 +15,13 @@
  */
 package com.github.wnameless.json;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 
@@ -27,15 +30,19 @@ import com.eclipsesource.json.JsonValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.testing.EqualsTester;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
+import net.sf.rubycollect4j.Ruby;
+
 public class JsonBaseTest {
 
   String str = "text";
   int i = 123;
+  long l = 1234567890;
   double d = 45.67;
   boolean bool = true;
   Object obj = null;
@@ -45,9 +52,9 @@ public class JsonBaseTest {
       setStr(str);
       setNum(new ArrayList<Number>() {
         private static final long serialVersionUID = 1L;
-
         {
           add(i);
+          add(l);
           add(d);
         }
       });
@@ -67,12 +74,24 @@ public class JsonBaseTest {
 
     assertTrue(jsonValue.isObject());
     assertTrue(jsonValue.asObject().get("str").isString());
+    assertEquals(str, jsonValue.asObject().get("str").asString());
     assertTrue(jsonValue.asObject().get("num").isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
     assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
+        0.0);
     assertTrue(jsonValue.asObject().get("bool").isBoolean());
     assertTrue(jsonValue.asObject().get("bool").asBoolean());
     assertTrue(jsonValue.asObject().get("obj").isNull());
+
+    new EqualsTester().addEqualityGroup(jsonValue).testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
+    new EqualsTester()
+        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
+        .testEquals();
   }
 
   @Test
@@ -82,12 +101,24 @@ public class JsonBaseTest {
 
     assertTrue(jsonValue.isObject());
     assertTrue(jsonValue.asObject().get("str").isString());
+    assertEquals(str, jsonValue.asObject().get("str").asString());
     assertTrue(jsonValue.asObject().get("num").isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
     assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
+        0.0);
     assertTrue(jsonValue.asObject().get("bool").isBoolean());
     assertTrue(jsonValue.asObject().get("bool").asBoolean());
     assertTrue(jsonValue.asObject().get("obj").isNull());
+
+    new EqualsTester().addEqualityGroup(jsonValue).testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
+    new EqualsTester()
+        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
+        .testEquals();
   }
 
   @Test
@@ -97,15 +128,27 @@ public class JsonBaseTest {
 
     assertTrue(jsonValue.isObject());
     assertTrue(jsonValue.asObject().get("str").isString());
+    assertEquals(str, jsonValue.asObject().get("str").asString());
     assertTrue(jsonValue.asObject().get("num").isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
     assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
+        0.0);
     assertTrue(jsonValue.asObject().get("bool").isBoolean());
     assertTrue(jsonValue.asObject().get("bool").asBoolean());
     assertTrue(jsonValue.asObject().get("obj").isNull());
+
+    new EqualsTester().addEqualityGroup(jsonValue).testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
+    new EqualsTester()
+        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
+        .testEquals();
   }
 
-  public class JsonObject {
+  public class JsonObject implements Iterable<Entry<String, Object>> {
 
     private String str;
     private List<Number> num;
@@ -142,6 +185,12 @@ public class JsonBaseTest {
 
     public void setObj(Object obj) {
       this.obj = obj;
+    }
+
+    @Override
+    public Iterator<Entry<String, Object>> iterator() {
+      return Ruby.Hash.of("str", str, "num", num, "bool", bool, "obj", obj)
+          .iterator();
     }
 
   }
