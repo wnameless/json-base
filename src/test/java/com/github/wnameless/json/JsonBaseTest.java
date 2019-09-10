@@ -16,6 +16,7 @@
 package com.github.wnameless.json;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -35,8 +36,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
-
-import net.sf.rubycollect4j.Ruby;
 
 public class JsonBaseTest {
 
@@ -148,7 +147,137 @@ public class JsonBaseTest {
         .testEquals();
   }
 
-  public class JsonObject implements Iterable<Entry<String, Object>> {
+  @Test
+  public void testGsonArrayIterable() {
+    Gson gson = new GsonBuilder().serializeNulls().create();
+    JsonElement jsonElement =
+        gson.toJsonTree(jo, new TypeToken<JsonObject>() {}.getType());
+    GsonJsonValue gsonJson = new GsonJsonValue(jsonElement);
+
+    JsonArrayBase<GsonJsonValue> array =
+        gsonJson.asObject().get("num").asArray();
+    Iterator<GsonJsonValue> iter = array.iterator();
+
+    assertEquals(array.get(0), iter.next());
+    assertEquals(array.get(1), iter.next());
+    assertEquals(array.get(2), iter.next());
+    assertFalse(iter.hasNext());
+  }
+
+  @Test
+  public void testGsonObjectIterable() {
+    Gson gson = new GsonBuilder().serializeNulls().create();
+    JsonElement jsonElement =
+        gson.toJsonTree(jo, new TypeToken<JsonObject>() {}.getType());
+    GsonJsonValue jsonValue = new GsonJsonValue(jsonElement);
+    GsonJsonObject gsonObject = jsonValue.asObject();
+
+    Iterator<Entry<String, GsonJsonValue>> iter = gsonObject.iterator();
+
+    Entry<String, GsonJsonValue> element = iter.next();
+    assertEquals("str", element.getKey());
+    assertEquals(gsonObject.get("str"), element.getValue());
+
+    element = iter.next();
+    assertEquals("num", element.getKey());
+    assertEquals(gsonObject.get("num"), element.getValue());
+
+    element = iter.next();
+    assertEquals("bool", element.getKey());
+    assertEquals(gsonObject.get("bool"), element.getValue());
+
+    element = iter.next();
+    assertEquals("obj", element.getKey());
+    assertEquals(gsonObject.get("obj"), element.getValue());
+
+    assertFalse(iter.hasNext());
+  }
+
+  @Test
+  public void testJacksonArrayIterable() {
+    JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
+    JacksonJsonValue jacksonJson = new JacksonJsonValue(jsonNode);
+
+    JsonArrayBase<JacksonJsonValue> array =
+        jacksonJson.asObject().get("num").asArray();
+    Iterator<JacksonJsonValue> iter = array.iterator();
+
+    assertEquals(array.get(0), iter.next());
+    assertEquals(array.get(1), iter.next());
+    assertEquals(array.get(2), iter.next());
+    assertFalse(iter.hasNext());
+  }
+
+  @Test
+  public void testJacksonObjectIterable() {
+    JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
+    JacksonJsonValue jacksonJson = new JacksonJsonValue(jsonNode);
+    JacksonJsonObject jacksonObject = jacksonJson.asObject();
+
+    Iterator<Entry<String, JacksonJsonValue>> iter = jacksonObject.iterator();
+
+    Entry<String, JacksonJsonValue> element = iter.next();
+    assertEquals("str", element.getKey());
+    assertEquals(jacksonObject.get("str"), element.getValue());
+
+    element = iter.next();
+    assertEquals("num", element.getKey());
+    assertEquals(jacksonObject.get("num"), element.getValue());
+
+    element = iter.next();
+    assertEquals("bool", element.getKey());
+    assertEquals(jacksonObject.get("bool"), element.getValue());
+
+    element = iter.next();
+    assertEquals("obj", element.getKey());
+    assertEquals(jacksonObject.get("obj"), element.getValue());
+
+    assertFalse(iter.hasNext());
+  }
+
+  @Test
+  public void testMinimalArrayIterable() throws JsonProcessingException {
+    JsonValue jv = Json.parse(new ObjectMapper().writeValueAsString(jo));
+    MinimalJsonValue minimalJson = new MinimalJsonValue(jv);
+
+    JsonArrayBase<MinimalJsonValue> array =
+        minimalJson.asObject().get("num").asArray();
+    Iterator<MinimalJsonValue> iter = array.iterator();
+
+    assertEquals(array.get(0), iter.next());
+    assertEquals(array.get(1), iter.next());
+    assertEquals(array.get(2), iter.next());
+    assertFalse(iter.hasNext());
+  }
+
+  @Test
+  public void testMinimalObjectIterable() throws JsonProcessingException {
+    JsonValue jv = Json.parse(new ObjectMapper().writeValueAsString(jo));
+    MinimalJsonValue minimalJson = new MinimalJsonValue(jv);
+    MinimalJsonObject minimalObject = minimalJson.asObject();
+
+    Iterator<Entry<String, MinimalJsonValue>> iter = minimalObject.iterator();
+
+    Entry<String, MinimalJsonValue> element = iter.next();
+    assertEquals("str", element.getKey());
+    assertEquals(minimalObject.get("str"), element.getValue());
+
+    element = iter.next();
+    assertEquals("num", element.getKey());
+    assertEquals(minimalObject.get("num"), element.getValue());
+
+    element = iter.next();
+    assertEquals("bool", element.getKey());
+    assertEquals(minimalObject.get("bool"), element.getValue());
+
+    element = iter.next();
+    assertEquals("obj", element.getKey());
+    assertEquals(minimalObject.get("obj"), element.getValue());
+
+    assertFalse(iter.hasNext());
+  }
+
+  public class JsonObject {
 
     private String str;
     private List<Number> num;
@@ -185,12 +314,6 @@ public class JsonBaseTest {
 
     public void setObj(Object obj) {
       this.obj = obj;
-    }
-
-    @Override
-    public Iterator<Entry<String, Object>> iterator() {
-      return Ruby.Hash.of("str", str, "num", num, "bool", bool, "obj", obj)
-          .iterator();
     }
 
   }

@@ -100,7 +100,7 @@ public final class MinimalJsonValue implements JsonValueBase<MinimalJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof GsonJsonValue)) return false;
+    if (!(o instanceof MinimalJsonValue)) return false;
     return Objects.equals(jsonValue, ((MinimalJsonValue) o).jsonValue);
   }
 

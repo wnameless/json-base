@@ -100,7 +100,7 @@ public final class JacksonJsonValue implements JsonValueBase<JacksonJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof GsonJsonValue)) return false;
+    if (!(o instanceof JacksonJsonValue)) return false;
     return Objects.equals(jsonValue, ((JacksonJsonValue) o).jsonValue);
   }
 

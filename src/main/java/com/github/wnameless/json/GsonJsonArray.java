@@ -58,20 +58,20 @@ public final class GsonJsonArray implements JsonArrayBase<GsonJsonValue> {
 
   private class GsonJsonValueIterator implements Iterator<GsonJsonValue> {
 
-    private final Iterator<JsonElement> jsonValueIterator;
+    private final Iterator<JsonElement> jsonElementIterator;
 
-    private GsonJsonValueIterator(Iterator<JsonElement> jsonValueIterator) {
-      this.jsonValueIterator = jsonValueIterator;
+    private GsonJsonValueIterator(Iterator<JsonElement> jsonElementIterator) {
+      this.jsonElementIterator = jsonElementIterator;
     }
 
     @Override
     public boolean hasNext() {
-      return jsonValueIterator.hasNext();
+      return jsonElementIterator.hasNext();
     }
 
     @Override
     public GsonJsonValue next() {
-      return new GsonJsonValue(jsonValueIterator.next());
+      return new GsonJsonValue(jsonElementIterator.next());
     }
 
   }
