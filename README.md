@@ -1,5 +1,5 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless/json-base/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless/json-base)
-[![codecov](https://codecov.io/gh/wnameless/json-flattener/branch/master/graph/badge.svg)](https://codecov.io/gh/wnameless/json-base)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless.json/json-base/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless.json/json-base)
+[![codecov](https://codecov.io/gh/wnameless/json-base/branch/master/graph/badge.svg)](https://codecov.io/gh/wnameless/json-base)
 
 json-base
 =============
@@ -11,7 +11,7 @@ To avoid JSON conversion between different JSON libararies(Jackson, Gson...) in 
 ## Maven Repo
 ```xml
 <dependency>
-	<groupId>com.github.wnameless</groupId>
+	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-base</artifactId>
 	<version>1.0.0</version>
 </dependency>
