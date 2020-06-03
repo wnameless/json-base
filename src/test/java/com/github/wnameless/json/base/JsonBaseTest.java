@@ -13,24 +13,27 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.base;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import com.eclipsesource.json.Json;
-import com.eclipsesource.json.JsonValue;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.wnameless.json.base.GsonJsonObject;
+import com.github.wnameless.json.base.GsonJsonValue;
+import com.github.wnameless.json.base.JacksonJsonObject;
+import com.github.wnameless.json.base.JacksonJsonValue;
+import com.github.wnameless.json.base.JsonArrayBase;
+import com.github.wnameless.json.base.JsonValueBase;
 import com.google.common.testing.EqualsTester;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -120,32 +123,33 @@ public class JsonBaseTest {
         .testEquals();
   }
 
-  @Test
-  public void testMinialJsonValue() throws JsonProcessingException {
-    JsonValue jv = Json.parse(new ObjectMapper().writeValueAsString(jo));
-    jsonValue = new MinimalJsonValue(jv);
-
-    assertTrue(jsonValue.isObject());
-    assertTrue(jsonValue.asObject().get("str").isString());
-    assertEquals(str, jsonValue.asObject().get("str").asString());
-    assertTrue(jsonValue.asObject().get("num").isArray());
-    assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
-    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
-    assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
-    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
-    assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
-    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
-        0.0);
-    assertTrue(jsonValue.asObject().get("bool").isBoolean());
-    assertTrue(jsonValue.asObject().get("bool").asBoolean());
-    assertTrue(jsonValue.asObject().get("obj").isNull());
-
-    new EqualsTester().addEqualityGroup(jsonValue).testEquals();
-    new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
-    new EqualsTester()
-        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
-        .testEquals();
-  }
+  // @Test
+  // public void testMinialJsonValue() throws JsonProcessingException {
+  // JsonValue jv = Json.parse(new ObjectMapper().writeValueAsString(jo));
+  // jsonValue = new MinimalJsonValue(jv);
+  //
+  // assertTrue(jsonValue.isObject());
+  // assertTrue(jsonValue.asObject().get("str").isString());
+  // assertEquals(str, jsonValue.asObject().get("str").asString());
+  // assertTrue(jsonValue.asObject().get("num").isArray());
+  // assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
+  // assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
+  // assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
+  // assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
+  // assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
+  // assertEquals(d,
+  // jsonValue.asObject().get("num").asArray().get(2).asDouble(),
+  // 0.0);
+  // assertTrue(jsonValue.asObject().get("bool").isBoolean());
+  // assertTrue(jsonValue.asObject().get("bool").asBoolean());
+  // assertTrue(jsonValue.asObject().get("obj").isNull());
+  //
+  // new EqualsTester().addEqualityGroup(jsonValue).testEquals();
+  // new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
+  // new EqualsTester()
+  // .addEqualityGroup(jsonValue.asObject().get("num").asArray())
+  // .testEquals();
+  // }
 
   @Test
   public void testGsonArrayIterable() {
@@ -162,6 +166,13 @@ public class JsonBaseTest {
     assertEquals(array.get(1), iter.next());
     assertEquals(array.get(2), iter.next());
     assertFalse(iter.hasNext());
+
+    assertFalse(array.isEmpty());
+    jsonElement = gson.toJsonTree(new ArrayList<>(),
+        new TypeToken<ArrayList<?>>() {}.getType());
+    gsonJson = new GsonJsonValue(jsonElement);
+    array = gsonJson.asArray();
+    assertTrue(array.isEmpty());
   }
 
   @Test
@@ -191,6 +202,13 @@ public class JsonBaseTest {
     assertEquals(gsonObject.get("obj"), element.getValue());
 
     assertFalse(iter.hasNext());
+
+    assertFalse(gsonObject.isEmpty());
+    jsonElement =
+        gson.toJsonTree(new Object(), new TypeToken<Object>() {}.getType());
+    jsonValue = new GsonJsonValue(jsonElement);
+    gsonObject = jsonValue.asObject();
+    assertTrue(gsonObject.isEmpty());
   }
 
   @Test
@@ -206,6 +224,12 @@ public class JsonBaseTest {
     assertEquals(array.get(1), iter.next());
     assertEquals(array.get(2), iter.next());
     assertFalse(iter.hasNext());
+
+    assertFalse(array.isEmpty());
+    jsonNode = new ObjectMapper().valueToTree(new ArrayList<>());
+    jacksonJson = new JacksonJsonValue(jsonNode);
+    array = jacksonJson.asArray();
+    assertTrue(array.isEmpty());
   }
 
   @Test
@@ -233,89 +257,54 @@ public class JsonBaseTest {
     assertEquals(jacksonObject.get("obj"), element.getValue());
 
     assertFalse(iter.hasNext());
+
+    assertFalse(jacksonObject.isEmpty());
+    jsonNode = new ObjectMapper().valueToTree(new HashMap<>());
+    jacksonJson = new JacksonJsonValue(jsonNode);
+    jacksonObject = jacksonJson.asObject();
+    assertTrue(jacksonObject.isEmpty());
   }
 
-  @Test
-  public void testMinimalArrayIterable() throws JsonProcessingException {
-    JsonValue jv = Json.parse(new ObjectMapper().writeValueAsString(jo));
-    MinimalJsonValue minimalJson = new MinimalJsonValue(jv);
-
-    JsonArrayBase<MinimalJsonValue> array =
-        minimalJson.asObject().get("num").asArray();
-    Iterator<MinimalJsonValue> iter = array.iterator();
-
-    assertEquals(array.get(0), iter.next());
-    assertEquals(array.get(1), iter.next());
-    assertEquals(array.get(2), iter.next());
-    assertFalse(iter.hasNext());
-  }
-
-  @Test
-  public void testMinimalObjectIterable() throws JsonProcessingException {
-    JsonValue jv = Json.parse(new ObjectMapper().writeValueAsString(jo));
-    MinimalJsonValue minimalJson = new MinimalJsonValue(jv);
-    MinimalJsonObject minimalObject = minimalJson.asObject();
-
-    Iterator<Entry<String, MinimalJsonValue>> iter = minimalObject.iterator();
-
-    Entry<String, MinimalJsonValue> element = iter.next();
-    assertEquals("str", element.getKey());
-    assertEquals(minimalObject.get("str"), element.getValue());
-
-    element = iter.next();
-    assertEquals("num", element.getKey());
-    assertEquals(minimalObject.get("num"), element.getValue());
-
-    element = iter.next();
-    assertEquals("bool", element.getKey());
-    assertEquals(minimalObject.get("bool"), element.getValue());
-
-    element = iter.next();
-    assertEquals("obj", element.getKey());
-    assertEquals(minimalObject.get("obj"), element.getValue());
-
-    assertFalse(iter.hasNext());
-  }
-
-  public class JsonObject {
-
-    private String str;
-    private List<Number> num;
-    private boolean bool;
-    private Object obj;
-
-    public String getStr() {
-      return str;
-    }
-
-    public void setStr(String str) {
-      this.str = str;
-    }
-
-    public List<Number> getNum() {
-      return num;
-    }
-
-    public void setNum(List<Number> num) {
-      this.num = num;
-    }
-
-    public boolean isBool() {
-      return bool;
-    }
-
-    public void setBool(boolean bool) {
-      this.bool = bool;
-    }
-
-    public Object getObj() {
-      return obj;
-    }
-
-    public void setObj(Object obj) {
-      this.obj = obj;
-    }
-
-  }
+  // @Test
+  // public void testMinimalArrayIterable() throws JsonProcessingException {
+  // JsonValue jv = Json.parse(new ObjectMapper().writeValueAsString(jo));
+  // MinimalJsonValue minimalJson = new MinimalJsonValue(jv);
+  //
+  // JsonArrayBase<MinimalJsonValue> array =
+  // minimalJson.asObject().get("num").asArray();
+  // Iterator<MinimalJsonValue> iter = array.iterator();
+  //
+  // assertEquals(array.get(0), iter.next());
+  // assertEquals(array.get(1), iter.next());
+  // assertEquals(array.get(2), iter.next());
+  // assertFalse(iter.hasNext());
+  // }
+  //
+  // @Test
+  // public void testMinimalObjectIterable() throws JsonProcessingException {
+  // JsonValue jv = Json.parse(new ObjectMapper().writeValueAsString(jo));
+  // MinimalJsonValue minimalJson = new MinimalJsonValue(jv);
+  // MinimalJsonObject minimalObject = minimalJson.asObject();
+  //
+  // Iterator<Entry<String, MinimalJsonValue>> iter = minimalObject.iterator();
+  //
+  // Entry<String, MinimalJsonValue> element = iter.next();
+  // assertEquals("str", element.getKey());
+  // assertEquals(minimalObject.get("str"), element.getValue());
+  //
+  // element = iter.next();
+  // assertEquals("num", element.getKey());
+  // assertEquals(minimalObject.get("num"), element.getValue());
+  //
+  // element = iter.next();
+  // assertEquals("bool", element.getKey());
+  // assertEquals(minimalObject.get("bool"), element.getValue());
+  //
+  // element = iter.next();
+  // assertEquals("obj", element.getKey());
+  // assertEquals(minimalObject.get("obj"), element.getValue());
+  //
+  // assertFalse(iter.hasNext());
+  // }
 
 }

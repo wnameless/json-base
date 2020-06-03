@@ -13,83 +13,86 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.base;
 
 import java.util.Objects;
 
-import com.eclipsesource.json.JsonValue;
+import com.google.gson.JsonElement;
 
-public final class MinimalJsonValue implements JsonValueBase<MinimalJsonValue> {
+public final class GsonJsonValue implements JsonValueBase<GsonJsonValue> {
 
-  private final JsonValue jsonValue;
+  private final JsonElement jsonValue;
 
-  public MinimalJsonValue(JsonValue jsonValue) {
+  public GsonJsonValue(JsonElement jsonValue) {
     this.jsonValue = jsonValue;
   }
 
   @Override
   public boolean isObject() {
-    return jsonValue.isObject();
+    return jsonValue.isJsonObject();
   }
 
   @Override
   public boolean isArray() {
-    return jsonValue.isArray();
+    return jsonValue.isJsonArray();
   }
 
   @Override
   public boolean isNumber() {
-    return jsonValue.isNumber();
+    return jsonValue.isJsonPrimitive()
+        ? jsonValue.getAsJsonPrimitive().isNumber() : false;
   }
 
   @Override
   public boolean isString() {
-    return jsonValue.isString();
+    return jsonValue.isJsonPrimitive()
+        ? jsonValue.getAsJsonPrimitive().isString() : false;
   }
 
   @Override
   public boolean isBoolean() {
-    return jsonValue.isBoolean();
+    return jsonValue.isJsonPrimitive()
+        ? jsonValue.getAsJsonPrimitive().isBoolean() : false;
   }
 
   @Override
   public boolean isNull() {
-    return jsonValue.isNull();
+    return jsonValue.isJsonNull();
   }
 
   @Override
-  public MinimalJsonObject asObject() {
-    return new MinimalJsonObject(jsonValue.asObject());
+  public GsonJsonObject asObject() {
+    return new GsonJsonObject(jsonValue.getAsJsonObject());
   }
 
   @Override
-  public MinimalJsonArray asArray() {
-    return new MinimalJsonArray(jsonValue.asArray());
+  public GsonJsonArray asArray() {
+    return new GsonJsonArray(jsonValue.getAsJsonArray());
   }
 
   @Override
   public int asInt() {
-    return jsonValue.asInt();
+    return jsonValue.getAsInt();
   }
 
   @Override
   public long asLong() {
-    return jsonValue.asLong();
+    return jsonValue.getAsLong();
   }
 
   @Override
   public double asDouble() {
-    return jsonValue.asDouble();
+    return jsonValue.getAsDouble();
   }
 
   @Override
   public String asString() {
-    return jsonValue.asString();
+    return jsonValue.getAsString();
   }
 
   @Override
   public boolean asBoolean() {
-    return jsonValue.asBoolean();
+    return jsonValue.getAsBoolean();
   }
 
   @Override
@@ -100,8 +103,8 @@ public final class MinimalJsonValue implements JsonValueBase<MinimalJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof MinimalJsonValue)) return false;
-    return Objects.equals(jsonValue, ((MinimalJsonValue) o).jsonValue);
+    if (!(o instanceof GsonJsonValue)) return false;
+    return Objects.equals(jsonValue, ((GsonJsonValue) o).jsonValue);
   }
 
   @Override

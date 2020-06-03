@@ -13,28 +13,27 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.base;
 
 import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
 
-import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonObject.Member;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
-public final class MinimalJsonObject
-    implements JsonObjectBase<MinimalJsonValue> {
+public final class GsonJsonObject implements JsonObjectBase<GsonJsonValue> {
 
   private final JsonObject jsonObject;
 
-  public MinimalJsonObject(JsonObject jsonObject) {
+  public GsonJsonObject(JsonObject jsonObject) {
     this.jsonObject = jsonObject;
   }
 
   @Override
-  public MinimalJsonValue get(String name) {
-    return new MinimalJsonValue(jsonObject.get(name));
+  public GsonJsonValue get(String name) {
+    return new GsonJsonValue(jsonObject.get(name));
   }
 
   @Override
@@ -46,7 +45,7 @@ public final class MinimalJsonObject
   public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof JacksonJsonObject)) return false;
-    return Objects.equals(jsonObject, ((MinimalJsonObject) o).jsonObject);
+    return Objects.equals(jsonObject, ((GsonJsonObject) o).jsonObject);
   }
 
   @Override
@@ -55,29 +54,30 @@ public final class MinimalJsonObject
   }
 
   @Override
-  public Iterator<Entry<String, MinimalJsonValue>> iterator() {
-    return new MinimalJsonEntryIterator(jsonObject.iterator());
+  public Iterator<Entry<String, GsonJsonValue>> iterator() {
+    return new GsonJsonEntryIterator(jsonObject.entrySet().iterator());
   }
 
-  private final class MinimalJsonEntryIterator
-      implements Iterator<Entry<String, MinimalJsonValue>> {
+  private final class GsonJsonEntryIterator
+      implements Iterator<Entry<String, GsonJsonValue>> {
 
-    private final Iterator<Member> jsonMemberIterator;
+    private final Iterator<Entry<String, JsonElement>> jsonElementIterator;
 
-    private MinimalJsonEntryIterator(Iterator<Member> jsonMemberIterator) {
-      this.jsonMemberIterator = jsonMemberIterator;
+    private GsonJsonEntryIterator(
+        Iterator<Entry<String, JsonElement>> jsonElementIterator) {
+      this.jsonElementIterator = jsonElementIterator;
     }
 
     @Override
     public boolean hasNext() {
-      return jsonMemberIterator.hasNext();
+      return jsonElementIterator.hasNext();
     }
 
     @Override
-    public Entry<String, MinimalJsonValue> next() {
-      Member member = jsonMemberIterator.next();
-      return new AbstractMap.SimpleImmutableEntry<>(member.getName(),
-          new MinimalJsonValue(member.getValue()));
+    public Entry<String, GsonJsonValue> next() {
+      Entry<String, JsonElement> member = jsonElementIterator.next();
+      return new AbstractMap.SimpleImmutableEntry<>(member.getKey(),
+          new GsonJsonValue(member.getValue()));
     }
 
   }

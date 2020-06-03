@@ -13,34 +13,15 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.base;
 
-public interface JsonValueBase<JV extends JsonValueBase<?>> {
+public interface JsonArrayBase<JV extends JsonValueBase<?>>
+    extends Iterable<JV> {
 
-  public boolean isObject();
+  JV get(int index);
 
-  public boolean isArray();
-
-  public boolean isNumber();
-
-  public boolean isString();
-
-  public boolean isBoolean();
-
-  public boolean isNull();
-
-  public JsonObjectBase<JV> asObject();
-
-  public JsonArrayBase<JV> asArray();
-
-  public int asInt();
-
-  public long asLong();
-
-  public double asDouble();
-
-  public String asString();
-
-  public boolean asBoolean();
+  default boolean isEmpty() {
+    return !iterator().hasNext();
+  }
 
 }

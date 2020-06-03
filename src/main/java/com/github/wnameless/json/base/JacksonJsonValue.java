@@ -13,7 +13,7 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.base;
 
 import java.util.Objects;
 

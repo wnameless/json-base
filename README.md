@@ -3,17 +3,18 @@
 
 json-base
 =============
-A set of Java interfaces which decouples JSON implementations such as Jackson, Gson and minimal-json...
+A set of Java interfaces which decouples JSON implementations such as Jackson and Gson...
 
 ## Purpose
 To avoid JSON conversion between different JSON libararies(Jackson, Gson...) in any JSON cosuming Java method by creating generic JSON data intefaces which cover the common JSON data behavior.
 
+Java 9 Module is supported after v1.1.0, but the minimal Java version is remained Java 8.
 ## Maven Repo
 ```xml
 <dependency>
 	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-base</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 </dependency>
 ```
 
@@ -35,16 +36,10 @@ public void  acceptJacksonVal(JsonNode jsonNode) {
 	JsonValueBase val = new JacksonJsonValue(jsonNode);
 	...
 }
-
-// Or you can accept the minimal-json JsonValue and wrap it by MinimalJsonValue within your library
-public void  acceptMinimalJsonVal(JsonValue jsonValue) {
-	JsonValueBase val = new MinimalJsonValue(jsonValue);
-	...
-}
 ```
 
 ## Important
-Althought this labrary privides wrappers for Gson, Jackson and minimal-json, you should  include the JSON impletation library you used in your dependencies.
+Althought this labrary privides wrappers for Gson and Jackson, you still need to include the JSON implementation library which you are using in your dependencies.
 
 ## JSON data common interfaces
 ### JsonValueBase
@@ -85,9 +80,11 @@ public interface JsonValueBase<JV extends JsonValueBase<?>> {
 public interface JsonArrayBase<JV extends JsonValueBase<?>>
     extends Iterable<JV> {
 
-  public JV get(int index);
+  JV get(int index);
 
-  public Iterator<JV> iterator();
+  default boolean isEmpty() {
+    return !iterator().hasNext();
+  }
 
 }
 
@@ -98,7 +95,11 @@ public interface JsonArrayBase<JV extends JsonValueBase<?>>
 public interface JsonObjectBase<JV extends JsonValueBase<?>>
     extends Iterable<Entry<String, JV>> {
 
-  public JV get(String name);
+  JV get(String name);
+
+  default boolean isEmpty() {
+    return !iterator().hasNext();
+  }
 
 }
 

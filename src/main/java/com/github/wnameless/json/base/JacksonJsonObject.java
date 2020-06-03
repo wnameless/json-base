@@ -13,27 +13,27 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.base;
 
 import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
-public final class GsonJsonObject implements JsonObjectBase<GsonJsonValue> {
+public final class JacksonJsonObject
+    implements JsonObjectBase<JacksonJsonValue> {
 
-  private final JsonObject jsonObject;
+  private final JsonNode jsonObject;
 
-  public GsonJsonObject(JsonObject jsonObject) {
+  public JacksonJsonObject(JsonNode jsonObject) {
     this.jsonObject = jsonObject;
   }
 
   @Override
-  public GsonJsonValue get(String name) {
-    return new GsonJsonValue(jsonObject.get(name));
+  public JacksonJsonValue get(String name) {
+    return new JacksonJsonValue(jsonObject.get(name));
   }
 
   @Override
@@ -45,7 +45,7 @@ public final class GsonJsonObject implements JsonObjectBase<GsonJsonValue> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof JacksonJsonObject)) return false;
-    return Objects.equals(jsonObject, ((GsonJsonObject) o).jsonObject);
+    return Objects.equals(jsonObject, ((JacksonJsonObject) o).jsonObject);
   }
 
   @Override
@@ -54,30 +54,30 @@ public final class GsonJsonObject implements JsonObjectBase<GsonJsonValue> {
   }
 
   @Override
-  public Iterator<Entry<String, GsonJsonValue>> iterator() {
-    return new GsonJsonEntryIterator(jsonObject.entrySet().iterator());
+  public Iterator<Entry<String, JacksonJsonValue>> iterator() {
+    return new JacksonJsonEntryIterator(jsonObject.fields());
   }
 
-  private final class GsonJsonEntryIterator
-      implements Iterator<Entry<String, GsonJsonValue>> {
+  private final class JacksonJsonEntryIterator
+      implements Iterator<Entry<String, JacksonJsonValue>> {
 
-    private final Iterator<Entry<String, JsonElement>> jsonElementIterator;
+    private final Iterator<Entry<String, JsonNode>> jsonNodeIterator;
 
-    private GsonJsonEntryIterator(
-        Iterator<Entry<String, JsonElement>> jsonElementIterator) {
-      this.jsonElementIterator = jsonElementIterator;
+    private JacksonJsonEntryIterator(
+        Iterator<Entry<String, JsonNode>> jsonNodeIterator) {
+      this.jsonNodeIterator = jsonNodeIterator;
     }
 
     @Override
     public boolean hasNext() {
-      return jsonElementIterator.hasNext();
+      return jsonNodeIterator.hasNext();
     }
 
     @Override
-    public Entry<String, GsonJsonValue> next() {
-      Entry<String, JsonElement> member = jsonElementIterator.next();
+    public Entry<String, JacksonJsonValue> next() {
+      Entry<String, JsonNode> member = jsonNodeIterator.next();
       return new AbstractMap.SimpleImmutableEntry<>(member.getKey(),
-          new GsonJsonValue(member.getValue()));
+          new JacksonJsonValue(member.getValue()));
     }
 
   }

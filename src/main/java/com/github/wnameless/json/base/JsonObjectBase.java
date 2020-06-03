@@ -13,13 +13,17 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.base;
 
 import java.util.Map.Entry;
 
 public interface JsonObjectBase<JV extends JsonValueBase<?>>
     extends Iterable<Entry<String, JV>> {
 
-  public JV get(String name);
+  JV get(String name);
+
+  default boolean isEmpty() {
+    return !iterator().hasNext();
+  }
 
 }
