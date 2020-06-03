@@ -1,7 +1,7 @@
 module com.github.wnameless.json.base {
-  requires com.fasterxml.jackson.core;
-  requires com.fasterxml.jackson.databind;
-  requires com.google.gson;
+  requires static com.fasterxml.jackson.core;
+  requires static com.fasterxml.jackson.databind;
+  requires static com.google.gson;
   
   exports com.github.wnameless.json.base;
 }
