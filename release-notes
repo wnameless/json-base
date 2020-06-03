@@ -5,3 +5,6 @@ Version 1.1.0
 + Support Java 9 Module
 + Add isEmpty() to JsonArrayBase and JsonObjectBase
 * Change package name from com.github.wnameless.json to com.github.wnameless.json.base
+
+Version 1.1.1
+* Using "requires static" on Gson and Jackson

@@ -14,7 +14,7 @@ Java 9 Module is supported after v1.1.0, but the minimal Java version is remaine
 <dependency>
 	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-base</artifactId>
-	<version>1.1.0</version>
+	<version>1.1.1</version>
 </dependency>
 ```
 
