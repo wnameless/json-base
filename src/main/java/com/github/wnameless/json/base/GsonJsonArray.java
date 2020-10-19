@@ -21,7 +21,8 @@ import java.util.Objects;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
-public final class GsonJsonArray implements JsonArrayBase<GsonJsonValue> {
+public final class GsonJsonArray
+    implements JsonArrayBase<GsonJsonValue>, Jsonable {
 
   private final JsonArray jsonArray;
 
@@ -74,6 +75,11 @@ public final class GsonJsonArray implements JsonArrayBase<GsonJsonValue> {
       return new GsonJsonValue(jsonElementIterator.next());
     }
 
+  }
+
+  @Override
+  public String toJson() {
+    return toString();
   }
 
 }

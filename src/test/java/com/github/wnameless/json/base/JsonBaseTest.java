@@ -91,6 +91,22 @@ public class JsonBaseTest {
   }
 
   @Test
+  public void testGsonValueToJson() {
+    Gson gson = new GsonBuilder().serializeNulls().create();
+    JsonElement jsonElement =
+        gson.toJsonTree(jo, new TypeToken<JsonObject>() {}.getType());
+    GsonJsonValue jsonValue = new GsonJsonValue(jsonElement);
+    assertEquals(
+        "{\"str\":\"text\",\"num\":[123,1234567890,45.67],\"bool\":true,\"obj\":null}",
+        jsonValue.toJson());
+    assertEquals(
+        "{\"str\":\"text\",\"num\":[123,1234567890,45.67],\"bool\":true,\"obj\":null}",
+        jsonValue.asObject().toJson());
+    assertEquals("[123,1234567890,45.67]",
+        jsonValue.asObject().get("num").asArray().toJson());
+  }
+
+  @Test
   public void testJacksonValue() {
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jsonValue = new JacksonJsonValue(jsonNode);
@@ -115,6 +131,20 @@ public class JsonBaseTest {
     new EqualsTester()
         .addEqualityGroup(jsonValue.asObject().get("num").asArray())
         .testEquals();
+  }
+
+  @Test
+  public void testJacksonValueToJson() {
+    JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
+    JacksonJsonValue jsonValue = new JacksonJsonValue(jsonNode);
+    assertEquals(
+        "{\"str\":\"text\",\"num\":[123,1234567890,45.67],\"bool\":true,\"obj\":null}",
+        jsonValue.toJson());
+    assertEquals(
+        "{\"str\":\"text\",\"num\":[123,1234567890,45.67],\"bool\":true,\"obj\":null}",
+        jsonValue.asObject().toJson());
+    assertEquals("[123,1234567890,45.67]",
+        jsonValue.asObject().get("num").asArray().toJson());
   }
 
   // @Test

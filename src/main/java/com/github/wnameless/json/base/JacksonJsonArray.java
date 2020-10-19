@@ -20,7 +20,8 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public final class JacksonJsonArray implements JsonArrayBase<JacksonJsonValue> {
+public final class JacksonJsonArray
+    implements JsonArrayBase<JacksonJsonValue>, Jsonable {
 
   private final JsonNode jsonArray;
 
@@ -73,6 +74,11 @@ public final class JacksonJsonArray implements JsonArrayBase<JacksonJsonValue> {
       return new JacksonJsonValue(jsonValueIterator.next());
     }
 
+  }
+
+  @Override
+  public String toJson() {
+    return toString();
   }
 
 }

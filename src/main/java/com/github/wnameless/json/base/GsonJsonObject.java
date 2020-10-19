@@ -23,7 +23,8 @@ import java.util.Objects;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public final class GsonJsonObject implements JsonObjectBase<GsonJsonValue> {
+public final class GsonJsonObject
+    implements JsonObjectBase<GsonJsonValue>, Jsonable {
 
   private final JsonObject jsonObject;
 
@@ -80,6 +81,11 @@ public final class GsonJsonObject implements JsonObjectBase<GsonJsonValue> {
           new GsonJsonValue(member.getValue()));
     }
 
+  }
+
+  @Override
+  public String toJson() {
+    return toString();
   }
 
 }

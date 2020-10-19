@@ -19,7 +19,8 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public final class JacksonJsonValue implements JsonValueBase<JacksonJsonValue> {
+public final class JacksonJsonValue
+    implements JsonValueBase<JacksonJsonValue>, Jsonable {
 
   private final JsonNode jsonValue;
 
@@ -107,6 +108,11 @@ public final class JacksonJsonValue implements JsonValueBase<JacksonJsonValue> {
   @Override
   public String toString() {
     return jsonValue.toString();
+  }
+
+  @Override
+  public String toJson() {
+    return toString();
   }
 
 }

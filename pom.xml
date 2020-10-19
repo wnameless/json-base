@@ -1,11 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-base</artifactId>
 	<version>1.1.2-SNAPSHOT</version>
 
 	<name>json-base</name>
-	<description>A set of Java interfaces which decouples JSON implementations such as Jackson, Gson and minimal-json...</description>
+	<description>A set of Java interfaces which decouples JSON implementations such as Jackson and Gson...</description>
 	<url>https://github.com/wnameless/json-base</url>
 
 	<licenses>
@@ -79,10 +81,31 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.6</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- attached to Maven test phase -->
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.2</version>
 				<configuration>
-					<argLine>--add-modules com.google.gson,com.fasterxml.jackson.core,com.fasterxml.jackson.databind</argLine>
+					<argLine>@{argLine} --add-modules com.google.gson,com.fasterxml.jackson.core,com.fasterxml.jackson.databind</argLine>
 				</configuration>
 			</plugin>
 			<plugin>

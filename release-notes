@@ -8,3 +8,6 @@ Version 1.1.0
 
 Version 1.1.1
 * Using "requires static" on Gson and Jackson
+
+Version 1.2.0
++ Add Jsonable interface
