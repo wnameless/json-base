@@ -15,6 +15,9 @@
  */
 package com.github.wnameless.json.base;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 public interface JsonValueBase<JV extends JsonValueBase<?>> {
 
   public boolean isObject();
@@ -42,5 +45,9 @@ public interface JsonValueBase<JV extends JsonValueBase<?>> {
   public String asString();
 
   public boolean asBoolean();
+
+  public BigInteger asBigInteger();
+
+  public BigDecimal asBigDecimal();
 
 }

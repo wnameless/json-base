@@ -15,6 +15,8 @@
  */
 package com.github.wnameless.json.base;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Objects;
 
 import com.google.gson.JsonElement;
@@ -116,6 +118,16 @@ public final class GsonJsonValue
   @Override
   public String toJson() {
     return toString();
+  }
+
+  @Override
+  public BigInteger asBigInteger() {
+    return new BigInteger(jsonValue.toString());
+  }
+
+  @Override
+  public BigDecimal asBigDecimal() {
+    return new BigDecimal(jsonValue.toString());
   }
 
 }
