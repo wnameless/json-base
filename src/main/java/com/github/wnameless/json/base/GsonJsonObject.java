@@ -24,7 +24,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public final class GsonJsonObject
-    implements JsonObjectCore<JsonElement, GsonJsonValue>, Jsonable {
+    implements JsonObjectCore<JsonElement, GsonJsonValue> {
 
   private final JsonObject jsonObject;
 

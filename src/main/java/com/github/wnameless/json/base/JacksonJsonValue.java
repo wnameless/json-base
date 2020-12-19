@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public final class JacksonJsonValue
-    implements JsonValueBase<JacksonJsonValue>, Jsonable {
+    implements JsonValueCore<JsonNode, JacksonJsonValue> {
 
   private final JsonNode jsonValue;
 
@@ -126,7 +126,12 @@ public final class JacksonJsonValue
 
   @Override
   public BigDecimal asBigDecimal() {
-    return new BigDecimal(jsonValue.toString());
+    return jsonValue.decimalValue();
+  }
+
+  @Override
+  public JsonNode getSource() {
+    return jsonValue;
   }
 
 }

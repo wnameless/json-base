@@ -18,7 +18,7 @@ package com.github.wnameless.json.base;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public interface JsonValueBase<JV extends JsonValueBase<?>> {
+public interface JsonValueBase<JVB extends JsonValueBase<?>> extends Jsonable {
 
   public boolean isObject();
 
@@ -32,9 +32,9 @@ public interface JsonValueBase<JV extends JsonValueBase<?>> {
 
   public boolean isNull();
 
-  public JsonObjectBase<JV> asObject();
+  public JsonObjectBase<JVB> asObject();
 
-  public JsonArrayBase<JV> asArray();
+  public JsonArrayBase<JVB> asArray();
 
   public int asInt();
 

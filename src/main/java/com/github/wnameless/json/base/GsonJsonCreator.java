@@ -15,6 +15,7 @@
  */
 package com.github.wnameless.json.base;
 
+import java.io.IOException;
 import java.io.Reader;
 
 import com.google.gson.Gson;
@@ -23,7 +24,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class GsonJsonCreator
-    implements JsonCreator<GsonJsonValue, GsonJsonArray, GsonJsonObject> {
+    implements JsonCreator<JsonElement, GsonJsonValue> {
 
   private final Gson gson;
 
@@ -37,7 +38,7 @@ public class GsonJsonCreator
   }
 
   @Override
-  public GsonJsonValue parse(Reader jsonReader) {
+  public GsonJsonValue parse(Reader jsonReader) throws IOException {
     return new GsonJsonValue(gson.fromJson(jsonReader, JsonElement.class));
   }
 

@@ -15,10 +15,10 @@
  */
 package com.github.wnameless.json.base;
 
-public interface JsonArrayBase<JV extends JsonValueBase<?>>
-    extends Iterable<JV> {
+public interface JsonArrayBase<JVB extends JsonValueBase<?>>
+    extends Iterable<JVB>, Jsonable {
 
-  JV get(int index);
+  JVB get(int index);
 
   default boolean isEmpty() {
     return !iterator().hasNext();

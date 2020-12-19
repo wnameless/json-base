@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 public final class JacksonJsonArray
-    implements JsonArrayCore<JsonNode, JacksonJsonValue>, Jsonable {
+    implements JsonArrayCore<JsonNode, JacksonJsonValue> {
 
   private final ArrayNode jsonArray;
 

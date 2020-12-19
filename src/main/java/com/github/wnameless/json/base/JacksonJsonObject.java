@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public final class JacksonJsonObject
-    implements JsonObjectCore<JsonNode, JacksonJsonValue>, Jsonable {
+    implements JsonObjectCore<JsonNode, JacksonJsonValue> {
 
   private final ObjectNode jsonObject;
 

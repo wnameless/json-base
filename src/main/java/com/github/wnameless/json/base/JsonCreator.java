@@ -15,16 +15,17 @@
  */
 package com.github.wnameless.json.base;
 
+import java.io.IOException;
 import java.io.Reader;
 
-public interface JsonCreator<JV extends JsonValueBase<?>, JA extends JsonArrayBase<?>, JO extends JsonObjectBase<?>> {
+public interface JsonCreator<S, JVB extends JsonValueBase<?>> {
 
-  JV parse(String json);
+  JsonValueCore<S, JVB> parse(String json);
 
-  JV parse(Reader jsonReader);
+  JsonValueCore<S, JVB> parse(Reader jsonReader) throws IOException;
 
-  JA createJsonArray();
+  JsonArrayCore<S, JVB> createJsonArray();
 
-  JO createJsonObject();
+  JsonObjectCore<S, JVB> createJsonObject();
 
 }

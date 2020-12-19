@@ -17,10 +17,10 @@ package com.github.wnameless.json.base;
 
 import java.util.Map.Entry;
 
-public interface JsonObjectBase<JV extends JsonValueBase<?>>
-    extends Iterable<Entry<String, JV>> {
+public interface JsonObjectBase<JVB extends JsonValueBase<?>>
+    extends Iterable<Entry<String, JVB>>, Jsonable {
 
-  JV get(String name);
+  JVB get(String name);
 
   default boolean isEmpty() {
     return !iterator().hasNext();

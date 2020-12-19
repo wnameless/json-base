@@ -15,11 +15,11 @@
  */
 package com.github.wnameless.json.base;
 
-public interface JsonArrayExtra<S, JVE extends JsonValueExtra<S>> {
+public interface JsonArrayExtra<S> {
 
-  void add(JVE jsonValue);
+  void add(JsonValueExtra<S> jsonValue);
 
-  void set(int index, JVE jsonValue);
+  void set(int index, JsonValueExtra<S> jsonValue);
 
   boolean remove(int index);
 

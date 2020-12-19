@@ -22,7 +22,7 @@ import java.util.Objects;
 import com.google.gson.JsonElement;
 
 public final class GsonJsonValue
-    implements JsonValueCore<JsonElement, GsonJsonValue>, Jsonable {
+    implements JsonValueCore<JsonElement, GsonJsonValue> {
 
   private final JsonElement jsonValue;
 

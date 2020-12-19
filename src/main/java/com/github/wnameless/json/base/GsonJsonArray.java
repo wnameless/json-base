@@ -22,7 +22,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 public final class GsonJsonArray
-    implements JsonArrayCore<JsonElement, GsonJsonValue>, Jsonable {
+    implements JsonArrayCore<JsonElement, GsonJsonValue> {
 
   private final JsonArray jsonArray;
 

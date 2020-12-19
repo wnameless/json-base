@@ -19,12 +19,13 @@ import java.io.IOException;
 import java.io.Reader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JacksonJsonCreator implements
-    JsonCreator<JacksonJsonValue, JacksonJsonArray, JacksonJsonObject> {
+public class JacksonJsonCreator
+    implements JsonCreator<JsonNode, JacksonJsonValue> {
 
-  private final ObjectMapper mapper;
+  private ObjectMapper mapper;
 
   public JacksonJsonCreator(ObjectMapper mapper) {
     this.mapper = mapper;
@@ -40,12 +41,8 @@ public class JacksonJsonCreator implements
   }
 
   @Override
-  public JacksonJsonValue parse(Reader jsonReader) {
-    try {
-      return new JacksonJsonValue(mapper.readTree(jsonReader));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+  public JacksonJsonValue parse(Reader jsonReader) throws IOException {
+    return new JacksonJsonValue(mapper.readTree(jsonReader));
   }
 
   @Override
