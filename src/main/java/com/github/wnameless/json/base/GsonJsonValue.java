@@ -22,7 +22,7 @@ import java.util.Objects;
 import com.google.gson.JsonElement;
 
 public final class GsonJsonValue
-    implements JsonValueBase<GsonJsonValue>, Jsonable {
+    implements JsonValueCore<JsonElement, GsonJsonValue>, Jsonable {
 
   private final JsonElement jsonValue;
 
@@ -128,6 +128,11 @@ public final class GsonJsonValue
   @Override
   public BigDecimal asBigDecimal() {
     return new BigDecimal(jsonValue.toString());
+  }
+
+  @Override
+  public JsonElement getSource() {
+    return jsonValue;
   }
 
 }

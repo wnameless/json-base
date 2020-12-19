@@ -21,13 +21,14 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public final class JacksonJsonObject
-    implements JsonObjectBase<JacksonJsonValue>, Jsonable {
+    implements JsonObjectCore<JsonNode, JacksonJsonValue>, Jsonable {
 
-  private final JsonNode jsonObject;
+  private final ObjectNode jsonObject;
 
-  public JacksonJsonObject(JsonNode jsonObject) {
+  public JacksonJsonObject(ObjectNode jsonObject) {
     this.jsonObject = jsonObject;
   }
 
@@ -85,6 +86,21 @@ public final class JacksonJsonObject
   @Override
   public String toJson() {
     return toString();
+  }
+
+  @Override
+  public void set(String name, JsonValueExtra<JsonNode> jsonValue) {
+    jsonObject.set(name, jsonValue.getSource());
+  }
+
+  @Override
+  public boolean remove(String name) {
+    return jsonObject.remove(name) != null;
+  }
+
+  @Override
+  public boolean contains(String name) {
+    return jsonObject.has(name);
   }
 
 }

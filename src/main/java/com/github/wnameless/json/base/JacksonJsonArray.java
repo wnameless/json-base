@@ -19,13 +19,14 @@ import java.util.Iterator;
 import java.util.Objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 public final class JacksonJsonArray
-    implements JsonArrayBase<JacksonJsonValue>, Jsonable {
+    implements JsonArrayCore<JsonNode, JacksonJsonValue>, Jsonable {
 
-  private final JsonNode jsonArray;
+  private final ArrayNode jsonArray;
 
-  public JacksonJsonArray(JsonNode jsonArray) {
+  public JacksonJsonArray(ArrayNode jsonArray) {
     this.jsonArray = jsonArray;
   }
 
@@ -79,6 +80,21 @@ public final class JacksonJsonArray
   @Override
   public String toJson() {
     return toString();
+  }
+
+  @Override
+  public void add(JsonValueExtra<JsonNode> jsonValue) {
+    jsonArray.add(jsonValue.getSource());
+  }
+
+  @Override
+  public void set(int index, JsonValueExtra<JsonNode> jsonValue) {
+    jsonArray.set(index, jsonValue.getSource());
+  }
+
+  @Override
+  public boolean remove(int index) {
+    return jsonArray.remove(index) != null;
   }
 
 }

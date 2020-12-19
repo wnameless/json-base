@@ -22,7 +22,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 public final class GsonJsonArray
-    implements JsonArrayBase<GsonJsonValue>, Jsonable {
+    implements JsonArrayCore<JsonElement, GsonJsonValue>, Jsonable {
 
   private final JsonArray jsonArray;
 
@@ -80,6 +80,21 @@ public final class GsonJsonArray
   @Override
   public String toJson() {
     return toString();
+  }
+
+  @Override
+  public void add(JsonValueExtra<JsonElement> jsonValue) {
+    jsonArray.add(jsonValue.getSource());
+  }
+
+  @Override
+  public void set(int index, JsonValueExtra<JsonElement> jsonValue) {
+    jsonArray.set(index, jsonValue.getSource());
+  }
+
+  @Override
+  public boolean remove(int index) {
+    return jsonArray.remove(index) != null;
   }
 
 }

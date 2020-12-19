@@ -24,7 +24,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public final class GsonJsonObject
-    implements JsonObjectBase<GsonJsonValue>, Jsonable {
+    implements JsonObjectCore<JsonElement, GsonJsonValue>, Jsonable {
 
   private final JsonObject jsonObject;
 
@@ -86,6 +86,21 @@ public final class GsonJsonObject
   @Override
   public String toJson() {
     return toString();
+  }
+
+  @Override
+  public void set(String name, JsonValueExtra<JsonElement> jsonValue) {
+    jsonObject.add(name, jsonValue.getSource());
+  }
+
+  @Override
+  public boolean remove(String name) {
+    return jsonObject.remove(name) != null;
+  }
+
+  @Override
+  public boolean contains(String name) {
+    return jsonObject.has(name);
   }
 
 }

@@ -20,6 +20,8 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public final class JacksonJsonValue
     implements JsonValueBase<JacksonJsonValue>, Jsonable {
@@ -62,12 +64,12 @@ public final class JacksonJsonValue
 
   @Override
   public JacksonJsonObject asObject() {
-    return new JacksonJsonObject(jsonValue);
+    return new JacksonJsonObject((ObjectNode) jsonValue);
   }
 
   @Override
   public JacksonJsonArray asArray() {
-    return new JacksonJsonArray(jsonValue);
+    return new JacksonJsonArray((ArrayNode) jsonValue);
   }
 
   @Override
@@ -119,7 +121,7 @@ public final class JacksonJsonValue
 
   @Override
   public BigInteger asBigInteger() {
-    return new BigInteger(jsonValue.toString());
+    return jsonValue.bigIntegerValue();
   }
 
   @Override
