@@ -21,8 +21,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-public final class JacksonJsonArray
-    implements JsonArrayCore<JsonNode, JacksonJsonValue> {
+public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
 
   private final ArrayNode jsonArray;
 
@@ -83,13 +82,13 @@ public final class JacksonJsonArray
   }
 
   @Override
-  public void add(JsonValueExtra<JsonNode> jsonValue) {
-    jsonArray.add(jsonValue.getSource());
+  public void add(JsonValueExtra jsonValue) {
+    jsonArray.add((JsonNode) jsonValue.getSource());
   }
 
   @Override
-  public void set(int index, JsonValueExtra<JsonNode> jsonValue) {
-    jsonArray.set(index, jsonValue.getSource());
+  public void set(int index, JsonValueExtra jsonValue) {
+    jsonArray.set(index, (JsonNode) jsonValue.getSource());
   }
 
   @Override

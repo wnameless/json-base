@@ -21,8 +21,7 @@ import java.util.Objects;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
-public final class GsonJsonArray
-    implements JsonArrayCore<JsonElement, GsonJsonValue> {
+public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
 
   private final JsonArray jsonArray;
 
@@ -83,13 +82,13 @@ public final class GsonJsonArray
   }
 
   @Override
-  public void add(JsonValueExtra<JsonElement> jsonValue) {
-    jsonArray.add(jsonValue.getSource());
+  public void add(JsonValueExtra jsonValue) {
+    jsonArray.add((JsonElement) jsonValue.getSource());
   }
 
   @Override
-  public void set(int index, JsonValueExtra<JsonElement> jsonValue) {
-    jsonArray.set(index, jsonValue.getSource());
+  public void set(int index, JsonValueExtra jsonValue) {
+    jsonArray.set(index, (JsonElement) jsonValue.getSource());
   }
 
   @Override

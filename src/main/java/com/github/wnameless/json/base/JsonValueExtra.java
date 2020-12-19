@@ -15,8 +15,8 @@
  */
 package com.github.wnameless.json.base;
 
-public interface JsonValueExtra<S> {
+public interface JsonValueExtra {
 
-  S getSource();
+  Object getSource();
 
 }

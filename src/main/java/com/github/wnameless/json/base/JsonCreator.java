@@ -18,14 +18,14 @@ package com.github.wnameless.json.base;
 import java.io.IOException;
 import java.io.Reader;
 
-public interface JsonCreator<S, JVB extends JsonValueBase<?>> {
+public interface JsonCreator<JVB extends JsonValueBase<?>> {
 
-  JsonValueCore<S, JVB> parse(String json);
+  JsonValueCore<JVB> parse(String json);
 
-  JsonValueCore<S, JVB> parse(Reader jsonReader) throws IOException;
+  JsonValueCore<JVB> parse(Reader jsonReader) throws IOException;
 
-  JsonArrayCore<S, JVB> createJsonArray();
+  JsonArrayCore<JVB> createJsonArray();
 
-  JsonObjectCore<S, JVB> createJsonObject();
+  JsonObjectCore<JVB> createJsonObject();
 
 }

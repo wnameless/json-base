@@ -15,9 +15,9 @@
  */
 package com.github.wnameless.json.base;
 
-public interface JsonObjectExtra<S> {
+public interface JsonObjectExtra {
 
-  void set(String name, JsonValueExtra<S> jsonValue);
+  void set(String name, JsonValueExtra jsonValue);
 
   boolean remove(String name);
 

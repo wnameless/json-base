@@ -19,11 +19,9 @@ import java.io.IOException;
 import java.io.Reader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JacksonJsonCreator
-    implements JsonCreator<JsonNode, JacksonJsonValue> {
+public class JacksonJsonCreator implements JsonCreator<JacksonJsonValue> {
 
   private ObjectMapper mapper;
 

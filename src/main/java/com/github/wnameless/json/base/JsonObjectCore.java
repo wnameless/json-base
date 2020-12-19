@@ -15,5 +15,5 @@
  */
 package com.github.wnameless.json.base;
 
-public interface JsonObjectCore<S, JVB extends JsonValueBase<?>>
-    extends JsonObjectBase<JVB>, JsonObjectExtra<S> {}
+public interface JsonObjectCore<JVB extends JsonValueBase<?>>
+    extends JsonObjectBase<JVB>, JsonObjectExtra {}

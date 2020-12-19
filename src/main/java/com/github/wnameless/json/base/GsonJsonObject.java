@@ -23,8 +23,7 @@ import java.util.Objects;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public final class GsonJsonObject
-    implements JsonObjectCore<JsonElement, GsonJsonValue> {
+public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
 
   private final JsonObject jsonObject;
 
@@ -89,8 +88,8 @@ public final class GsonJsonObject
   }
 
   @Override
-  public void set(String name, JsonValueExtra<JsonElement> jsonValue) {
-    jsonObject.add(name, jsonValue.getSource());
+  public void set(String name, JsonValueExtra jsonValue) {
+    jsonObject.add(name, (JsonElement) jsonValue.getSource());
   }
 
   @Override

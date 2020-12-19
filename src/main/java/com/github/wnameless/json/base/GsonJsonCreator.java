@@ -23,8 +23,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class GsonJsonCreator
-    implements JsonCreator<JsonElement, GsonJsonValue> {
+public class GsonJsonCreator implements JsonCreator<GsonJsonValue> {
 
   private final Gson gson;
 

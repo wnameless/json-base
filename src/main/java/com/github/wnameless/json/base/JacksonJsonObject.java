@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public final class JacksonJsonObject
-    implements JsonObjectCore<JsonNode, JacksonJsonValue> {
+    implements JsonObjectCore<JacksonJsonValue> {
 
   private final ObjectNode jsonObject;
 
@@ -89,8 +89,8 @@ public final class JacksonJsonObject
   }
 
   @Override
-  public void set(String name, JsonValueExtra<JsonNode> jsonValue) {
-    jsonObject.set(name, jsonValue.getSource());
+  public void set(String name, JsonValueExtra jsonValue) {
+    jsonObject.set(name, (JsonNode) jsonValue.getSource());
   }
 
   @Override
