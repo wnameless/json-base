@@ -22,4 +22,6 @@ public interface JsonValueCore<JVC extends JsonValueCore<?>>
 
   JsonArrayCore<JVC> asArray();
 
+  JsonValueCore<JVC> asValue();
+
 }

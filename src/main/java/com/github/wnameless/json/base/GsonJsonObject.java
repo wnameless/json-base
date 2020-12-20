@@ -30,12 +30,14 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   private final JsonObject jsonObject;
 
   public GsonJsonObject(JsonObject jsonObject) {
+    if (jsonObject == null) throw new NullPointerException();
     this.jsonObject = jsonObject;
   }
 
   @Override
   public GsonJsonValue get(String name) {
-    return new GsonJsonValue(jsonObject.get(name));
+    JsonElement element = jsonObject.get(name);
+    return element == null ? null : new GsonJsonValue(element);
   }
 
   @Override
@@ -90,6 +92,11 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   }
 
   @Override
+  public int size() {
+    return jsonObject.size();
+  }
+
+  @Override
   public void set(String name, JsonValueExtra jsonValue) {
     jsonObject.add(name, (JsonElement) jsonValue.getSource());
   }
@@ -135,13 +142,18 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   }
 
   @Override
-  public JsonObjectBase<GsonJsonValue> asObject() {
+  public GsonJsonObject asObject() {
     return this;
   }
 
   @Override
-  public JsonArrayBase<GsonJsonValue> asArray() {
+  public GsonJsonArray asArray() {
     throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public GsonJsonValue asValue() {
+    return new GsonJsonValue(jsonObject);
   }
 
   @Override
@@ -182,6 +194,11 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   @Override
   public Object getSource() {
     return jsonObject;
+  }
+
+  @Override
+  public Iterator<String> names() {
+    return jsonObject.keySet().iterator();
   }
 
 }

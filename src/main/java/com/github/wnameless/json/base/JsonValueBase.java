@@ -36,6 +36,8 @@ public interface JsonValueBase<JVB extends JsonValueBase<?>> extends Jsonable {
 
   public JsonArrayBase<JVB> asArray();
 
+  public JsonValueBase<JVB> asValue();
+
   public int asInt();
 
   public long asLong();

@@ -15,10 +15,13 @@
  */
 package com.github.wnameless.json.base;
 
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 public interface JsonObjectBase<JVB extends JsonValueBase<?>>
     extends Iterable<Entry<String, JVB>>, JsonValueBase<JVB> {
+
+  Iterator<String> names();
 
   JVB get(String name);
 

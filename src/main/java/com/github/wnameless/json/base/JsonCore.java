@@ -17,15 +17,22 @@ package com.github.wnameless.json.base;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Map;
 
-public interface JsonCreator<JVC extends JsonValueCore<?>> {
+public interface JsonCore<JVC extends JsonValueCore<?>> {
 
   JsonValueCore<JVC> parse(String json);
 
   JsonValueCore<JVC> parse(Reader jsonReader) throws IOException;
 
+  JsonValueCore<JVC> parse(Object obj);
+
   JsonArrayCore<JVC> createJsonArray();
 
   JsonObjectCore<JVC> createJsonObject();
+
+  JsonValueCore<JVC> createJsonNull();
+
+  Map<String, Object> convertToMap(JsonValueExtra jsonValue);
 
 }

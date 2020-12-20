@@ -17,15 +17,22 @@ package com.github.wnameless.json.base;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JacksonJsonCreator implements JsonCreator<JacksonJsonValue> {
+public class JacksonJsonCore implements JsonCore<JacksonJsonValue> {
 
   private ObjectMapper mapper;
 
-  public JacksonJsonCreator(ObjectMapper mapper) {
+  public JacksonJsonCore() {
+    mapper = new ObjectMapper();
+  }
+
+  public JacksonJsonCore(ObjectMapper mapper) {
     this.mapper = mapper;
   }
 
@@ -44,6 +51,11 @@ public class JacksonJsonCreator implements JsonCreator<JacksonJsonValue> {
   }
 
   @Override
+  public JacksonJsonValue parse(Object obj) {
+    return new JacksonJsonValue(mapper.valueToTree(obj));
+  }
+
+  @Override
   public JacksonJsonArray createJsonArray() {
     return new JacksonJsonArray(mapper.createArrayNode());
   }
@@ -51,6 +63,17 @@ public class JacksonJsonCreator implements JsonCreator<JacksonJsonValue> {
   @Override
   public JacksonJsonObject createJsonObject() {
     return new JacksonJsonObject(mapper.createObjectNode());
+  }
+
+  @Override
+  public JacksonJsonValue createJsonNull() {
+    return new JacksonJsonValue(mapper.nullNode());
+  }
+
+  @Override
+  public Map<String, Object> convertToMap(JsonValueExtra jsonValue) {
+    return mapper.convertValue((JsonNode) jsonValue.getSource(),
+        new TypeReference<Map<String, Object>>() {});
   }
 
 }

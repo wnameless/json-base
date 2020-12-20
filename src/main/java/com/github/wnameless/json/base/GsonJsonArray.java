@@ -28,6 +28,7 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
   private final JsonArray jsonArray;
 
   public GsonJsonArray(JsonArray jsonArray) {
+    if (jsonArray == null) throw new NullPointerException();
     this.jsonArray = jsonArray;
   }
 
@@ -129,13 +130,18 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
   }
 
   @Override
-  public JsonObjectBase<GsonJsonValue> asObject() {
+  public GsonJsonObject asObject() {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public JsonArrayBase<GsonJsonValue> asArray() {
+  public GsonJsonArray asArray() {
     return this;
+  }
+
+  @Override
+  public GsonJsonValue asValue() {
+    return new GsonJsonValue(jsonArray);
   }
 
   @Override

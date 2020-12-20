@@ -31,12 +31,14 @@ public final class JacksonJsonObject
   private final ObjectNode jsonObject;
 
   public JacksonJsonObject(ObjectNode jsonObject) {
+    if (jsonObject == null) throw new NullPointerException();
     this.jsonObject = jsonObject;
   }
 
   @Override
   public JacksonJsonValue get(String name) {
-    return new JacksonJsonValue(jsonObject.get(name));
+    JsonNode node = jsonObject.get(name);
+    return node == null ? null : new JacksonJsonValue(node);
   }
 
   @Override
@@ -91,6 +93,11 @@ public final class JacksonJsonObject
   }
 
   @Override
+  public int size() {
+    return jsonObject.size();
+  }
+
+  @Override
   public void set(String name, JsonValueExtra jsonValue) {
     jsonObject.set(name, (JsonNode) jsonValue.getSource());
   }
@@ -136,13 +143,18 @@ public final class JacksonJsonObject
   }
 
   @Override
-  public JsonObjectBase<JacksonJsonValue> asObject() {
+  public JacksonJsonObject asObject() {
     return this;
   }
 
   @Override
-  public JsonArrayBase<JacksonJsonValue> asArray() {
+  public JacksonJsonArray asArray() {
     throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public JacksonJsonValue asValue() {
+    return new JacksonJsonValue(jsonObject);
   }
 
   @Override
@@ -183,6 +195,11 @@ public final class JacksonJsonObject
   @Override
   public Object getSource() {
     return jsonObject;
+  }
+
+  @Override
+  public Iterator<String> names() {
+    return jsonObject.fieldNames();
   }
 
 }

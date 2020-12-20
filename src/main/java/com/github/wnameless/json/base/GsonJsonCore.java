@@ -17,17 +17,25 @@ package com.github.wnameless.json.base;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
-public class GsonJsonCreator implements JsonCreator<GsonJsonValue> {
+public class GsonJsonCore implements JsonCore<GsonJsonValue> {
 
   private final Gson gson;
 
-  public GsonJsonCreator(Gson gson) {
+  public GsonJsonCore() {
+    gson = new GsonBuilder().serializeNulls().create();
+  }
+
+  public GsonJsonCore(Gson gson) {
     this.gson = gson;
   }
 
@@ -42,6 +50,11 @@ public class GsonJsonCreator implements JsonCreator<GsonJsonValue> {
   }
 
   @Override
+  public GsonJsonValue parse(Object obj) {
+    return new GsonJsonValue(gson.toJsonTree(obj));
+  }
+
+  @Override
   public GsonJsonArray createJsonArray() {
     return new GsonJsonArray(gson.fromJson("[]", JsonArray.class));
   }
@@ -49,6 +62,17 @@ public class GsonJsonCreator implements JsonCreator<GsonJsonValue> {
   @Override
   public GsonJsonObject createJsonObject() {
     return new GsonJsonObject(gson.fromJson("{}", JsonObject.class));
+  }
+
+  @Override
+  public GsonJsonValue createJsonNull() {
+    return new GsonJsonValue(JsonNull.INSTANCE);
+  }
+
+  @Override
+  public Map<String, Object> convertToMap(JsonValueExtra jsonValue) {
+    return gson.fromJson((JsonElement) jsonValue.getSource(),
+        new TypeToken<Map<String, Object>>() {}.getType());
   }
 
 }

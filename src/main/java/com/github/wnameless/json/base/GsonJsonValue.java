@@ -26,6 +26,7 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
   private final JsonElement jsonValue;
 
   public GsonJsonValue(JsonElement jsonValue) {
+    if (jsonValue == null) throw new NullPointerException();
     this.jsonValue = jsonValue;
   }
 
@@ -70,6 +71,11 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
   @Override
   public GsonJsonArray asArray() {
     return new GsonJsonArray(jsonValue.getAsJsonArray());
+  }
+
+  @Override
+  public GsonJsonValue asValue() {
+    return this;
   }
 
   @Override

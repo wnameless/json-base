@@ -28,6 +28,7 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   private final ArrayNode jsonArray;
 
   public JacksonJsonArray(ArrayNode jsonArray) {
+    if (jsonArray == null) throw new NullPointerException();
     this.jsonArray = jsonArray;
   }
 
@@ -129,13 +130,18 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   }
 
   @Override
-  public JsonObjectBase<JacksonJsonValue> asObject() {
+  public JacksonJsonObject asObject() {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public JsonArrayBase<JacksonJsonValue> asArray() {
+  public JacksonJsonArray asArray() {
     return this;
+  }
+
+  @Override
+  public JacksonJsonValue asValue() {
+    return new JacksonJsonValue(jsonArray);
   }
 
   @Override

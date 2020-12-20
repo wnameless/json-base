@@ -28,6 +28,7 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
   private final JsonNode jsonValue;
 
   public JacksonJsonValue(JsonNode jsonValue) {
+    if (jsonValue == null) throw new NullPointerException();
     this.jsonValue = jsonValue;
   }
 
@@ -69,6 +70,11 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
   @Override
   public JacksonJsonArray asArray() {
     return new JacksonJsonArray((ArrayNode) jsonValue);
+  }
+
+  @Override
+  public JacksonJsonValue asValue() {
+    return this;
   }
 
   @Override
