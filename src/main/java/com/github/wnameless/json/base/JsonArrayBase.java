@@ -16,7 +16,7 @@
 package com.github.wnameless.json.base;
 
 public interface JsonArrayBase<JVB extends JsonValueBase<?>>
-    extends Iterable<JVB>, Jsonable {
+    extends Iterable<JVB>, JsonValueBase<JVB> {
 
   JVB get(int index);
 

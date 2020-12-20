@@ -15,6 +15,8 @@
  */
 package com.github.wnameless.json.base;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -94,6 +96,86 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
   @Override
   public boolean remove(int index) {
     return jsonArray.remove(index) != null;
+  }
+
+  @Override
+  public boolean isObject() {
+    return false;
+  }
+
+  @Override
+  public boolean isArray() {
+    return true;
+  }
+
+  @Override
+  public boolean isNumber() {
+    return false;
+  }
+
+  @Override
+  public boolean isString() {
+    return false;
+  }
+
+  @Override
+  public boolean isBoolean() {
+    return false;
+  }
+
+  @Override
+  public boolean isNull() {
+    return false;
+  }
+
+  @Override
+  public JsonObjectBase<GsonJsonValue> asObject() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public JsonArrayBase<GsonJsonValue> asArray() {
+    return this;
+  }
+
+  @Override
+  public int asInt() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public long asLong() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public double asDouble() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public String asString() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean asBoolean() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public BigInteger asBigInteger() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public BigDecimal asBigDecimal() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Object getSource() {
+    return jsonArray;
   }
 
 }

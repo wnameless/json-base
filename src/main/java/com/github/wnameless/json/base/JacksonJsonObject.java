@@ -15,6 +15,8 @@
  */
 package com.github.wnameless.json.base;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -101,6 +103,86 @@ public final class JacksonJsonObject
   @Override
   public boolean contains(String name) {
     return jsonObject.has(name);
+  }
+
+  @Override
+  public boolean isObject() {
+    return true;
+  }
+
+  @Override
+  public boolean isArray() {
+    return false;
+  }
+
+  @Override
+  public boolean isNumber() {
+    return false;
+  }
+
+  @Override
+  public boolean isString() {
+    return false;
+  }
+
+  @Override
+  public boolean isBoolean() {
+    return false;
+  }
+
+  @Override
+  public boolean isNull() {
+    return false;
+  }
+
+  @Override
+  public JsonObjectBase<JacksonJsonValue> asObject() {
+    return this;
+  }
+
+  @Override
+  public JsonArrayBase<JacksonJsonValue> asArray() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public int asInt() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public long asLong() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public double asDouble() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public String asString() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean asBoolean() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public BigInteger asBigInteger() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public BigDecimal asBigDecimal() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Object getSource() {
+    return jsonObject;
   }
 
 }

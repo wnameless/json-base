@@ -18,7 +18,7 @@ package com.github.wnameless.json.base;
 import java.util.Map.Entry;
 
 public interface JsonObjectBase<JVB extends JsonValueBase<?>>
-    extends Iterable<Entry<String, JVB>>, Jsonable {
+    extends Iterable<Entry<String, JVB>>, JsonValueBase<JVB> {
 
   JVB get(String name);
 

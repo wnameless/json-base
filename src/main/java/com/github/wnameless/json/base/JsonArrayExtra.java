@@ -15,7 +15,7 @@
  */
 package com.github.wnameless.json.base;
 
-public interface JsonArrayExtra {
+public interface JsonArrayExtra extends JsonValueExtra {
 
   void add(JsonValueExtra jsonValue);
 
