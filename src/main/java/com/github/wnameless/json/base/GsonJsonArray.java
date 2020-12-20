@@ -178,4 +178,9 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
     return jsonArray;
   }
 
+  @Override
+  public int size() {
+    return jsonArray.size();
+  }
+
 }

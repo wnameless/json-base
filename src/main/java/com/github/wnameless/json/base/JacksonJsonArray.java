@@ -178,4 +178,9 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
     return jsonArray;
   }
 
+  @Override
+  public int size() {
+    return jsonArray.size();
+  }
+
 }
