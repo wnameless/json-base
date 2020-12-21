@@ -27,12 +27,6 @@ public interface JsonCore<JVC extends JsonValueCore<?>> {
 
   JsonValueCore<JVC> parse(Object obj);
 
-  JsonArrayCore<JVC> createJsonArray();
-
-  JsonObjectCore<JVC> createJsonObject();
-
-  JsonValueCore<JVC> createJsonNull();
-
   Map<String, Object> convertToMap(JsonValueExtra jsonValue);
 
 }

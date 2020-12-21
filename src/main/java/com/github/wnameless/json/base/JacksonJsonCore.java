@@ -56,21 +56,6 @@ public class JacksonJsonCore implements JsonCore<JacksonJsonValue> {
   }
 
   @Override
-  public JacksonJsonArray createJsonArray() {
-    return new JacksonJsonArray(mapper.createArrayNode());
-  }
-
-  @Override
-  public JacksonJsonObject createJsonObject() {
-    return new JacksonJsonObject(mapper.createObjectNode());
-  }
-
-  @Override
-  public JacksonJsonValue createJsonNull() {
-    return new JacksonJsonValue(mapper.nullNode());
-  }
-
-  @Override
   public Map<String, Object> convertToMap(JsonValueExtra jsonValue) {
     return mapper.convertValue((JsonNode) jsonValue.getSource(),
         new TypeReference<Map<String, Object>>() {});

@@ -21,10 +21,7 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 public class GsonJsonCore implements JsonCore<GsonJsonValue> {
@@ -52,21 +49,6 @@ public class GsonJsonCore implements JsonCore<GsonJsonValue> {
   @Override
   public GsonJsonValue parse(Object obj) {
     return new GsonJsonValue(gson.toJsonTree(obj));
-  }
-
-  @Override
-  public GsonJsonArray createJsonArray() {
-    return new GsonJsonArray(gson.fromJson("[]", JsonArray.class));
-  }
-
-  @Override
-  public GsonJsonObject createJsonObject() {
-    return new GsonJsonObject(gson.fromJson("{}", JsonObject.class));
-  }
-
-  @Override
-  public GsonJsonValue createJsonNull() {
-    return new GsonJsonValue(JsonNull.INSTANCE);
   }
 
   @Override
