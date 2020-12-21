@@ -12,5 +12,6 @@ Version 1.1.1
 Version 1.2.0
 + Add Jsonable interface
 
-Version 1.2.1
+Version 2.0.0
 + Add #asBigInteger and #asBigDecimal
++ Add JsonValueExtra, JsonValueCore, JsonObjectExtra, JsonObjectCore, JsonArrayExtra, JsonArrayCore, JsonCore
