@@ -85,12 +85,12 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
   }
 
   @Override
-  public void add(JsonValueExtra jsonValue) {
+  public void add(JsonSource jsonValue) {
     jsonArray.add((JsonElement) jsonValue.getSource());
   }
 
   @Override
-  public void set(int index, JsonValueExtra jsonValue) {
+  public void set(int index, JsonSource jsonValue) {
     jsonArray.set(index, (JsonElement) jsonValue.getSource());
   }
 

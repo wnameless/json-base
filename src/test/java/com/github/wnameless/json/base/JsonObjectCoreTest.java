@@ -83,13 +83,37 @@ public class JsonObjectCoreTest {
   }
 
   @Test
-  public void testConstrutorException() {
+  public void testConstructorException() {
     assertThrows(NullPointerException.class, () -> {
       new GsonJsonObject(null);
     });
     assertThrows(NullPointerException.class, () -> {
       new JacksonJsonObject(null);
     });
+  }
+
+  @Test
+  public void testSetRemove() {
+    assertFalse(gsonObj.contains("text"));
+    assertFalse(jacksonObj.contains("text"));
+
+    gsonObj.set("text", new GsonJsonCore().parse("\"str\""));
+    jacksonObj.set("text", new JacksonJsonCore().parse("\"str\""));
+
+    assertEquals(5, gsonObj.size());
+    assertEquals(5, jacksonObj.size());
+
+    assertEquals("str", gsonObj.get("text").asString());
+    assertEquals("str", jacksonObj.get("text").asString());
+
+    assertTrue(gsonObj.contains("text"));
+    assertTrue(jacksonObj.contains("text"));
+
+    gsonObj.remove("text");
+    jacksonObj.remove("text");
+
+    assertFalse(gsonObj.contains("text"));
+    assertFalse(jacksonObj.contains("text"));
   }
 
   @Test

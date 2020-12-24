@@ -16,7 +16,7 @@
 package com.github.wnameless.json.base;
 
 public interface JsonValueCore<JVC extends JsonValueCore<?>>
-    extends JsonValueBase<JVC>, JsonValueExtra {
+    extends JsonValueBase<JVC>, JsonSource {
 
   JsonObjectCore<JVC> asObject();
 

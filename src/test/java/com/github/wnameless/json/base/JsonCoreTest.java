@@ -71,6 +71,16 @@ public class JsonCoreTest {
   JsonValueCore<?> jsonValue;
 
   @Test
+  public void testConstructorException() {
+    assertThrows(NullPointerException.class, () -> {
+      new GsonJsonCore(null);
+    });
+    assertThrows(NullPointerException.class, () -> {
+      new JacksonJsonCore(null);
+    });
+  }
+
+  @Test
   public void testGsonJsonCore() throws IOException {
     Gson gson = new Gson();
     JsonElement jsonElement =

@@ -15,13 +15,12 @@
  */
 package com.github.wnameless.json.base;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,7 +30,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
-public class JsonArrayExtraTest {
+public class JsonValueCoreTest {
 
   String str = "text";
   int i = 123;
@@ -61,45 +60,24 @@ public class JsonArrayExtraTest {
     }
   };
 
-  JsonArrayCore<?> gsonAry;
-  JsonArrayCore<?> jacksonAry;
+  JsonValueCore<?> jsonValue;
 
-  @BeforeEach
-  public void init() {
+  @Test
+  public void testGsonGetSource() {
     Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
         gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
-    gsonAry = new GsonJsonValue(jsonElement).asObject().get("num").asArray();
+    jsonValue = new GsonJsonValue(jsonElement);
 
+    assertSame(jsonElement, jsonValue.getSource());
+  }
+
+  @Test
+  public void testJacksonGetSource() {
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
-    jacksonAry = new JacksonJsonValue(jsonNode).asObject().get("num").asArray();
-  }
+    jsonValue = new JacksonJsonValue(jsonNode);
 
-  @Test
-  public void testAdd() {
-    gsonAry.add(new GsonJsonCore().parse("0"));
-    assertEquals(new GsonJsonCore().parse("0"), gsonAry.get(5));
-
-    jacksonAry.add(new JacksonJsonCore().parse("0"));
-    assertEquals(new JacksonJsonCore().parse("0"), jacksonAry.get(5));
-  }
-
-  @Test
-  public void testSet() {
-    gsonAry.set(4, new GsonJsonCore().parse("0"));
-    assertEquals(new GsonJsonCore().parse("0"), gsonAry.get(4));
-
-    jacksonAry.set(4, new JacksonJsonCore().parse("0"));
-    assertEquals(new JacksonJsonCore().parse("0"), jacksonAry.get(4));
-  }
-
-  @Test
-  public void testRemove() {
-    gsonAry.remove(4);
-    assertEquals(4, gsonAry.size());
-
-    jacksonAry.remove(4);
-    assertEquals(4, jacksonAry.size());
+    assertSame(jsonNode, jsonValue.getSource());
   }
 
 }

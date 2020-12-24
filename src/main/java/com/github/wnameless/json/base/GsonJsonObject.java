@@ -97,7 +97,7 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   }
 
   @Override
-  public void set(String name, JsonValueExtra jsonValue) {
+  public void set(String name, JsonSource jsonValue) {
     jsonObject.add(name, (JsonElement) jsonValue.getSource());
   }
 

@@ -98,7 +98,7 @@ public final class JacksonJsonObject
   }
 
   @Override
-  public void set(String name, JsonValueExtra jsonValue) {
+  public void set(String name, JsonSource jsonValue) {
     jsonObject.set(name, (JsonNode) jsonValue.getSource());
   }
 

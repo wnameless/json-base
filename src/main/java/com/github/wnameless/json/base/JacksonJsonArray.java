@@ -85,12 +85,12 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   }
 
   @Override
-  public void add(JsonValueExtra jsonValue) {
+  public void add(JsonSource jsonValue) {
     jsonArray.add((JsonNode) jsonValue.getSource());
   }
 
   @Override
-  public void set(int index, JsonValueExtra jsonValue) {
+  public void set(int index, JsonSource jsonValue) {
     jsonArray.set(index, (JsonNode) jsonValue.getSource());
   }
 

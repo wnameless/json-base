@@ -83,13 +83,40 @@ public class JsonArrayCoreTest {
   }
 
   @Test
-  public void testConstrutorException() {
+  public void testConstructorException() {
     assertThrows(NullPointerException.class, () -> {
       new GsonJsonArray(null);
     });
     assertThrows(NullPointerException.class, () -> {
       new JacksonJsonArray(null);
     });
+  }
+
+  @Test
+  public void testAdd() {
+    gsonAry.add(new GsonJsonCore().parse("0"));
+    assertEquals(new GsonJsonCore().parse("0"), gsonAry.get(5));
+
+    jacksonAry.add(new JacksonJsonCore().parse("0"));
+    assertEquals(new JacksonJsonCore().parse("0"), jacksonAry.get(5));
+  }
+
+  @Test
+  public void testSet() {
+    gsonAry.set(4, new GsonJsonCore().parse("0"));
+    assertEquals(new GsonJsonCore().parse("0"), gsonAry.get(4));
+
+    jacksonAry.set(4, new JacksonJsonCore().parse("0"));
+    assertEquals(new JacksonJsonCore().parse("0"), jacksonAry.get(4));
+  }
+
+  @Test
+  public void testRemove() {
+    gsonAry.remove(4);
+    assertEquals(4, gsonAry.size());
+
+    jacksonAry.remove(4);
+    assertEquals(4, jacksonAry.size());
   }
 
   @Test

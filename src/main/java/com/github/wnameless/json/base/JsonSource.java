@@ -15,10 +15,8 @@
  */
 package com.github.wnameless.json.base;
 
-public interface JsonObjectExtra extends JsonValueExtra {
+public interface JsonSource {
 
-  void set(String name, JsonValueExtra jsonValue);
-
-  boolean remove(String name);
+  Object getSource();
 
 }
