@@ -31,6 +31,7 @@ public class GsonJsonCore implements JsonCore<GsonJsonValue> {
   }
 
   public GsonJsonCore(Gson gson) {
+    if (gson == null) throw new NullPointerException();
     this.gson = gson;
   }
 

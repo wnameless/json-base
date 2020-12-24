@@ -30,6 +30,7 @@ public class JacksonJsonCore implements JsonCore<JacksonJsonValue> {
   }
 
   public JacksonJsonCore(ObjectMapper mapper) {
+    if (mapper == null) throw new NullPointerException();
     this.mapper = mapper;
   }
 
