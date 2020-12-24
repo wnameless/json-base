@@ -52,4 +52,8 @@ public interface JsonValueBase<JVB extends JsonValueBase<?>> extends Jsonable {
 
   public BigDecimal asBigDecimal();
 
+  default public Number asNumber() {
+    return JsonValueUtils.toJavaNumber(asBigDecimal());
+  }
+
 }

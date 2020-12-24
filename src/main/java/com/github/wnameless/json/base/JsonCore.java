@@ -17,16 +17,11 @@ package com.github.wnameless.json.base;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Map;
 
 public interface JsonCore<JVC extends JsonValueCore<?>> {
 
   JsonValueCore<JVC> parse(String json);
 
   JsonValueCore<JVC> parse(Reader jsonReader) throws IOException;
-
-  JsonValueCore<JVC> parse(Object obj);
-
-  Map<String, Object> convertToMap(JsonValueExtra jsonValue);
 
 }

@@ -17,11 +17,8 @@ package com.github.wnameless.json.base;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JacksonJsonCore implements JsonCore<JacksonJsonValue> {
@@ -48,17 +45,6 @@ public class JacksonJsonCore implements JsonCore<JacksonJsonValue> {
   @Override
   public JacksonJsonValue parse(Reader jsonReader) throws IOException {
     return new JacksonJsonValue(mapper.readTree(jsonReader));
-  }
-
-  @Override
-  public JacksonJsonValue parse(Object obj) {
-    return new JacksonJsonValue(mapper.valueToTree(obj));
-  }
-
-  @Override
-  public Map<String, Object> convertToMap(JsonValueExtra jsonValue) {
-    return mapper.convertValue((JsonNode) jsonValue.getSource(),
-        new TypeReference<Map<String, Object>>() {});
   }
 
 }

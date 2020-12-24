@@ -17,12 +17,10 @@ package com.github.wnameless.json.base;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
 
 public class GsonJsonCore implements JsonCore<GsonJsonValue> {
 
@@ -44,17 +42,6 @@ public class GsonJsonCore implements JsonCore<GsonJsonValue> {
   @Override
   public GsonJsonValue parse(Reader jsonReader) throws IOException {
     return new GsonJsonValue(gson.fromJson(jsonReader, JsonElement.class));
-  }
-
-  @Override
-  public GsonJsonValue parse(Object obj) {
-    return new GsonJsonValue(gson.toJsonTree(obj));
-  }
-
-  @Override
-  public Map<String, Object> convertToMap(JsonValueExtra jsonValue) {
-    return gson.fromJson((JsonElement) jsonValue.getSource(),
-        new TypeToken<Map<String, Object>>() {}.getType());
   }
 
 }

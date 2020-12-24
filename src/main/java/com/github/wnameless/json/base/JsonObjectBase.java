@@ -16,6 +16,7 @@
 package com.github.wnameless.json.base;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public interface JsonObjectBase<JVB extends JsonValueBase<?>>
@@ -27,6 +28,10 @@ public interface JsonObjectBase<JVB extends JsonValueBase<?>>
 
   default boolean isEmpty() {
     return !iterator().hasNext();
+  }
+
+  default Map<String, Object> toMap() {
+    return JsonValueUtils.toMap(this);
   }
 
 }
