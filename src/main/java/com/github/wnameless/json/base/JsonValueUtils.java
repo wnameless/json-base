@@ -27,7 +27,7 @@ public final class JsonValueUtils {
   private JsonValueUtils() {}
 
   public static Object toObject(JsonValueBase<?> jsonValue) {
-    if (jsonValue.isNull()) return null;
+    if (jsonValue.isNull()) return jsonValue.asNull();
     if (jsonValue.isBoolean()) return jsonValue.asBoolean();
     if (jsonValue.isString()) return jsonValue.asString();
     if (jsonValue.isNumber()) return jsonValue.asNumber();

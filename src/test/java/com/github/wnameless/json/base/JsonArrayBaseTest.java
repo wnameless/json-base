@@ -16,18 +16,18 @@
 package com.github.wnameless.json.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -35,10 +35,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
-public class JsonCoreTest {
-
-  String json =
-      "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}";
+public class JsonArrayBaseTest {
 
   String str = "text";
   int i = 123;
@@ -68,44 +65,60 @@ public class JsonCoreTest {
     }
   };
 
-  JsonValueCore<?> jsonValue;
+  JsonArrayBase<?> gsonAry;
+  JsonArrayBase<?> jacksonAry;
 
-  @Test
-  public void testGsonJsonCore() throws IOException {
-    Gson gson = new Gson();
+  @BeforeEach
+  public void init() {
+    Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
         gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
-    jsonValue = new GsonJsonValue(jsonElement);
-    assertNotEquals(jsonValue, new GsonJsonCore().parse(json));
+    gsonAry = new GsonJsonValue(jsonElement).asObject().get("num").asArray();
 
-    gson = new GsonBuilder().serializeNulls().create();
-    jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
-    jsonValue = new GsonJsonValue(jsonElement);
-
-    assertEquals(jsonValue, new GsonJsonCore(gson).parse(json));
-    assertEquals(jsonValue,
-        new GsonJsonCore(gson).parse(new StringReader(json)));
+    JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
+    jacksonAry = new JacksonJsonValue(jsonNode).asObject().get("num").asArray();
   }
 
   @Test
-  public void testJacksonJsonCore() throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    JsonNode jsonNode = mapper.valueToTree(jo);
-    jsonValue = new JacksonJsonValue(jsonNode);
-    assertNotEquals(jsonValue, new JacksonJsonCore().parse(json));
+  public void testGet() {
+    assertEquals(i, gsonAry.get(0).asNumber());
+    assertEquals(l, gsonAry.get(1).asNumber());
+    assertEquals(d, gsonAry.get(2).asNumber());
+    assertEquals(bi, gsonAry.get(3).asNumber());
+    assertEquals(bd, gsonAry.get(4).asNumber());
 
-    mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-    mapper.enable(DeserializationFeature.USE_BIG_INTEGER_FOR_INTS);
-    jsonNode = mapper.valueToTree(jo);
-    jsonValue = new JacksonJsonValue(jsonNode);
+    assertEquals(i, jacksonAry.get(0).asNumber());
+    assertEquals(l, jacksonAry.get(1).asNumber());
+    assertEquals(d, jacksonAry.get(2).asNumber());
+    assertEquals(bi, jacksonAry.get(3).asNumber());
+    assertEquals(bd, jacksonAry.get(4).asNumber());
+  }
 
-    assertEquals(jsonValue, new JacksonJsonCore(mapper).parse(json));
-    assertEquals(jsonValue,
-        new JacksonJsonCore(mapper).parse(new StringReader(json)));
+  @Test
+  public void testSize() {
+    assertEquals(5, gsonAry.size());
+    assertEquals(5, jacksonAry.size());
+  }
 
-    assertThrows(RuntimeException.class, () -> {
-      new JacksonJsonCore().parse("abc");
-    });
+  @Test
+  public void testIsEmpty() {
+    assertFalse(gsonAry.isEmpty());
+    assertFalse(jacksonAry.isEmpty());
+
+    gsonAry = new GsonJsonCore().parse("[]").asArray();
+    jacksonAry = new JacksonJsonCore().parse("[]").asArray();
+
+    assertTrue(gsonAry.isEmpty());
+    assertTrue(jacksonAry.isEmpty());
+  }
+
+  @Test
+  public void testToList() {
+    List<Object> num = new ArrayList<>();
+    num.addAll(Arrays.asList(i, l, d, bi, bd));
+
+    assertEquals(num, gsonAry.toList());
+    assertEquals(num, gsonAry.toList());
   }
 
 }

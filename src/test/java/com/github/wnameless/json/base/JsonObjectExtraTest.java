@@ -16,18 +16,16 @@
 package com.github.wnameless.json.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -35,10 +33,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
-public class JsonCoreTest {
-
-  String json =
-      "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}";
+public class JsonObjectExtraTest {
 
   String str = "text";
   int i = 123;
@@ -68,44 +63,42 @@ public class JsonCoreTest {
     }
   };
 
-  JsonValueCore<?> jsonValue;
+  JsonObjectCore<?> gsonObj;
+  JsonObjectCore<?> jacksonObj;
 
-  @Test
-  public void testGsonJsonCore() throws IOException {
-    Gson gson = new Gson();
+  @BeforeEach
+  public void init() {
+    Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
         gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
-    jsonValue = new GsonJsonValue(jsonElement);
-    assertNotEquals(jsonValue, new GsonJsonCore().parse(json));
+    gsonObj = new GsonJsonValue(jsonElement).asObject();
 
-    gson = new GsonBuilder().serializeNulls().create();
-    jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
-    jsonValue = new GsonJsonValue(jsonElement);
-
-    assertEquals(jsonValue, new GsonJsonCore(gson).parse(json));
-    assertEquals(jsonValue,
-        new GsonJsonCore(gson).parse(new StringReader(json)));
+    JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
+    jacksonObj = new JacksonJsonValue(jsonNode).asObject();
   }
 
   @Test
-  public void testJacksonJsonCore() throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    JsonNode jsonNode = mapper.valueToTree(jo);
-    jsonValue = new JacksonJsonValue(jsonNode);
-    assertNotEquals(jsonValue, new JacksonJsonCore().parse(json));
+  public void testSetRemove() {
+    assertFalse(gsonObj.contains("text"));
+    assertFalse(jacksonObj.contains("text"));
 
-    mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-    mapper.enable(DeserializationFeature.USE_BIG_INTEGER_FOR_INTS);
-    jsonNode = mapper.valueToTree(jo);
-    jsonValue = new JacksonJsonValue(jsonNode);
+    gsonObj.set("text", new GsonJsonCore().parse("\"str\""));
+    jacksonObj.set("text", new JacksonJsonCore().parse("\"str\""));
 
-    assertEquals(jsonValue, new JacksonJsonCore(mapper).parse(json));
-    assertEquals(jsonValue,
-        new JacksonJsonCore(mapper).parse(new StringReader(json)));
+    assertEquals(5, gsonObj.size());
+    assertEquals(5, jacksonObj.size());
 
-    assertThrows(RuntimeException.class, () -> {
-      new JacksonJsonCore().parse("abc");
-    });
+    assertEquals("str", gsonObj.get("text").asString());
+    assertEquals("str", jacksonObj.get("text").asString());
+
+    assertTrue(gsonObj.contains("text"));
+    assertTrue(jacksonObj.contains("text"));
+
+    gsonObj.remove("text");
+    jacksonObj.remove("text");
+
+    assertFalse(gsonObj.contains("text"));
+    assertFalse(jacksonObj.contains("text"));
   }
 
 }

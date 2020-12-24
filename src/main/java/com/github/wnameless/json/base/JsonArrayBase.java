@@ -15,13 +15,21 @@
  */
 package com.github.wnameless.json.base;
 
+import java.util.List;
+
 public interface JsonArrayBase<JVB extends JsonValueBase<?>>
     extends Iterable<JVB>, JsonValueBase<JVB> {
 
   JVB get(int index);
 
+  int size();
+
   default boolean isEmpty() {
     return !iterator().hasNext();
+  }
+
+  default List<Object> toList() {
+    return JsonValueUtils.toList(this);
   }
 
 }

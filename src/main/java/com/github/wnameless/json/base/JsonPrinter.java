@@ -28,7 +28,6 @@ public final class JsonPrinter {
    */
   public static String minimalPrint(String json) {
     if (json == null) new NullPointerException();
-    if (json == null) new NullPointerException();
     StringBuilder minimalPrintBuilder = new StringBuilder();
 
     boolean inQuote = false;
@@ -56,6 +55,19 @@ public final class JsonPrinter {
    * @return a pretty print JSON
    */
   public static String prettyPrint(String json) {
+    return prettyPrint(json, "  ");
+  }
+
+  /**
+   * Returns a pretty print JSON of any JSON input.
+   * 
+   * @param json
+   *          any JSON
+   * @param indentStr
+   *          a string to use as an indent
+   * @return a pretty print JSON
+   */
+  public static String prettyPrint(String json, String indentStr) {
     if (json == null) new NullPointerException();
     StringBuilder prettyPrintBuilder = new StringBuilder();
 
@@ -72,13 +84,13 @@ public final class JsonPrinter {
           prettyPrintBuilder.append(jsonChar);
           if (!inQuote) {
             indentLevel++;
-            appendNewLine(indentLevel, prettyPrintBuilder);
+            appendNewLine(prettyPrintBuilder, indentLevel, indentStr);
           }
           break;
         case '}':
           if (!inQuote) {
             indentLevel--;
-            appendNewLine(indentLevel, prettyPrintBuilder);
+            appendNewLine(prettyPrintBuilder, indentLevel, indentStr);
           }
           prettyPrintBuilder.append(jsonChar);
           break;
@@ -102,7 +114,7 @@ public final class JsonPrinter {
             if (inBracket) {
               prettyPrintBuilder.append(' ');
             } else {
-              appendNewLine(indentLevel, prettyPrintBuilder);
+              appendNewLine(prettyPrintBuilder, indentLevel, indentStr);
             }
           }
           break;
@@ -125,12 +137,11 @@ public final class JsonPrinter {
     return prettyPrintBuilder.toString();
   }
 
-  private static void appendNewLine(int indentLevel,
-      StringBuilder stringBuilder) {
+  private static void appendNewLine(StringBuilder stringBuilder,
+      int indentLevel, String indentStr) {
     stringBuilder.append('\n');
     for (int i = 0; i < indentLevel; i++) {
-      stringBuilder.append(' ');
-      stringBuilder.append(' ');
+      stringBuilder.append(indentStr);
     }
   }
 

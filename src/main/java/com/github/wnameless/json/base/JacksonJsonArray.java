@@ -110,17 +110,17 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   }
 
   @Override
-  public boolean isNumber() {
-    return false;
-  }
-
-  @Override
   public boolean isString() {
     return false;
   }
 
   @Override
   public boolean isBoolean() {
+    return false;
+  }
+
+  @Override
+  public boolean isNumber() {
     return false;
   }
 
@@ -145,21 +145,6 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   }
 
   @Override
-  public int asInt() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public long asLong() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public double asDouble() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public String asString() {
     throw new UnsupportedOperationException();
   }
@@ -170,7 +155,22 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   }
 
   @Override
+  public int asInt() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public long asLong() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
   public BigInteger asBigInteger() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public double asDouble() {
     throw new UnsupportedOperationException();
   }
 

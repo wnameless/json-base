@@ -48,7 +48,7 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof JacksonJsonObject)) return false;
+    if (!(o instanceof GsonJsonObject)) return false;
     return Objects.equals(jsonObject, ((GsonJsonObject) o).jsonObject);
   }
 
@@ -122,17 +122,17 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   }
 
   @Override
-  public boolean isNumber() {
-    return false;
-  }
-
-  @Override
   public boolean isString() {
     return false;
   }
 
   @Override
   public boolean isBoolean() {
+    return false;
+  }
+
+  @Override
+  public boolean isNumber() {
     return false;
   }
 
@@ -157,21 +157,6 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   }
 
   @Override
-  public int asInt() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public long asLong() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public double asDouble() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public String asString() {
     throw new UnsupportedOperationException();
   }
@@ -182,7 +167,22 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   }
 
   @Override
+  public int asInt() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public long asLong() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
   public BigInteger asBigInteger() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public double asDouble() {
     throw new UnsupportedOperationException();
   }
 

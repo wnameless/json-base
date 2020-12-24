@@ -15,22 +15,24 @@
  */
 package com.github.wnameless.json.base;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
-public class JavaValueExtraTest {
+public class JsonValueUtilsTest {
 
   String str = "text";
   int i = 123;
@@ -42,10 +44,10 @@ public class JavaValueExtraTest {
   BigDecimal bd =
       new BigDecimal("45.678912367891236789123678912367891236789123");
 
-  JsonObject jo = new JsonObject() {
+  JsonPOJO jo = new JsonPOJO() {
     {
       setStr(str);
-      setNum(new ArrayList<Number>() {
+      setNum(new ArrayList<Object>() {
         private static final long serialVersionUID = 1L;
         {
           add(i);
@@ -53,6 +55,7 @@ public class JavaValueExtraTest {
           add(d);
           add(bi);
           add(bd);
+          add(ImmutableMap.of("abc", 123));
         }
       });
       setBool(bool);
@@ -60,24 +63,24 @@ public class JavaValueExtraTest {
     }
   };
 
-  JsonValueExtra jsonValue;
+  JsonObjectBase<?> gsonObj;
+  JsonObjectBase<?> jacksonObj;
 
-  @Test
-  public void testGsonGetSource() {
+  @BeforeEach
+  public void init() {
     Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonObject>() {}.getType());
-    jsonValue = new GsonJsonValue(jsonElement);
+        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    gsonObj = new GsonJsonValue(jsonElement).asObject();
 
-    assertSame(jsonElement, jsonValue.getSource());
+    JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
+    jacksonObj = new JacksonJsonValue(jsonNode).asObject();
   }
 
   @Test
-  public void testJacksonGetSource() {
-    JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
-    jsonValue = new JacksonJsonValue(jsonNode);
-
-    assertSame(jsonNode, jsonValue.getSource());
+  public void testToObject() {
+    assertEquals(JsonValueUtils.toObject(gsonObj),
+        JsonValueUtils.toObject(jacksonObj));
   }
 
 }

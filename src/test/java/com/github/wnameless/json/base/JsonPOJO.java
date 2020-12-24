@@ -17,10 +17,10 @@ package com.github.wnameless.json.base;
 
 import java.util.List;
 
-public class JsonObject {
+public class JsonPOJO {
 
   private String str;
-  private List<Number> num;
+  private List<?> num;
   private boolean bool;
   private Object obj;
 
@@ -32,11 +32,11 @@ public class JsonObject {
     this.str = str;
   }
 
-  public List<Number> getNum() {
+  public List<?> getNum() {
     return num;
   }
 
-  public void setNum(List<Number> num) {
+  public void setNum(List<?> num) {
     this.num = num;
   }
 

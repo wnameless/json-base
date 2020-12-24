@@ -24,7 +24,11 @@ public interface JsonObjectBase<JVB extends JsonValueBase<?>>
 
   Iterator<String> names();
 
+  boolean contains(String name);
+
   JVB get(String name);
+
+  int size();
 
   default boolean isEmpty() {
     return !iterator().hasNext();

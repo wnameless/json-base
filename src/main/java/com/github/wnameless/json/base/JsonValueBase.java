@@ -24,11 +24,11 @@ public interface JsonValueBase<JVB extends JsonValueBase<?>> extends Jsonable {
 
   public boolean isArray();
 
-  public boolean isNumber();
-
   public boolean isString();
 
   public boolean isBoolean();
+
+  public boolean isNumber();
 
   public boolean isNull();
 
@@ -38,22 +38,26 @@ public interface JsonValueBase<JVB extends JsonValueBase<?>> extends Jsonable {
 
   public JsonValueBase<JVB> asValue();
 
-  public int asInt();
-
-  public long asLong();
-
-  public double asDouble();
-
   public String asString();
 
   public boolean asBoolean();
 
+  public int asInt();
+
+  public long asLong();
+
   public BigInteger asBigInteger();
+
+  public double asDouble();
 
   public BigDecimal asBigDecimal();
 
-  default public Number asNumber() {
+  default Number asNumber() {
     return JsonValueUtils.toJavaNumber(asBigDecimal());
+  }
+
+  default Object asNull() {
+    return null;
   }
 
 }

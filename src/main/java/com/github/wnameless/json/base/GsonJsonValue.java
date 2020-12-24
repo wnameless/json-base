@@ -41,12 +41,6 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
   }
 
   @Override
-  public boolean isNumber() {
-    return jsonValue.isJsonPrimitive()
-        ? jsonValue.getAsJsonPrimitive().isNumber() : false;
-  }
-
-  @Override
   public boolean isString() {
     return jsonValue.isJsonPrimitive()
         ? jsonValue.getAsJsonPrimitive().isString() : false;
@@ -56,6 +50,12 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
   public boolean isBoolean() {
     return jsonValue.isJsonPrimitive()
         ? jsonValue.getAsJsonPrimitive().isBoolean() : false;
+  }
+
+  @Override
+  public boolean isNumber() {
+    return jsonValue.isJsonPrimitive()
+        ? jsonValue.getAsJsonPrimitive().isNumber() : false;
   }
 
   @Override
@@ -89,8 +89,18 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
   }
 
   @Override
+  public BigInteger asBigInteger() {
+    return new BigInteger(jsonValue.toString());
+  }
+
+  @Override
   public double asDouble() {
     return jsonValue.getAsDouble();
+  }
+
+  @Override
+  public BigDecimal asBigDecimal() {
+    return new BigDecimal(jsonValue.toString());
   }
 
   @Override
@@ -123,16 +133,6 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
   @Override
   public String toJson() {
     return toString();
-  }
-
-  @Override
-  public BigInteger asBigInteger() {
-    return new BigInteger(jsonValue.toString());
-  }
-
-  @Override
-  public BigDecimal asBigDecimal() {
-    return new BigDecimal(jsonValue.toString());
   }
 
   @Override

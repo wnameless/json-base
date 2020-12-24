@@ -43,11 +43,6 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
   }
 
   @Override
-  public boolean isNumber() {
-    return jsonValue.isNumber();
-  }
-
-  @Override
   public boolean isString() {
     return jsonValue.isTextual();
   }
@@ -55,6 +50,11 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
   @Override
   public boolean isBoolean() {
     return jsonValue.isBoolean();
+  }
+
+  @Override
+  public boolean isNumber() {
+    return jsonValue.isNumber();
   }
 
   @Override
@@ -78,6 +78,16 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
   }
 
   @Override
+  public String asString() {
+    return jsonValue.asText();
+  }
+
+  @Override
+  public boolean asBoolean() {
+    return jsonValue.asBoolean();
+  }
+
+  @Override
   public int asInt() {
     return jsonValue.asInt();
   }
@@ -88,18 +98,18 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
   }
 
   @Override
+  public BigInteger asBigInteger() {
+    return jsonValue.bigIntegerValue();
+  }
+
+  @Override
   public double asDouble() {
     return jsonValue.asDouble();
   }
 
   @Override
-  public String asString() {
-    return jsonValue.asText();
-  }
-
-  @Override
-  public boolean asBoolean() {
-    return jsonValue.asBoolean();
+  public BigDecimal asBigDecimal() {
+    return jsonValue.decimalValue();
   }
 
   @Override
@@ -122,16 +132,6 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
   @Override
   public String toJson() {
     return toString();
-  }
-
-  @Override
-  public BigInteger asBigInteger() {
-    return jsonValue.bigIntegerValue();
-  }
-
-  @Override
-  public BigDecimal asBigDecimal() {
-    return jsonValue.decimalValue();
   }
 
   @Override

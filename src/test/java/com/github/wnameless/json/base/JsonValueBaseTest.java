@@ -18,6 +18,7 @@ package com.github.wnameless.json.base;
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -49,7 +50,7 @@ public class JsonValueBaseTest {
   BigDecimal bd =
       new BigDecimal("45.678912367891236789123678912367891236789123");
 
-  JsonObject jo = new JsonObject() {
+  JsonPOJO jo = new JsonPOJO() {
     {
       setStr(str);
       setNum(new ArrayList<Number>() {
@@ -70,10 +71,20 @@ public class JsonValueBaseTest {
   JsonValueBase<?> jsonValue;
 
   @Test
+  public void testConstructorException() {
+    assertThrows(NullPointerException.class, () -> {
+      new GsonJsonValue(null);
+    });
+    assertThrows(NullPointerException.class, () -> {
+      new JacksonJsonValue(null);
+    });
+  }
+
+  @Test
   public void testGsonValue() {
     Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonObject>() {}.getType());
+        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     jsonValue = new GsonJsonValue(jsonElement);
 
     assertTrue(jsonValue.isObject());
@@ -104,6 +115,7 @@ public class JsonValueBaseTest {
     assertTrue(jsonValue.asObject().get("bool").isBoolean());
     assertTrue(jsonValue.asObject().get("bool").asBoolean());
     assertTrue(jsonValue.asObject().get("obj").isNull());
+    assertSame(null, jsonValue.asObject().get("obj").asNull());
 
     assertSame(jsonValue, jsonValue.asValue());
 
@@ -118,7 +130,7 @@ public class JsonValueBaseTest {
   public void testGsonValueToJson() {
     Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonObject>() {}.getType());
+        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     GsonJsonValue jsonValue = new GsonJsonValue(jsonElement);
     assertEquals(
         "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}",
@@ -164,6 +176,7 @@ public class JsonValueBaseTest {
     assertTrue(jsonValue.asObject().get("bool").isBoolean());
     assertTrue(jsonValue.asObject().get("bool").asBoolean());
     assertTrue(jsonValue.asObject().get("obj").isNull());
+    assertSame(null, jsonValue.asObject().get("obj").asNull());
 
     assertSame(jsonValue, jsonValue.asValue());
 
@@ -193,7 +206,7 @@ public class JsonValueBaseTest {
   public void testGsonArrayIterable() {
     Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonObject>() {}.getType());
+        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     GsonJsonValue gsonJson = new GsonJsonValue(jsonElement);
 
     JsonArrayBase<GsonJsonValue> array =
@@ -219,7 +232,7 @@ public class JsonValueBaseTest {
   public void testGsonObjectIterable() {
     Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonObject>() {}.getType());
+        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     GsonJsonValue jsonValue = new GsonJsonValue(jsonElement);
     GsonJsonObject gsonObject = jsonValue.asObject();
 
