@@ -14,7 +14,7 @@ Java 9 Module is supported after v1.1.0, but the minimal Java version is remaine
 <dependency>
 	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-base</artifactId>
-	<version>1.2.0</version>
+	<version>2.0.0</version>
 </dependency>
 ```
 
@@ -44,7 +44,7 @@ Althought this labrary privides wrappers for Gson and Jackson, you still need to
 ## JSON data common interfaces
 ### JsonValueBase
 ```java
-public interface JsonValueBase<JV extends JsonValueBase<?>> {
+public interface JsonValueBase<JVB extends JsonValueBase<?>> {
 
   public boolean isObject();
 
@@ -58,9 +58,9 @@ public interface JsonValueBase<JV extends JsonValueBase<?>> {
 
   public boolean isNull();
 
-  public JsonObjectBase<JV> asObject();
+  public JsonObjectBase<JVB> asObject();
 
-  public JsonArrayBase<JV> asArray();
+  public JsonArrayBase<JVB> asArray();
 
   public int asInt();
 
@@ -72,15 +72,28 @@ public interface JsonValueBase<JV extends JsonValueBase<?>> {
 
   public boolean asBoolean();
 
+  public boolean asBoolean();
+
+  // The following methods have been added since v2.0.0
+  public JsonValueBase<JVB> asValue();
+
+  public BigInteger asBigInteger();
+
+  public BigDecimal asBigDecimal();
+
+  default public Number asNumber() {
+    return JsonValueUtils.toJavaNumber(asBigDecimal());
+  }
+
 }
 ```
 
 ### JsonArrayBase
 ```java
-public interface JsonArrayBase<JV extends JsonValueBase<?>>
-    extends Iterable<JV> {
+public interface JsonArrayBase<JVB extends JsonValueBase<?>>
+    extends Iterable<JVB> {
 
-  JV get(int index);
+  JVB get(int index);
 
   default boolean isEmpty() {
     return !iterator().hasNext();
@@ -92,10 +105,10 @@ public interface JsonArrayBase<JV extends JsonValueBase<?>>
 
 ### JsonObjectBase
 ```java
-public interface JsonObjectBase<JV extends JsonValueBase<?>>
-    extends Iterable<Entry<String, JV>> {
+public interface JsonObjectBase<JVB extends JsonValueBase<?>>
+    extends Iterable<Entry<String, JVB>> {
 
-  JV get(String name);
+  JVB get(String name);
 
   default boolean isEmpty() {
     return !iterator().hasNext();
