@@ -19,23 +19,23 @@ Java 9 Module is supported after v1.1.0, but the minimal Java version is remaine
 ```
 
 ## Quick Start
+User can now program zir library logic focus to the JSON data wrapper interfaces.
 ```java
-// User can program zir library logic to the wrapper interface
 public void acceptJsonVal(JsonValueBase<?> val) {
-	...
+  ...
 }
 
-// At the same time, user can allow zir library to consume popular JSON implementations such as Jackson or Gson by default Gson and Jackson wrappers
+// At the same time, user can consume popular JSON implementations easily in zir library
 public void  acceptGsonVal(JsonElement jsonElement) {
-	JsonValueCore<GsonJsonValue> val = new GsonJsonValue(jsonElement);
+  JsonValueCore<GsonJsonValue> val = new GsonJsonValue(jsonElement);
   acceptJsonVal(val);
-	...
+  ...
 }
 
 public void  acceptJacksonVal(JsonNode jsonNode) {
-	JsonValueCore<JacksonJsonValue> val = new JacksonJsonValue(jsonNode);
+  JsonValueCore<JacksonJsonValue> val = new JacksonJsonValue(jsonNode);
   acceptJsonVal(val);
-	...
+  ...
 }
 ```
 
@@ -54,6 +54,12 @@ obj.set("def", jsonCore.parse("[4.56,true]"));
 if (obj.get("abc").isNumber()) {
   System.out.println(obj.get("abc").asInt());
   // 123
+  
+  // User can chose what kind of Java Number zir want to use
+  System.out.println(obj.get("abc").asBigInteger());
+  // 123
+  
+  // The #asNumber method creates a proper Java Number by the size and scale of numeric
   System.out.println(obj.get("abc").asNumber() instanceof Integer);
   // true
 }
@@ -62,16 +68,24 @@ if (obj.get("def").isArray()) {
   JsonArrayCore<?> ary = obj.get("def").asArray();
   System.out.println(ary.get(0).asDouble());
   // 4.56
+  
   System.out.println(ary.get(0).asNumber() instanceof Double);
   // true
+  
+  // Any JsonArrayBase can be converted into a List
   System.out.println(ary.toList());
   // [4.56, true]
 }
-  
+
+// Any JsonObjectBase can be converted into a Map
 System.out.println(obj.toMap());
 // {abc=123, def=[4.56, true]}
+
+// All JSON data wrapper can be converted into a JSON string
 System.out.println(obj.toJson());
 // {"abc":123,"def":[4.56,true]}
+
+// JsonPrinter can either minimal or pretty print any JSON string
 System.out.println(JsonPrinter.prettyPrint(obj.toJson()));
 // {
 //   "abc" : 123,
@@ -83,6 +97,10 @@ System.out.println(JsonPrinter.prettyPrint(obj.toJson()));
 Althought this labrary privides wrappers for Gson and Jackson, you still need to include the JSON implementation library which you are using in your dependencies.
 
 ## JSON data common interfaces
+If user want to implement zir own JSON data wappers, here are some interfaces to work with.
+
+For immutable JSON data: JsonValueBase, JsonArrayBase, JsonObjectBase <br>
+For mutable JSON data: JsonCore, JsonValueCore, JsonArrayCore, JsonObjectCore
 ### JsonCore
 ```java
 public interface JsonCore<JVC extends JsonValueCore<?>> {
