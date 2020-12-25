@@ -27,7 +27,7 @@ import java.util.List;
  * @param <JVB>
  *          the type of a JSON implementation wrapper
  */
-public interface JsonArrayBase<JVB extends JsonValueBase<?>>
+public interface JsonArrayBase<JVB extends JsonValueBase<JVB>>
     extends Iterable<JVB>, JsonValueBase<JVB> {
 
   /**

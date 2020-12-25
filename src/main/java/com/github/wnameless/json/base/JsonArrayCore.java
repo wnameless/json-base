@@ -25,7 +25,7 @@ package com.github.wnameless.json.base;
  * @param <JVC>
  *          the type of a JSON implementation wrapper
  */
-public interface JsonArrayCore<JVC extends JsonValueCore<?>>
+public interface JsonArrayCore<JVC extends JsonValueCore<JVC>>
     extends JsonArrayBase<JVC>, JsonValueCore<JVC> {
 
   /**

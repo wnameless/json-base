@@ -29,7 +29,8 @@ import java.math.BigInteger;
  * @param <JVB>
  *          the type of a JSON implementation wrapper
  */
-public interface JsonValueBase<JVB extends JsonValueBase<?>> extends Jsonable {
+public interface JsonValueBase<JVB extends JsonValueBase<JVB>>
+    extends Jsonable {
 
   /**
    * Checks if this is represented as a JSON object.

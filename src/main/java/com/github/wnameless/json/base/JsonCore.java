@@ -27,7 +27,7 @@ import java.io.Reader;
  * @param <JVC>
  *          the type of a JSON implementation wrapper
  */
-public interface JsonCore<JVC extends JsonValueCore<?>> {
+public interface JsonCore<JVC extends JsonValueCore<JVC>> {
 
   /**
    * Creates a {@link JsonValueCore} by given JSON string.

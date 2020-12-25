@@ -29,7 +29,7 @@ import java.util.Map.Entry;
  * @param <JVB>
  *          the type of a JSON implementation wrapper
  */
-public interface JsonObjectBase<JVB extends JsonValueBase<?>>
+public interface JsonObjectBase<JVB extends JsonValueBase<JVB>>
     extends Iterable<Entry<String, JVB>>, JsonValueBase<JVB> {
 
   /**
