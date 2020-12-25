@@ -21,6 +21,13 @@ import java.io.Reader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * 
+ * The Jackson implementation of {@link JsonCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public class JacksonJsonCore implements JsonCore<JacksonJsonValue> {
 
   private ObjectMapper mapper;

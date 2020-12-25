@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2015 Wei-Ming Wu
+ * Copyright 2019 Wei-Ming Wu
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,8 +19,10 @@ package com.github.wnameless.json.base;
 
 /**
  * 
- * {@link Jsonable} is an interface which allows the implementing class to be
- * converted into a JSON string.
+ * {@link Jsonable} allows the implementing class to be converted into a JSON
+ * string.
+ * 
+ * @author Wei-Ming Wu
  *
  */
 public interface Jsonable {

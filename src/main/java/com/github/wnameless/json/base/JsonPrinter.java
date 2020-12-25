@@ -15,6 +15,15 @@
  */
 package com.github.wnameless.json.base;
 
+/**
+ * 
+ * {@link JsonPrinter} reprints any JSON input into minimal or pretty form. It
+ * only uses Java native string processing to generate the output and no
+ * additional explicit JSON library is required.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public final class JsonPrinter {
 
   private JsonPrinter() {}

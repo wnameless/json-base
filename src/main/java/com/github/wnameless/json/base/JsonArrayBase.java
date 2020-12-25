@@ -17,17 +17,49 @@ package com.github.wnameless.json.base;
 
 import java.util.List;
 
+/**
+ * 
+ * {@link JsonArrayBase} extends {@link JsonValueBase} and adds essential
+ * methods which should be included in any JSON array implementation.
+ * 
+ * @author Wei-Ming Wu
+ *
+ * @param <JVB>
+ *          the type of a JSON implementation wrapper
+ */
 public interface JsonArrayBase<JVB extends JsonValueBase<?>>
     extends Iterable<JVB>, JsonValueBase<JVB> {
 
+  /**
+   * Returns a JSON value wrapper by given index.
+   * 
+   * @param index
+   *          a position in this JSON array
+   * @return a JSON value wrapper
+   */
   JVB get(int index);
 
+  /**
+   * Returns the size of this JSON array.
+   * 
+   * @return an int
+   */
   int size();
 
+  /**
+   * Checks if this JSON array is empty.
+   * 
+   * @return true if this JSON array is empty, false otherwise
+   */
   default boolean isEmpty() {
     return !iterator().hasNext();
   }
 
+  /**
+   * Converts this JSON array to a Java {@link List}.
+   * 
+   * @return a {@link List}
+   */
   default List<Object> toList() {
     return JsonValueUtils.toList(this);
   }

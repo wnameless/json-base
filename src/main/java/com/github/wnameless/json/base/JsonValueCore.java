@@ -15,6 +15,20 @@
  */
 package com.github.wnameless.json.base;
 
+/**
+ * 
+ * {@link JsonValueCore} extends {@link JsonValueBase} and alters the returning
+ * values of {@link #asObject()}, {@link #asArray()} and {@link #asValue()} from
+ * immutable "Base" version to mutable "Core" version.<br>
+ * <br>
+ * It also extends {@link JsonSource} which allows it returns the JSON
+ * implementation object of this wrapper.
+ * 
+ * @author Wei-Ming Wu
+ *
+ * @param <JVC>
+ *          the type of a JSON implementation wrapper
+ */
 public interface JsonValueCore<JVC extends JsonValueCore<?>>
     extends JsonValueBase<JVC>, JsonSource {
 

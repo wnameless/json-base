@@ -23,6 +23,13 @@ import java.util.Objects;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
+/**
+ * 
+ * The GSON implementation of {@link JsonArrayCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
 
   private final JsonArray jsonArray;

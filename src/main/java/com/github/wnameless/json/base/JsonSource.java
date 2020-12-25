@@ -15,8 +15,21 @@
  */
 package com.github.wnameless.json.base;
 
+/**
+ * 
+ * {@link JsonSource} allows the implementing class to return a JSON elementary
+ * object. For example: JsonElement of GSON or JsonNode of Jackson.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public interface JsonSource {
 
+  /**
+   * Returns a JSON elementary object.
+   * 
+   * @return a JSON elementary object
+   */
   Object getSource();
 
 }

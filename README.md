@@ -44,17 +44,17 @@ Althought this labrary privides wrappers for Gson and Jackson, you still need to
 ## JSON data common interfaces
 ### JsonValueBase
 ```java
-public interface JsonValueBase<JVB extends JsonValueBase<?>> {
+public interface JsonValueBase<JVB extends JsonValueBase<?>> extends Jsonable {
 
   public boolean isObject();
 
   public boolean isArray();
 
-  public boolean isNumber();
-
   public boolean isString();
 
   public boolean isBoolean();
+
+  public boolean isNumber();
 
   public boolean isNull();
 
@@ -62,27 +62,28 @@ public interface JsonValueBase<JVB extends JsonValueBase<?>> {
 
   public JsonArrayBase<JVB> asArray();
 
-  public int asInt();
-
-  public long asLong();
-
-  public double asDouble();
+  public JsonValueBase<JVB> asValue();
 
   public String asString();
 
   public boolean asBoolean();
 
-  public boolean asBoolean();
+  public int asInt();
 
-  // The following methods have been added since v2.0.0
-  public JsonValueBase<JVB> asValue();
+  public long asLong();
 
   public BigInteger asBigInteger();
 
+  public double asDouble();
+
   public BigDecimal asBigDecimal();
 
-  default public Number asNumber() {
+  default Number asNumber() {
     return JsonValueUtils.toJavaNumber(asBigDecimal());
+  }
+
+  default Object asNull() {
+    return null;
   }
 
 }
@@ -91,29 +92,43 @@ public interface JsonValueBase<JVB extends JsonValueBase<?>> {
 ### JsonArrayBase
 ```java
 public interface JsonArrayBase<JVB extends JsonValueBase<?>>
-    extends Iterable<JVB> {
+    extends Iterable<JVB>, JsonValueBase<JVB> {
 
   JVB get(int index);
+
+  int size();
 
   default boolean isEmpty() {
     return !iterator().hasNext();
   }
 
-}
+  default List<Object> toList() {
+    return JsonValueUtils.toList(this);
+  }
 
+}
 ```
 
 ### JsonObjectBase
 ```java
 public interface JsonObjectBase<JVB extends JsonValueBase<?>>
-    extends Iterable<Entry<String, JVB>> {
+    extends Iterable<Entry<String, JVB>>, JsonValueBase<JVB> {
+
+  Iterator<String> names();
+
+  boolean contains(String name);
 
   JVB get(String name);
+
+  int size();
 
   default boolean isEmpty() {
     return !iterator().hasNext();
   }
 
-}
+  default Map<String, Object> toMap() {
+    return JsonValueUtils.toMap(this);
+  }
 
+}
 ```

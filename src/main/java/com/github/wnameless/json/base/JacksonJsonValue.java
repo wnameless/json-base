@@ -23,6 +23,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * 
+ * The Jackson implementation of {@link JsonValueCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
 
   private final JsonNode jsonValue;

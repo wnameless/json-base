@@ -22,6 +22,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
+/**
+ * 
+ * The GSON implementation of {@link JsonCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public class GsonJsonCore implements JsonCore<GsonJsonValue> {
 
   private final Gson gson;

@@ -23,6 +23,13 @@ import java.util.Objects;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+/**
+ * 
+ * The Jackson implementation of {@link JsonArrayCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
 
   private final ArrayNode jsonArray;

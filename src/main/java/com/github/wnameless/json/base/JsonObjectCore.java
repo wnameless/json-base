@@ -15,17 +15,36 @@
  */
 package com.github.wnameless.json.base;
 
+/**
+ * 
+ * {@link JsonObjectCore} extends {@link JsonObjectBase}, {@link JsonValueCore}
+ * and adds few methods to make it mutable.
+ * 
+ * @author Wei-Ming Wu
+ *
+ * @param <JVC>
+ *          the type of a JSON implementation wrapper
+ */
 public interface JsonObjectCore<JVC extends JsonValueCore<?>>
     extends JsonObjectBase<JVC>, JsonValueCore<JVC> {
 
-  JsonObjectCore<JVC> asObject();
+  /**
+   * Sets an element by given field name and {@link JsonSource}.
+   * 
+   * @param name
+   *          a field name
+   * @param jsonSource
+   *          a {@link JsonSource}
+   */
+  void set(String name, JsonSource jsonSource);
 
-  JsonArrayCore<JVC> asArray();
-
-  JsonValueCore<JVC> asValue();
-
-  void set(String name, JsonSource jsonValue);
-
+  /**
+   * Removes an element by given field name.
+   * 
+   * @param name
+   *          a field name
+   * @return true if an element removed, false otherwise
+   */
   boolean remove(String name);
 
 }

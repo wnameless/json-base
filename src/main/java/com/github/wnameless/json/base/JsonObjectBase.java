@@ -19,21 +19,65 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * 
+ * {@link JsonObjectBase} extends {@link JsonValueBase} and adds essential
+ * methods which should be included in any JSON object implementation.
+ * 
+ * @author Wei-Ming Wu
+ *
+ * @param <JVB>
+ *          the type of a JSON implementation wrapper
+ */
 public interface JsonObjectBase<JVB extends JsonValueBase<?>>
     extends Iterable<Entry<String, JVB>>, JsonValueBase<JVB> {
 
+  /**
+   * Returns field names of this JSON object.
+   * 
+   * @return an {@link Iterator} of field names
+   */
   Iterator<String> names();
 
+  /**
+   * Checks if this JSON object contains given field name.
+   * 
+   * @param name
+   *          a field name
+   * @return true if this JSON object contains given field name, false otherwise
+   */
   boolean contains(String name);
 
+  /**
+   * Returns a JSON value wrapper by given field name.
+   * 
+   * @param name
+   *          a field name
+   * @return a JSON value wrapper
+   */
   JVB get(String name);
 
+  /**
+   * Returns the size of this JSON object.
+   * 
+   * @return an int
+   */
   int size();
 
+  /**
+   * Checks if this JSON object is empty.
+   * 
+   * @return true if this JSON object is empty, false otherwise
+   */
   default boolean isEmpty() {
     return !iterator().hasNext();
   }
 
+  /**
+   * Converts this JSON object to a Java {@link Map}.
+   * 
+   * @return a {@link Map}
+   */
   default Map<String, Object> toMap() {
     return JsonValueUtils.toMap(this);
   }

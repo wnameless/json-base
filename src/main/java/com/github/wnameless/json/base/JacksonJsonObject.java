@@ -25,6 +25,13 @@ import java.util.Objects;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * 
+ * The Jackson implementation of {@link JsonObjectCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public final class JacksonJsonObject
     implements JsonObjectCore<JacksonJsonValue> {
 

@@ -21,6 +21,13 @@ import java.util.Objects;
 
 import com.google.gson.JsonElement;
 
+/**
+ * 
+ * The GSON implementation of {@link JsonValueCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
 
   private final JsonElement jsonValue;
