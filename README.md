@@ -20,20 +20,21 @@ Java 9 Module is supported after v1.1.0, but the minimal Java version is remaine
 
 ## Quick Start
 ```java
-// You can let user to wrap their JSON implementation with JsonValueBase interface
+// User can program zir library logic to the wrapper interface
 public void acceptJsonVal(JsonValueBase<?> val) {
 	...
 }
 
-// Or you can accept the Gson JsonElement and wrap it by GsonJsonValue within your library
+// At the same time, user can allow zir library to consume popular JSON implementations such as Jackson or Gson by default Gson and Jackson wrappers
 public void  acceptGsonVal(JsonElement jsonElement) {
-	JsonValueCore<?> val = new GsonJsonValue(jsonElement);
+	JsonValueCore<GsonJsonValue> val = new GsonJsonValue(jsonElement);
+  acceptJsonVal(val);
 	...
 }
 
-// Or you can accept the Jackson JsonNode and wrap it by JacksonJsonValue within your library
 public void  acceptJacksonVal(JsonNode jsonNode) {
-	JsonValueCore<?> val = new JacksonJsonValue(jsonNode);
+	JsonValueCore<JacksonJsonValue> val = new JacksonJsonValue(jsonNode);
+  acceptJsonVal(val);
 	...
 }
 ```
