@@ -116,6 +116,29 @@ public class JsonCoreTest {
     assertThrows(RuntimeException.class, () -> {
       new JacksonJsonCore().parse("abc");
     });
+
+    JsonCore<?> jsonCore = new JacksonJsonCore();
+
+    JsonValueCore<?> val = jsonCore.parse("{\"abc\":123}");
+
+    JsonObjectCore<?> obj = val.asObject();
+    obj.set("def", jsonCore.parse("[4.56,true]"));
+
+    if (obj.get("abc").isNumber()) {
+      System.out.println(obj.get("abc").asInt());
+      System.out.println(obj.get("abc").asNumber() instanceof Integer);
+    }
+
+    if (obj.get("def").isArray()) {
+      JsonArrayCore<?> ary = obj.get("def").asArray();
+      System.out.println(ary.get(0).asDouble());
+      System.out.println(ary.get(0).asNumber() instanceof Double);
+      System.out.println(ary.toList());
+    }
+
+    System.out.println(obj.toMap());
+    System.out.println(obj.toJson());
+    System.out.println(JsonPrinter.prettyPrint(obj.toJson()));
   }
 
 }

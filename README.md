@@ -21,27 +21,78 @@ Java 9 Module is supported after v1.1.0, but the minimal Java version is remaine
 ## Quick Start
 ```java
 // You can let user to wrap their JSON implementation with JsonValueBase interface
-public void acceptJsonVal(JsonValueBase val) {
+public void acceptJsonVal(JsonValueBase<?> val) {
 	...
 }
 
 // Or you can accept the Gson JsonElement and wrap it by GsonJsonValue within your library
 public void  acceptGsonVal(JsonElement jsonElement) {
-	JsonValueBase val = new GsonJsonValue(jsonElement);
+	JsonValueCore<?> val = new GsonJsonValue(jsonElement);
 	...
 }
 
 // Or you can accept the Jackson JsonNode and wrap it by JacksonJsonValue within your library
 public void  acceptJacksonVal(JsonNode jsonNode) {
-	JsonValueBase val = new JacksonJsonValue(jsonNode);
+	JsonValueCore<?> val = new JacksonJsonValue(jsonNode);
 	...
 }
+```
+
+Sometimes, you may need a JSON producer in your library. Here is the wrapper:
+```java
+// GsonJsonCore is also available
+JsonCore<?> jsonCore = new JacksonJsonCore();
+JsonValueCore<?> val = jsonCore.parse("{\"abc\":123}");
+```
+
+Demo of some operations:
+```java
+JsonObjectCore<?> obj = val.asObject();
+obj.set("def", jsonCore.parse("[4.56,true]"));
+
+if (obj.get("abc").isNumber()) {
+  System.out.println(obj.get("abc").asInt());
+  // 123
+  System.out.println(obj.get("abc").asNumber() instanceof Integer);
+  // true
+}
+
+if (obj.get("def").isArray()) {
+  JsonArrayCore<?> ary = obj.get("def").asArray();
+  System.out.println(ary.get(0).asDouble());
+  // 4.56
+  System.out.println(ary.get(0).asNumber() instanceof Double);
+  // true
+  System.out.println(ary.toList());
+  // [4.56, true]
+}
+  
+System.out.println(obj.toMap());
+// {abc=123, def=[4.56, true]}
+System.out.println(obj.toJson());
+// {"abc":123,"def":[4.56,true]}
+System.out.println(JsonPrinter.prettyPrint(obj.toJson()));
+// {
+//   "abc" : 123,
+//   "def" : [ 4.56, true ]
+// }
 ```
 
 ## Important
 Althought this labrary privides wrappers for Gson and Jackson, you still need to include the JSON implementation library which you are using in your dependencies.
 
 ## JSON data common interfaces
+### JsonCore
+```java
+public interface JsonCore<JVC extends JsonValueCore<?>> {
+
+  JsonValueCore<JVC> parse(String json);
+
+  JsonValueCore<JVC> parse(Reader jsonReader) throws IOException;
+
+}
+```
+
 ### JsonValueBase
 ```java
 public interface JsonValueBase<JVB extends JsonValueBase<?>> extends Jsonable {
@@ -89,6 +140,20 @@ public interface JsonValueBase<JVB extends JsonValueBase<?>> extends Jsonable {
 }
 ```
 
+### JsonValueCore
+```java
+public interface JsonValueCore<JVC extends JsonValueCore<?>>
+    extends JsonValueBase<JVC>, JsonSource {
+
+  JsonObjectCore<JVC> asObject();
+
+  JsonArrayCore<JVC> asArray();
+
+  JsonValueCore<JVC> asValue();
+
+}
+```
+
 ### JsonArrayBase
 ```java
 public interface JsonArrayBase<JVB extends JsonValueBase<?>>
@@ -105,6 +170,20 @@ public interface JsonArrayBase<JVB extends JsonValueBase<?>>
   default List<Object> toList() {
     return JsonValueUtils.toList(this);
   }
+
+}
+```
+
+### JsonArrayCore
+```java
+public interface JsonArrayCore<JVC extends JsonValueCore<?>>
+    extends JsonArrayBase<JVC>, JsonValueCore<JVC> {
+
+  void add(JsonSource jsonSource);
+
+  void set(int index, JsonSource jsonSource);
+
+  boolean remove(int index);
 
 }
 ```
@@ -129,6 +208,18 @@ public interface JsonObjectBase<JVB extends JsonValueBase<?>>
   default Map<String, Object> toMap() {
     return JsonValueUtils.toMap(this);
   }
+
+}
+```
+
+### JsonObjectCore
+```java
+public interface JsonObjectCore<JVC extends JsonValueCore<?>>
+    extends JsonObjectBase<JVC>, JsonValueCore<JVC> {
+
+  void set(String name, JsonSource jsonSource);
+
+  boolean remove(String name);
 
 }
 ```
