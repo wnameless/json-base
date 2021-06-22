@@ -32,10 +32,13 @@ package com.github.wnameless.json.base;
 public interface JsonValueCore<JVC extends JsonValueCore<JVC>>
     extends JsonValueBase<JVC>, JsonSource {
 
+  @Override
   JsonObjectCore<JVC> asObject();
 
+  @Override
   JsonArrayCore<JVC> asArray();
 
+  @Override
   JsonValueCore<JVC> asValue();
 
 }
