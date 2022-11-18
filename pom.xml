@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.wnameless.json</groupId>
     <artifactId>json-base</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>2.2.0</version>
 
     <name>json-base</name>
     <description>A set of Java interfaces which decouples JSON implementations such as Jackson and Gson...</description>
@@ -21,7 +21,7 @@
         <connection>scm:git:git@github.com:wnameless/json-base.git</connection>
         <developerConnection>scm:git:git@github.com:wnameless/json-base.git</developerConnection>
         <url>git@github.com:wnameless/json-base.git</url>
-        <tag>HEAD</tag>
+        <tag>json-base-2.2.0</tag>
     </scm>
 
     <developers>
