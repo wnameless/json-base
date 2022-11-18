@@ -39,18 +39,22 @@ public final class JsonPrinter {
     if (json == null) new NullPointerException();
     StringBuilder minimalPrintBuilder = new StringBuilder();
 
+    int lookback = -1;
     boolean inQuote = false;
     for (char jsonChar : json.toCharArray()) {
       switch (jsonChar) {
         case '"':
-          inQuote = !inQuote;
-          minimalPrintBuilder.append(jsonChar);
-          break;
+          if (lookback != '\\') {
+            inQuote = !inQuote;
+            minimalPrintBuilder.append(jsonChar);
+            break;
+          }
         default:
           if (inQuote || !Character.toString(jsonChar).matches("\\s")) {
             minimalPrintBuilder.append(jsonChar);
           }
       }
+      lookback = jsonChar;
     }
 
     return minimalPrintBuilder.toString();
@@ -80,15 +84,18 @@ public final class JsonPrinter {
     if (json == null) new NullPointerException();
     StringBuilder prettyPrintBuilder = new StringBuilder();
 
+    int lookback = -1;
     int indentLevel = 0;
     boolean inQuote = false;
     boolean inBracket = false;
     for (char jsonChar : json.toCharArray()) {
       switch (jsonChar) {
         case '"':
-          inQuote = !inQuote;
-          prettyPrintBuilder.append(jsonChar);
-          break;
+          if (lookback != '\\') {
+            inQuote = !inQuote;
+            prettyPrintBuilder.append(jsonChar);
+            break;
+          }
         case '{':
           prettyPrintBuilder.append(jsonChar);
           if (!inQuote) {
@@ -141,6 +148,7 @@ public final class JsonPrinter {
             prettyPrintBuilder.append(jsonChar);
           }
       }
+      lookback = jsonChar;
     }
 
     return prettyPrintBuilder.toString();

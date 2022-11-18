@@ -18,5 +18,6 @@ Version 2.0.0
 + Add JsonValueCore, JsonObjectCore, JsonArrayCore, JsonCore, JsonSource
 + Add JsonPrinter, JsonValueUtils
 
-Version 2.0.1
-# Fix JsonProter#prettyPrint bug
+Version 2.1.0
+* Fix JsonProter#prettyPrint bug
+* Improve module-info.java
