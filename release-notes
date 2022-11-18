@@ -17,3 +17,6 @@ Version 2.0.0
 + Add #toMap, #toList
 + Add JsonValueCore, JsonObjectCore, JsonArrayCore, JsonCore, JsonSource
 + Add JsonPrinter, JsonValueUtils
+
+Version 2.0.1
+# Fix JsonProter#prettyPrint bug

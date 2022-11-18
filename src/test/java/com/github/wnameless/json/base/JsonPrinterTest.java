@@ -58,4 +58,24 @@ public class JsonPrinterTest {
     assertEquals(prettyJson, JsonPrinter.prettyPrint(minimalJson));
   }
 
+  @Test
+  public void testMinimalPrintWithDoubleQuotesEscaped() throws IOException {
+    URL url = Resources.getResource("minimal-double-quotes-escaped.json");
+    String minimalJson = Resources.toString(url, Charsets.UTF_8);
+    url = Resources.getResource("pretty-double-quotes-escaped.json");
+    String prettyJson = Resources.toString(url, Charsets.UTF_8);
+
+    assertEquals(minimalJson, JsonPrinter.minimalPrint(prettyJson));
+  }
+
+  @Test
+  public void testPrettyPrintWithDoubleQuotesEscaped() throws IOException {
+    URL url = Resources.getResource("minimal-double-quotes-escaped.json");
+    String minimalJson = Resources.toString(url, Charsets.UTF_8);
+    url = Resources.getResource("pretty-double-quotes-escaped.json");
+    String prettyJson = Resources.toString(url, Charsets.UTF_8);
+
+    assertEquals(prettyJson, JsonPrinter.prettyPrint(minimalJson));
+  }
+
 }
