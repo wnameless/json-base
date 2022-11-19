@@ -24,3 +24,6 @@ Version 2.1.0
 
 Version 2.2.0
 * Alter all "requires static transitive" to "requires static" in module-info.java to avoid "module not found" error while compiling by other projects
+
+Version 2.2.1
+* Fix JsonPrinter bug on the edge case: having backslash before ending double quotes
