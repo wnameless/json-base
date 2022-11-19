@@ -40,11 +40,12 @@ public final class JsonPrinter {
     StringBuilder minimalPrintBuilder = new StringBuilder();
 
     int lookback = -1;
+    int backslashCount = 0;
     boolean inQuote = false;
     for (char jsonChar : json.toCharArray()) {
       switch (jsonChar) {
         case '"':
-          if (lookback != '\\') {
+          if (lookback != '\\' || backslashCount % 2 == 0) {
             inQuote = !inQuote;
             minimalPrintBuilder.append(jsonChar);
             break;
@@ -53,6 +54,11 @@ public final class JsonPrinter {
           if (inQuote || !Character.toString(jsonChar).matches("\\s")) {
             minimalPrintBuilder.append(jsonChar);
           }
+      }
+      if (jsonChar == '\\') {
+        backslashCount++;
+      } else {
+        backslashCount = 0;
       }
       lookback = jsonChar;
     }
@@ -85,13 +91,14 @@ public final class JsonPrinter {
     StringBuilder prettyPrintBuilder = new StringBuilder();
 
     int lookback = -1;
+    int backslashCount = 0;
     int indentLevel = 0;
     boolean inQuote = false;
     boolean inBracket = false;
     for (char jsonChar : json.toCharArray()) {
       switch (jsonChar) {
         case '"':
-          if (lookback != '\\') {
+          if (lookback != '\\' || backslashCount % 2 == 0) {
             inQuote = !inQuote;
             prettyPrintBuilder.append(jsonChar);
             break;
@@ -147,6 +154,11 @@ public final class JsonPrinter {
           if (inQuote || !Character.toString(jsonChar).matches("\\s")) {
             prettyPrintBuilder.append(jsonChar);
           }
+      }
+      if (jsonChar == '\\') {
+        backslashCount++;
+      } else {
+        backslashCount = 0;
       }
       lookback = jsonChar;
     }
