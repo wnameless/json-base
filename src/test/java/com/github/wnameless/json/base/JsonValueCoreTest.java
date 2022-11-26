@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -78,6 +79,14 @@ public class JsonValueCoreTest {
     jsonValue = new JacksonJsonValue(jsonNode);
 
     assertSame(jsonNode, jsonValue.getSource());
+  }
+
+  @Test
+  public void testOrgnGetSource() {
+    JSONObject jsonObject = new JSONObject(jo);
+    jsonValue = new OrgJsonValue(jsonObject);
+
+    assertSame(jsonObject, jsonValue.getSource());
   }
 
 }

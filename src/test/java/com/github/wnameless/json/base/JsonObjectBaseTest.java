@@ -24,10 +24,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -71,6 +73,7 @@ public class JsonObjectBaseTest {
 
   JsonObjectBase<?> gsonObj;
   JsonObjectBase<?> jacksonObj;
+  JsonObjectBase<?> orgObj;
 
   @BeforeEach
   public void init() {
@@ -81,6 +84,9 @@ public class JsonObjectBaseTest {
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonObj = new JacksonJsonValue(jsonNode).asObject();
+
+    jo.setObj(JSONObject.NULL);
+    orgObj = new OrgJsonValue(new JSONObject(jo)).asObject();
   }
 
   @Test
@@ -90,14 +96,23 @@ public class JsonObjectBaseTest {
 
     assertArrayEquals(new String[] { "str", "num", "bool", "obj" },
         Iterators.toArray(jacksonObj.names(), String.class));
+
+    assertEquals(
+        new HashSet<>(
+            Arrays.asList(new String[] { "str", "num", "bool", "obj" })),
+        new HashSet<>(
+            Arrays.asList(Iterators.toArray(orgObj.names(), String.class))));
   }
 
   @Test
   public void testContains() {
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
+    assertFalse(orgObj.contains("text"));
+
     assertTrue(gsonObj.contains("str"));
     assertTrue(jacksonObj.contains("str"));
+    assertTrue(orgObj.contains("str"));
   }
 
   @Test
@@ -110,9 +125,15 @@ public class JsonObjectBaseTest {
 
     assertEquals(str, jacksonObj.get("str").asString());
     assertEquals(Arrays.asList(i, l, d, bi, bd),
-        gsonObj.get("num").asArray().toList());
+        jacksonObj.get("num").asArray().toList());
     assertEquals(bool, jacksonObj.get("bool").asBoolean());
     assertEquals(null, jacksonObj.get("obj").asNull());
+
+    assertEquals(str, orgObj.get("str").asString());
+    assertEquals(Arrays.asList(i, l, d, bi, bd),
+        orgObj.get("num").asArray().toList());
+    assertEquals(bool, orgObj.get("bool").asBoolean());
+    assertEquals(null, orgObj.get("obj").asNull());
   }
 
   @Test

@@ -24,10 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -77,6 +81,9 @@ public class JsonValueBaseTest {
     });
     assertThrows(NullPointerException.class, () -> {
       new JacksonJsonValue(null);
+    });
+    assertThrows(NullPointerException.class, () -> {
+      new OrgJsonValue(null);
     });
   }
 
@@ -203,6 +210,65 @@ public class JsonValueBaseTest {
   }
 
   @Test
+  public void testOrgValue() {
+    jo.setObj(JSONObject.NULL);
+    jsonValue = new OrgJsonValue(new JSONObject(jo));
+
+    assertTrue(jsonValue.isObject());
+    assertTrue(jsonValue.asObject().get("str").isString());
+    assertEquals(str, jsonValue.asObject().get("str").asString());
+    assertTrue(jsonValue.asObject().get("num").isArray());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
+    assertEquals(i,
+        jsonValue.asObject().get("num").asArray().get(0).asNumber());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
+    assertEquals(l,
+        jsonValue.asObject().get("num").asArray().get(1).asNumber());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
+        0.0);
+    assertEquals(d,
+        jsonValue.asObject().get("num").asArray().get(2).asNumber());
+    assertEquals(bi,
+        jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
+    assertEquals(bi,
+        jsonValue.asObject().get("num").asArray().get(3).asNumber());
+    assertEquals(bd,
+        jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
+    assertEquals(bd,
+        jsonValue.asObject().get("num").asArray().get(4).asNumber());
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertTrue(jsonValue.asObject().get("bool").asBoolean());
+    assertTrue(jsonValue.asObject().get("obj").isNull());
+    assertSame(null, jsonValue.asObject().get("obj").asNull());
+
+    assertSame(jsonValue, jsonValue.asValue());
+
+    new EqualsTester().addEqualityGroup(jsonValue).testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
+    new EqualsTester()
+        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
+        .testEquals();
+  }
+
+  @Test
+  public void testOrgValueToJson() {
+    jo.setObj(JSONObject.NULL);
+    jsonValue = new OrgJsonValue(new JSONObject(jo));
+    assertEquals(new OrgJsonCore().parse(
+        "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}"),
+        new OrgJsonCore().parse(jsonValue.toJson()));
+    assertEquals(new OrgJsonCore().parse(
+        "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}"),
+        new OrgJsonCore().parse(jsonValue.asObject().toJson()));
+    assertEquals(
+        "[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123]",
+        jsonValue.asObject().get("num").asArray().toJson());
+  }
+
+  @Test
   public void testGsonArrayIterable() {
     Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
@@ -318,6 +384,63 @@ public class JsonValueBaseTest {
     jacksonJson = new JacksonJsonValue(jsonNode);
     jacksonObject = jacksonJson.asObject();
     assertTrue(jacksonObject.isEmpty());
+  }
+
+  @Test
+  public void testOrgArrayIterable() {
+    OrgJsonValue orgJson = new OrgJsonValue(new JSONObject(jo));
+
+    JsonArrayBase<OrgJsonValue> array = orgJson.asObject().get("num").asArray();
+    Iterator<OrgJsonValue> iter = array.iterator();
+
+    assertEquals(array.get(0), iter.next());
+    assertEquals(array.get(1), iter.next());
+    assertEquals(array.get(2), iter.next());
+    assertEquals(array.get(3), iter.next());
+    assertEquals(array.get(4), iter.next());
+    assertFalse(iter.hasNext());
+
+    assertFalse(array.isEmpty());
+    orgJson = new OrgJsonValue(new JSONArray(new ArrayList<>()));
+    array = orgJson.asArray();
+    assertTrue(array.isEmpty());
+  }
+
+  @Test
+  public void testOrgObjectIterable() {
+    jo.setObj(JSONObject.NULL);
+    OrgJsonObject orgObject = new OrgJsonValue(new JSONObject(jo)).asObject();
+
+    Iterator<Entry<String, OrgJsonValue>> iter = orgObject.iterator();
+
+    Entry<String, OrgJsonValue> element = iter.next();
+    List<String> keys =
+        new ArrayList<>(Arrays.asList("str", "num", "bool", "obj"));
+    // assertEquals("str", element.getKey());
+    assertEquals(orgObject.get(element.getKey()), element.getValue());
+    keys.remove(element.getKey());
+
+    element = iter.next();
+    // assertEquals("num", element.getKey());
+    assertEquals(orgObject.get(element.getKey()), element.getValue());
+    keys.remove(element.getKey());
+
+    element = iter.next();
+    // assertEquals("bool", element.getKey());
+    assertEquals(orgObject.get(element.getKey()), element.getValue());
+    keys.remove(element.getKey());
+
+    element = iter.next();
+    // assertEquals("obj", element.getKey());
+    assertEquals(orgObject.get(element.getKey()), element.getValue());
+    keys.remove(element.getKey());
+
+    assertTrue(keys.isEmpty());
+    assertFalse(iter.hasNext());
+
+    assertFalse(orgObject.isEmpty());
+    orgObject = new OrgJsonValue(new JSONObject(new HashMap<>())).asObject();
+    assertTrue(orgObject.isEmpty());
   }
 
 }

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -67,6 +68,7 @@ public class JsonArrayBaseTest {
 
   JsonArrayBase<?> gsonAry;
   JsonArrayBase<?> jacksonAry;
+  JsonArrayCore<?> orgAry;
 
   @BeforeEach
   public void init() {
@@ -77,6 +79,10 @@ public class JsonArrayBaseTest {
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonAry = new JacksonJsonValue(jsonNode).asObject().get("num").asArray();
+
+    jo.setObj(JSONObject.NULL);
+    orgAry =
+        new OrgJsonValue(new JSONObject(jo)).asObject().get("num").asArray();
   }
 
   @Test
@@ -92,24 +98,34 @@ public class JsonArrayBaseTest {
     assertEquals(d, jacksonAry.get(2).asNumber());
     assertEquals(bi, jacksonAry.get(3).asNumber());
     assertEquals(bd, jacksonAry.get(4).asNumber());
+
+    assertEquals(i, orgAry.get(0).asNumber());
+    assertEquals(l, orgAry.get(1).asNumber());
+    assertEquals(d, orgAry.get(2).asNumber());
+    assertEquals(bi, orgAry.get(3).asNumber());
+    assertEquals(bd, orgAry.get(4).asNumber());
   }
 
   @Test
   public void testSize() {
     assertEquals(5, gsonAry.size());
     assertEquals(5, jacksonAry.size());
+    assertEquals(5, orgAry.size());
   }
 
   @Test
   public void testIsEmpty() {
     assertFalse(gsonAry.isEmpty());
     assertFalse(jacksonAry.isEmpty());
+    assertFalse(orgAry.isEmpty());
 
     gsonAry = new GsonJsonCore().parse("[]").asArray();
     jacksonAry = new JacksonJsonCore().parse("[]").asArray();
+    orgAry = new OrgJsonCore().parse("[]").asArray();
 
     assertTrue(gsonAry.isEmpty());
     assertTrue(jacksonAry.isEmpty());
+    assertTrue(orgAry.isEmpty());
   }
 
   @Test
@@ -118,7 +134,8 @@ public class JsonArrayBaseTest {
     num.addAll(Arrays.asList(i, l, d, bi, bd));
 
     assertEquals(num, gsonAry.toList());
-    assertEquals(num, gsonAry.toList());
+    assertEquals(num, jacksonAry.toList());
+    assertEquals(num, orgAry.toList());
   }
 
 }
