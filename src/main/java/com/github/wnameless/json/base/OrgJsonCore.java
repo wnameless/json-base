@@ -20,6 +20,13 @@ import java.io.Reader;
 
 import org.json.JSONTokener;
 
+/**
+ * 
+ * The org.json implementation of {@link JsonCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public class OrgJsonCore implements JsonCore<OrgJsonValue> {
 
   @Override

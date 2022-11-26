@@ -23,6 +23,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+/**
+ * 
+ * The org.json implementation of {@link JsonObjectCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
 
   private final Object jsonValue;

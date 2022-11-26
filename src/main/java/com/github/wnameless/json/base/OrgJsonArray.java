@@ -21,6 +21,13 @@ import java.util.Iterator;
 
 import org.json.JSONArray;
 
+/**
+ * 
+ * The org.json implementation of {@link JsonArrayCore}.
+ * 
+ * @author Wei-Ming Wu
+ *
+ */
 public final class OrgJsonArray implements JsonArrayCore<OrgJsonValue> {
 
   private final JSONArray jsonArray;
