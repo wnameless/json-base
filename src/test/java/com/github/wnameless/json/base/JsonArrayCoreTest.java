@@ -26,6 +26,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -70,6 +72,7 @@ public class JsonArrayCoreTest {
 
   JsonArrayCore<?> gsonAry;
   JsonArrayCore<?> jacksonAry;
+  JsonArrayCore<?> orgAry;
 
   @BeforeEach
   public void init() {
@@ -80,6 +83,9 @@ public class JsonArrayCoreTest {
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonAry = new JacksonJsonValue(jsonNode).asObject().get("num").asArray();
+
+    orgAry =
+        new OrgJsonValue(new JSONObject(jo)).asObject().get("num").asArray();
   }
 
   @Test
@@ -90,6 +96,9 @@ public class JsonArrayCoreTest {
     assertThrows(NullPointerException.class, () -> {
       new JacksonJsonArray(null);
     });
+    assertThrows(NullPointerException.class, () -> {
+      new OrgJsonArray(null);
+    });
   }
 
   @Test
@@ -99,6 +108,9 @@ public class JsonArrayCoreTest {
 
     jacksonAry.add(new JacksonJsonCore().parse("0"));
     assertEquals(new JacksonJsonCore().parse("0"), jacksonAry.get(5));
+
+    orgAry.add(new OrgJsonCore().parse("0"));
+    assertEquals(new OrgJsonCore().parse("0"), orgAry.get(5));
   }
 
   @Test
@@ -108,6 +120,9 @@ public class JsonArrayCoreTest {
 
     jacksonAry.set(4, new JacksonJsonCore().parse("0"));
     assertEquals(new JacksonJsonCore().parse("0"), jacksonAry.get(4));
+
+    orgAry.set(4, new OrgJsonCore().parse("0"));
+    assertEquals(new OrgJsonCore().parse("0"), orgAry.get(4));
   }
 
   @Test
@@ -117,6 +132,9 @@ public class JsonArrayCoreTest {
 
     jacksonAry.remove(4);
     assertEquals(4, jacksonAry.size());
+
+    orgAry.remove(4);
+    assertEquals(4, orgAry.size());
   }
 
   @Test
@@ -124,7 +142,11 @@ public class JsonArrayCoreTest {
     assertEquals(new GsonJsonArray((JsonArray) gsonAry.getSource()), gsonAry);
     assertEquals(new JacksonJsonArray((ArrayNode) jacksonAry.getSource()),
         jacksonAry);
+    assertEquals(new OrgJsonArray((JSONArray) orgAry.getSource()), orgAry);
+
     assertNotEquals(gsonAry, jacksonAry);
+    assertNotEquals(gsonAry, orgAry);
+    assertNotEquals(jacksonAry, orgAry);
   }
 
   @Test
@@ -203,6 +225,45 @@ public class JsonArrayCoreTest {
       jacksonAry.asBigDecimal();
     });
     assertTrue(jacksonAry.getSource() instanceof ArrayNode);
+  }
+
+  @Test
+  public void testOrgJsonObjectState() {
+    assertFalse(orgAry.isObject());
+    assertTrue(orgAry.isArray());
+    assertFalse(orgAry.isString());
+    assertFalse(orgAry.isBoolean());
+    assertFalse(orgAry.isNumber());
+    assertFalse(orgAry.isNull());
+
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgAry.asObject();
+    });
+    assertSame(orgAry, orgAry.asArray());
+    assertEquals(new OrgJsonValue((JSONArray) orgAry.getSource()),
+        orgAry.asValue());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgAry.asString();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgAry.asBoolean();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgAry.asInt();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgAry.asLong();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgAry.asBigInteger();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgAry.asDouble();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgAry.asBigDecimal();
+    });
+    assertTrue(orgAry.getSource() instanceof JSONArray);
   }
 
 }

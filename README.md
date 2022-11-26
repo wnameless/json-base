@@ -3,10 +3,10 @@
 
 json-base
 =============
-A set of Java interfaces which decouples JSON implementations such as Jackson and Gson...
+A set of Java interfaces which decouples JSON implementations such as Jackson, org.json and Gson...
 
 ## Purpose
-To avoid JSON conversion between different JSON libararies(Jackson, Gson...) in any JSON cosuming Java method by creating generic JSON data intefaces which cover the common JSON data behavior.
+To avoid JSON conversion between different JSON libraries(Jackson, org.json, Gson...) in any JSON consuming Java method by creating generic JSON data interfaces which cover the common JSON data behavior.
 
 Java 9 Module is supported after v1.1.0, but the minimal Java version is remained Java 8.
 ## Maven Repo
@@ -95,10 +95,10 @@ System.out.println(JsonPrinter.prettyPrint(obj.toJson()));
 ```
 
 ## Important
-Althought this labrary privides wrappers for Gson and Jackson, you still need to include the JSON implementation library which you are using in your dependencies.
+Although this library provides wrappers for Jackson, org.json and Gson, you still need to include the JSON implementation library which you are using in your dependencies.
 
 ## JSON data common interfaces
-If user want to implement zir own JSON data wappers, here are some interfaces to work with.
+If user want to implement zir own JSON data wrappers, here are some interfaces to work with.
 
 For immutable JSON data: JsonValueBase, JsonArrayBase, JsonObjectBase <br>
 For mutable JSON data: JsonCore, JsonValueCore, JsonArrayCore, JsonObjectCore

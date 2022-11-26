@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -70,6 +71,7 @@ public class JsonObjectCoreTest {
 
   JsonObjectCore<?> gsonObj;
   JsonObjectCore<?> jacksonObj;
+  JsonObjectCore<?> orgObj;
 
   @BeforeEach
   public void init() {
@@ -80,6 +82,9 @@ public class JsonObjectCoreTest {
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonObj = new JacksonJsonValue(jsonNode).asObject();
+
+    jo.setObj(JSONObject.NULL);
+    orgObj = new OrgJsonValue(new JSONObject(jo)).asObject();
   }
 
   @Test
@@ -90,30 +95,40 @@ public class JsonObjectCoreTest {
     assertThrows(NullPointerException.class, () -> {
       new JacksonJsonObject(null);
     });
+    assertThrows(NullPointerException.class, () -> {
+      new OrgJsonObject(null);
+    });
   }
 
   @Test
   public void testSetRemove() {
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
+    assertFalse(orgObj.contains("text"));
 
     gsonObj.set("text", new GsonJsonCore().parse("\"str\""));
     jacksonObj.set("text", new JacksonJsonCore().parse("\"str\""));
+    orgObj.set("text", new OrgJsonCore().parse("\"str\""));
 
     assertEquals(5, gsonObj.size());
     assertEquals(5, jacksonObj.size());
+    assertEquals(5, orgObj.size());
 
     assertEquals("str", gsonObj.get("text").asString());
     assertEquals("str", jacksonObj.get("text").asString());
+    assertEquals("str", orgObj.get("text").asString());
 
     assertTrue(gsonObj.contains("text"));
     assertTrue(jacksonObj.contains("text"));
+    assertTrue(orgObj.contains("text"));
 
     gsonObj.remove("text");
     jacksonObj.remove("text");
+    orgObj.remove("text");
 
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
+    assertFalse(orgObj.contains("text"));
   }
 
   @Test
@@ -121,7 +136,11 @@ public class JsonObjectCoreTest {
     assertEquals(new GsonJsonObject((JsonObject) gsonObj.getSource()), gsonObj);
     assertEquals(new JacksonJsonObject((ObjectNode) jacksonObj.getSource()),
         jacksonObj);
+    assertEquals(new OrgJsonObject((JSONObject) orgObj.getSource()), orgObj);
+
     assertNotEquals(gsonObj, jacksonObj);
+    assertNotEquals(gsonObj, orgObj);
+    assertNotEquals(jacksonObj, orgObj);
   }
 
   @Test
@@ -200,6 +219,45 @@ public class JsonObjectCoreTest {
       jacksonObj.asBigDecimal();
     });
     assertTrue(jacksonObj.getSource() instanceof ObjectNode);
+  }
+
+  @Test
+  public void testOrgJsonObjectState() {
+    assertTrue(orgObj.isObject());
+    assertFalse(orgObj.isArray());
+    assertFalse(orgObj.isString());
+    assertFalse(orgObj.isBoolean());
+    assertFalse(orgObj.isNumber());
+    assertFalse(orgObj.isNull());
+
+    assertSame(orgObj, orgObj.asObject());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgObj.asArray();
+    });
+    assertEquals(new OrgJsonValue((JSONObject) orgObj.getSource()),
+        orgObj.asValue());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgObj.asString();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgObj.asBoolean();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgObj.asInt();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgObj.asLong();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgObj.asBigInteger();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgObj.asDouble();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      orgObj.asBigDecimal();
+    });
+    assertTrue(orgObj.getSource() instanceof JSONObject);
   }
 
 }

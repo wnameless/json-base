@@ -25,6 +25,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -95,13 +97,17 @@ public class JsonCoreTest {
     assertEquals(jsonValue, new GsonJsonCore(gson).parse(json));
     assertEquals(jsonValue,
         new GsonJsonCore(gson).parse(new StringReader(json)));
+
+    assertThrows(RuntimeException.class, () -> {
+      new GsonJsonCore().parse("\"abc");
+    });
   }
 
   @Test
   public void testJacksonJsonCore() throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     JsonNode jsonNode = mapper.valueToTree(jo);
-    jsonValue = new JacksonJsonValue(jsonNode);
+    jsonValue = new OrgJsonValue(json);
     assertNotEquals(jsonValue, new JacksonJsonCore().parse(json));
 
     mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
@@ -114,7 +120,28 @@ public class JsonCoreTest {
         new JacksonJsonCore(mapper).parse(new StringReader(json)));
 
     assertThrows(RuntimeException.class, () -> {
-      new JacksonJsonCore().parse("abc");
+      new JacksonJsonCore().parse("\"abc");
+    });
+  }
+
+  @Test
+  public void testOrgJsonCore() throws IOException {
+    JSONObject jsonObject = new JSONObject(jo);
+    jsonValue = new OrgJsonValue(jsonObject);
+    assertNotEquals(jsonValue, new OrgJsonCore().parse(json));
+
+    jo.setObj(JSONObject.NULL);
+    jsonObject = new JSONObject(jo);
+    jsonValue = new OrgJsonValue(jsonObject);
+    assertEquals(jsonValue, new OrgJsonCore().parse(json));
+
+    jsonValue = new OrgJsonValue(new JSONTokener(json));
+
+    assertEquals(jsonValue, new OrgJsonCore().parse(json));
+    assertEquals(jsonValue, new OrgJsonCore().parse(new StringReader(json)));
+
+    assertThrows(RuntimeException.class, () -> {
+      new OrgJsonCore().parse("\"abc");
     });
   }
 
