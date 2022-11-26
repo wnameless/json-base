@@ -22,6 +22,7 @@ import java.util.Objects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.json.JSONWriter;
 
 /**
  * 
@@ -148,15 +149,12 @@ public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
 
   @Override
   public String toString() {
-    return jsonValue.toString();
+    return JSONWriter.valueToString(jsonValue);
   }
 
   @Override
   public String toJson() {
-    JSONArray array = new JSONArray();
-    array.put(jsonValue);
-    String json = array.toString();
-    return json.substring(1, json.length() - 1);
+    return toString();
   }
 
   @Override
