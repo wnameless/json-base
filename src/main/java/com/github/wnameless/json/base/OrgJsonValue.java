@@ -29,6 +29,11 @@ public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
 
   public OrgJsonValue(Object jsonValue) {
     if (jsonValue == null) throw new NullPointerException();
+    if (!(jsonValue instanceof Boolean || jsonValue instanceof String
+        || jsonValue instanceof Number || jsonValue instanceof JSONArray
+        || jsonValue instanceof JSONObject || jsonValue == JSONObject.NULL)) {
+      throw new IllegalArgumentException();
+    }
     this.jsonValue = jsonValue;
   }
 
