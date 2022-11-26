@@ -154,7 +154,6 @@ public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
 
   @Override
   public OrgJsonObject asObject() {
-    System.out.println(jsonValue);
     return new OrgJsonObject((JSONObject) jsonValue);
   }
 

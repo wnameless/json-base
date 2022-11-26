@@ -176,9 +176,7 @@ public class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
 
   @Override
   public void set(String name, JsonSource jsonValue) {
-    System.out.println(jsonObject.length());
     jsonObject.put(name, jsonValue.getSource());
-    System.out.println(jsonObject.length());
   }
 
   @Override
