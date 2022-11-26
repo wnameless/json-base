@@ -30,7 +30,7 @@ import org.json.JSONObject;
  * @author Wei-Ming Wu
  *
  */
-public class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
+public final class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
 
   private final JSONObject jsonObject;
 
