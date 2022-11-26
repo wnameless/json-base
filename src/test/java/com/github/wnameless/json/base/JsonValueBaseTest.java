@@ -90,6 +90,8 @@ public class JsonValueBaseTest {
   @Test
   public void testGsonValue() {
     Gson gson = new GsonBuilder().serializeNulls().create();
+    str = "\"text\\";
+    jo.setStr(str);
     JsonElement jsonElement =
         gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     jsonValue = new GsonJsonValue(jsonElement);
@@ -131,6 +133,13 @@ public class JsonValueBaseTest {
     new EqualsTester()
         .addEqualityGroup(jsonValue.asObject().get("num").asArray())
         .testEquals();
+
+    assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
+    assertEquals(
+        "[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123]",
+        jsonValue.asObject().get("num").toJson());
+    assertEquals("true", jsonValue.asObject().get("bool").toJson());
+    assertEquals("null", jsonValue.asObject().get("obj").toJson());
   }
 
   @Test
@@ -152,6 +161,8 @@ public class JsonValueBaseTest {
 
   @Test
   public void testJacksonValue() {
+    str = "\"text\\";
+    jo.setStr(str);
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jsonValue = new JacksonJsonValue(jsonNode);
 
@@ -192,6 +203,13 @@ public class JsonValueBaseTest {
     new EqualsTester()
         .addEqualityGroup(jsonValue.asObject().get("num").asArray())
         .testEquals();
+
+    assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
+    assertEquals(
+        "[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123]",
+        jsonValue.asObject().get("num").toJson());
+    assertEquals("true", jsonValue.asObject().get("bool").toJson());
+    assertEquals("null", jsonValue.asObject().get("obj").toJson());
   }
 
   @Test
@@ -211,6 +229,8 @@ public class JsonValueBaseTest {
 
   @Test
   public void testOrgValue() {
+    str = "\"text\\";
+    jo.setStr(str);
     jo.setObj(JSONObject.NULL);
     jsonValue = new OrgJsonValue(new JSONObject(jo));
 
@@ -251,6 +271,13 @@ public class JsonValueBaseTest {
     new EqualsTester()
         .addEqualityGroup(jsonValue.asObject().get("num").asArray())
         .testEquals();
+
+    assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
+    assertEquals(
+        "[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123]",
+        jsonValue.asObject().get("num").toJson());
+    assertEquals("true", jsonValue.asObject().get("bool").toJson());
+    assertEquals("null", jsonValue.asObject().get("obj").toJson());
   }
 
   @Test
