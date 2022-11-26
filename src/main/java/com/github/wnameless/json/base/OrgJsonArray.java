@@ -160,7 +160,7 @@ public final class OrgJsonArray implements JsonArrayCore<OrgJsonValue> {
   }
 
   @Override
-  public JsonObjectCore<OrgJsonValue> asObject() {
+  public OrgJsonObject asObject() {
     throw new UnsupportedOperationException();
   }
 
