@@ -40,6 +40,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
+import jakarta.json.Json;
+
 public class JsonArrayCoreTest {
 
   String str = "text";
@@ -73,6 +75,7 @@ public class JsonArrayCoreTest {
   JsonArrayCore<?> gsonAry;
   JsonArrayCore<?> jacksonAry;
   JsonArrayCore<?> orgAry;
+  JsonArrayCore<?> jakartaAry;
 
   @BeforeEach
   public void init() {
@@ -86,6 +89,9 @@ public class JsonArrayCoreTest {
 
     orgAry =
         new OrgJsonValue(new JSONObject(jo)).asObject().get("num").asArray();
+
+    jakartaAry = new JakartaJsonArray(
+        Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build());
   }
 
   @Test
@@ -99,6 +105,9 @@ public class JsonArrayCoreTest {
     assertThrows(NullPointerException.class, () -> {
       new OrgJsonArray(null);
     });
+    assertThrows(NullPointerException.class, () -> {
+      new JakartaJsonArray(null);
+    });
   }
 
   @Test
@@ -111,6 +120,9 @@ public class JsonArrayCoreTest {
 
     orgAry.add(new OrgJsonCore().parse("0"));
     assertEquals(new OrgJsonCore().parse("0"), orgAry.get(5));
+
+    jakartaAry.add(new JakartaJsonCore().parse("0"));
+    assertEquals(new JakartaJsonCore().parse("0"), jakartaAry.get(5));
   }
 
   @Test
@@ -123,6 +135,9 @@ public class JsonArrayCoreTest {
 
     orgAry.set(4, new OrgJsonCore().parse("0"));
     assertEquals(new OrgJsonCore().parse("0"), orgAry.get(4));
+
+    jakartaAry.set(4, new JakartaJsonCore().parse("0"));
+    assertEquals(new JakartaJsonCore().parse("0"), jakartaAry.get(4));
   }
 
   @Test
@@ -135,6 +150,9 @@ public class JsonArrayCoreTest {
 
     orgAry.remove(4);
     assertEquals(4, orgAry.size());
+
+    jakartaAry.remove(4);
+    assertEquals(4, jakartaAry.size());
   }
 
   @Test
@@ -143,10 +161,16 @@ public class JsonArrayCoreTest {
     assertEquals(new JacksonJsonArray((ArrayNode) jacksonAry.getSource()),
         jacksonAry);
     assertEquals(new OrgJsonArray((JSONArray) orgAry.getSource()), orgAry);
+    assertEquals(
+        new JakartaJsonArray((jakarta.json.JsonArray) jakartaAry.getSource()),
+        jakartaAry);
 
     assertNotEquals(gsonAry, jacksonAry);
     assertNotEquals(gsonAry, orgAry);
+    assertNotEquals(gsonAry, jakartaAry);
     assertNotEquals(jacksonAry, orgAry);
+    assertNotEquals(jacksonAry, jakartaAry);
+    assertNotEquals(orgAry, jakartaAry);
   }
 
   @Test
@@ -264,6 +288,46 @@ public class JsonArrayCoreTest {
       orgAry.asBigDecimal();
     });
     assertTrue(orgAry.getSource() instanceof JSONArray);
+  }
+
+  @Test
+  public void testJakartaJsonObjectState() {
+    assertFalse(jakartaAry.isObject());
+    assertTrue(jakartaAry.isArray());
+    assertFalse(jakartaAry.isString());
+    assertFalse(jakartaAry.isBoolean());
+    assertFalse(jakartaAry.isNumber());
+    assertFalse(jakartaAry.isNull());
+
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaAry.asObject();
+    });
+    assertSame(jakartaAry, jakartaAry.asArray());
+    assertEquals(
+        new JakartaJsonValue((jakarta.json.JsonArray) jakartaAry.getSource()),
+        jakartaAry.asValue());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaAry.asString();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaAry.asBoolean();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaAry.asInt();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaAry.asLong();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaAry.asBigInteger();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaAry.asDouble();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaAry.asBigDecimal();
+    });
+    assertTrue(jakartaAry.getSource() instanceof jakarta.json.JsonArray);
   }
 
 }

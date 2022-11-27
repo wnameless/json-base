@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 
@@ -35,7 +36,7 @@ import jakarta.json.JsonValue;
 public final class JakartaJsonObject
     implements JsonObjectCore<JakartaJsonValue> {
 
-  private final JsonObject jsonObject;
+  private JsonObject jsonObject;
 
   public JakartaJsonObject(JsonObject jsonObject) {
     if (jsonObject == null) throw new NullPointerException();
@@ -183,12 +184,15 @@ public final class JakartaJsonObject
 
   @Override
   public void set(String name, JsonSource jsonValue) {
-    jsonObject.put(name, (JsonValue) jsonValue.getSource());
+    jsonObject = Json.createObjectBuilder(jsonObject)
+        .add(name, (JsonValue) jsonValue.getSource()).build();
   }
 
   @Override
   public boolean remove(String name) {
-    return jsonObject.remove(name) != null;
+    boolean isRemovable = jsonObject.containsKey(name);
+    jsonObject = Json.createObjectBuilder(jsonObject).remove(name).build();
+    return isRemovable;
   }
 
   @Override

@@ -42,6 +42,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
+import jakarta.json.Json;
+import jakarta.json.JsonValue;
+
 public class JsonValueBaseTest {
 
   String str = "text";
@@ -84,6 +87,9 @@ public class JsonValueBaseTest {
     });
     assertThrows(NullPointerException.class, () -> {
       new OrgJsonValue(null);
+    });
+    assertThrows(NullPointerException.class, () -> {
+      new JakartaJsonValue(null);
     });
   }
 
@@ -296,6 +302,77 @@ public class JsonValueBaseTest {
   }
 
   @Test
+  public void testJakartaValue() {
+    str = "\"text\\";
+    jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
+            .add(bd).build())
+        .add("bool", bool).add("obj", JsonValue.NULL).build());
+
+    assertTrue(jsonValue.isObject());
+    assertTrue(jsonValue.asObject().get("str").isString());
+    assertEquals(str, jsonValue.asObject().get("str").asString());
+    assertTrue(jsonValue.asObject().get("num").isArray());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
+    assertEquals(i,
+        jsonValue.asObject().get("num").asArray().get(0).asNumber());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
+    assertEquals(l,
+        jsonValue.asObject().get("num").asArray().get(1).asNumber());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
+        0.0);
+    assertEquals(d,
+        jsonValue.asObject().get("num").asArray().get(2).asNumber());
+    assertEquals(bi,
+        jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
+    assertEquals(bi,
+        jsonValue.asObject().get("num").asArray().get(3).asNumber());
+    assertEquals(bd,
+        jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
+    assertEquals(bd,
+        jsonValue.asObject().get("num").asArray().get(4).asNumber());
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertTrue(jsonValue.asObject().get("bool").asBoolean());
+    assertTrue(jsonValue.asObject().get("obj").isNull());
+    assertSame(null, jsonValue.asObject().get("obj").asNull());
+
+    assertSame(jsonValue, jsonValue.asValue());
+
+    new EqualsTester().addEqualityGroup(jsonValue).testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
+    new EqualsTester()
+        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
+        .testEquals();
+
+    assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
+    assertEquals(
+        "[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123]",
+        jsonValue.asObject().get("num").toJson());
+    assertEquals("true", jsonValue.asObject().get("bool").toJson());
+    assertEquals("null", jsonValue.asObject().get("obj").toJson());
+  }
+
+  @Test
+  public void testJakartaValueToJson() {
+    jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
+            .add(bd).build())
+        .add("bool", bool).add("obj", JsonValue.NULL).build());
+    assertEquals(
+        "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}",
+        jsonValue.toJson());
+    assertEquals(
+        "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}",
+        jsonValue.asObject().toJson());
+    assertEquals(
+        "[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123]",
+        jsonValue.asObject().get("num").asArray().toJson());
+  }
+
+  @Test
   public void testGsonArrayIterable() {
     Gson gson = new GsonBuilder().serializeNulls().create();
     JsonElement jsonElement =
@@ -468,6 +545,66 @@ public class JsonValueBaseTest {
     assertFalse(orgObject.isEmpty());
     orgObject = new OrgJsonValue(new JSONObject(new HashMap<>())).asObject();
     assertTrue(orgObject.isEmpty());
+  }
+
+  @Test
+  public void testJakartaArrayIterable() {
+    JakartaJsonValue jakartaJson = new JakartaJsonValue(Json
+        .createObjectBuilder().add("str", str)
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
+            .add(bd).build())
+        .add("bool", bool).add("obj", JsonValue.NULL).build());
+
+    JsonArrayBase<JakartaJsonValue> array =
+        jakartaJson.asObject().get("num").asArray();
+    Iterator<JakartaJsonValue> iter = array.iterator();
+
+    assertEquals(array.get(0), iter.next());
+    assertEquals(array.get(1), iter.next());
+    assertEquals(array.get(2), iter.next());
+    assertEquals(array.get(3), iter.next());
+    assertEquals(array.get(4), iter.next());
+    assertFalse(iter.hasNext());
+
+    assertFalse(array.isEmpty());
+    jakartaJson = new JakartaJsonValue(Json.createArrayBuilder().build());
+    array = jakartaJson.asArray();
+    assertTrue(array.isEmpty());
+  }
+
+  @Test
+  public void testJakartaObjectIterable() {
+    JakartaJsonValue jakartaJson = new JakartaJsonValue(Json
+        .createObjectBuilder().add("str", str)
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
+            .add(bd).build())
+        .add("bool", bool).add("obj", JsonValue.NULL).build());
+    JakartaJsonObject jakartaObject = jakartaJson.asObject();
+
+    Iterator<Entry<String, JakartaJsonValue>> iter = jakartaObject.iterator();
+
+    Entry<String, JakartaJsonValue> element = iter.next();
+    assertEquals("str", element.getKey());
+    assertEquals(jakartaObject.get("str"), element.getValue());
+
+    element = iter.next();
+    assertEquals("num", element.getKey());
+    assertEquals(jakartaObject.get("num"), element.getValue());
+
+    element = iter.next();
+    assertEquals("bool", element.getKey());
+    assertEquals(jakartaObject.get("bool"), element.getValue());
+
+    element = iter.next();
+    assertEquals("obj", element.getKey());
+    assertEquals(jakartaObject.get("obj"), element.getValue());
+
+    assertFalse(iter.hasNext());
+
+    assertFalse(jakartaObject.isEmpty());
+    jakartaJson = new JakartaJsonValue(Json.createObjectBuilder().build());
+    jakartaObject = jakartaJson.asObject();
+    assertTrue(jakartaObject.isEmpty());
   }
 
 }

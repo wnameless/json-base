@@ -36,6 +36,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
+import jakarta.json.Json;
+
 public class JsonArrayBaseTest {
 
   String str = "text";
@@ -68,7 +70,8 @@ public class JsonArrayBaseTest {
 
   JsonArrayBase<?> gsonAry;
   JsonArrayBase<?> jacksonAry;
-  JsonArrayCore<?> orgAry;
+  JsonArrayBase<?> orgAry;
+  JsonArrayBase<?> jakartaAry;
 
   @BeforeEach
   public void init() {
@@ -83,6 +86,9 @@ public class JsonArrayBaseTest {
     jo.setObj(JSONObject.NULL);
     orgAry =
         new OrgJsonValue(new JSONObject(jo)).asObject().get("num").asArray();
+
+    jakartaAry = new JakartaJsonArray(
+        Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build());
   }
 
   @Test
@@ -104,6 +110,12 @@ public class JsonArrayBaseTest {
     assertEquals(d, orgAry.get(2).asNumber());
     assertEquals(bi, orgAry.get(3).asNumber());
     assertEquals(bd, orgAry.get(4).asNumber());
+
+    assertEquals(i, jakartaAry.get(0).asNumber());
+    assertEquals(l, jakartaAry.get(1).asNumber());
+    assertEquals(d, jakartaAry.get(2).asNumber());
+    assertEquals(bi, jakartaAry.get(3).asNumber());
+    assertEquals(bd, jakartaAry.get(4).asNumber());
   }
 
   @Test
@@ -111,6 +123,7 @@ public class JsonArrayBaseTest {
     assertEquals(5, gsonAry.size());
     assertEquals(5, jacksonAry.size());
     assertEquals(5, orgAry.size());
+    assertEquals(5, jakartaAry.size());
   }
 
   @Test
@@ -118,14 +131,17 @@ public class JsonArrayBaseTest {
     assertFalse(gsonAry.isEmpty());
     assertFalse(jacksonAry.isEmpty());
     assertFalse(orgAry.isEmpty());
+    assertFalse(jakartaAry.isEmpty());
 
     gsonAry = new GsonJsonCore().parse("[]").asArray();
     jacksonAry = new JacksonJsonCore().parse("[]").asArray();
     orgAry = new OrgJsonCore().parse("[]").asArray();
+    jakartaAry = new JakartaJsonCore().parse("[]").asArray();
 
     assertTrue(gsonAry.isEmpty());
     assertTrue(jacksonAry.isEmpty());
     assertTrue(orgAry.isEmpty());
+    assertTrue(jakartaAry.isEmpty());
   }
 
   @Test
@@ -136,6 +152,7 @@ public class JsonArrayBaseTest {
     assertEquals(num, gsonAry.toList());
     assertEquals(num, jacksonAry.toList());
     assertEquals(num, orgAry.toList());
+    assertEquals(num, jakartaAry.toList());
   }
 
 }

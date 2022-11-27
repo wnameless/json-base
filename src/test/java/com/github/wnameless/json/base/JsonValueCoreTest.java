@@ -31,6 +31,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
+
 public class JsonValueCoreTest {
 
   String str = "text";
@@ -82,11 +86,22 @@ public class JsonValueCoreTest {
   }
 
   @Test
-  public void testOrgnGetSource() {
+  public void testOrgGetSource() {
     JSONObject jsonObject = new JSONObject(jo);
     jsonValue = new OrgJsonValue(jsonObject);
 
     assertSame(jsonObject, jsonValue.getSource());
+  }
+
+  @Test
+  public void testJakartaGetSource() {
+    JsonObject JsonObject = Json.createObjectBuilder().add("str", str)
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
+            .add(bd).build())
+        .add("bool", bool).add("obj", JsonValue.NULL).build();
+    jsonValue = new JakartaJsonValue(JsonObject);
+
+    assertSame(JsonObject, jsonValue.getSource());
   }
 
 }

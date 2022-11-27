@@ -37,6 +37,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
+import jakarta.json.Json;
+import jakarta.json.JsonValue;
+
 public class JsonCoreTest {
 
   String json =
@@ -79,6 +82,9 @@ public class JsonCoreTest {
     });
     assertThrows(NullPointerException.class, () -> {
       new JacksonJsonCore(null);
+    });
+    assertThrows(NullPointerException.class, () -> {
+      new JakartaJsonCore(null);
     });
   }
 
@@ -142,6 +148,22 @@ public class JsonCoreTest {
 
     assertThrows(RuntimeException.class, () -> {
       new OrgJsonCore().parse("\"abc");
+    });
+  }
+
+  @Test
+  public void testJakartaJsonCore() throws IOException {
+    jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
+            .add(bd).build())
+        .add("bool", bool).add("obj", JsonValue.NULL).build());
+
+    assertEquals(jsonValue, new JakartaJsonCore().parse(json));
+    assertEquals(jsonValue,
+        new JakartaJsonCore().parse(new StringReader(json)));
+
+    assertThrows(RuntimeException.class, () -> {
+      new JakartaJsonCore().parse("\"abc");
     });
   }
 

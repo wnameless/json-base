@@ -41,6 +41,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
+import jakarta.json.Json;
+import jakarta.json.JsonValue;
+
 public class JsonObjectBaseTest {
 
   String str = "text";
@@ -74,6 +77,7 @@ public class JsonObjectBaseTest {
   JsonObjectBase<?> gsonObj;
   JsonObjectBase<?> jacksonObj;
   JsonObjectBase<?> orgObj;
+  JsonObjectBase<?> jakartaObj;
 
   @BeforeEach
   public void init() {
@@ -87,6 +91,12 @@ public class JsonObjectBaseTest {
 
     jo.setObj(JSONObject.NULL);
     orgObj = new OrgJsonValue(new JSONObject(jo)).asObject();
+
+    jakartaObj = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
+        .add("num",
+            Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd)
+                .build())
+        .add("bool", bool).add("obj", JsonValue.NULL).build()).asObject();
   }
 
   @Test
@@ -102,6 +112,9 @@ public class JsonObjectBaseTest {
             Arrays.asList(new String[] { "str", "num", "bool", "obj" })),
         new HashSet<>(
             Arrays.asList(Iterators.toArray(orgObj.names(), String.class))));
+
+    assertArrayEquals(new String[] { "str", "num", "bool", "obj" },
+        Iterators.toArray(jakartaObj.names(), String.class));
   }
 
   @Test
@@ -109,10 +122,12 @@ public class JsonObjectBaseTest {
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
     assertFalse(orgObj.contains("text"));
+    assertFalse(jakartaObj.contains("text"));
 
     assertTrue(gsonObj.contains("str"));
     assertTrue(jacksonObj.contains("str"));
     assertTrue(orgObj.contains("str"));
+    assertTrue(jakartaObj.contains("str"));
   }
 
   @Test
@@ -134,24 +149,38 @@ public class JsonObjectBaseTest {
         orgObj.get("num").asArray().toList());
     assertEquals(bool, orgObj.get("bool").asBoolean());
     assertEquals(null, orgObj.get("obj").asNull());
+
+    assertEquals(str, jakartaObj.get("str").asString());
+    assertEquals(Arrays.asList(i, l, d, bi, bd),
+        jakartaObj.get("num").asArray().toList());
+    assertEquals(bool, jakartaObj.get("bool").asBoolean());
+    assertEquals(null, jakartaObj.get("obj").asNull());
   }
 
   @Test
   public void testSize() {
     assertEquals(4, gsonObj.size());
     assertEquals(4, jacksonObj.size());
+    assertEquals(4, orgObj.size());
+    assertEquals(4, jakartaObj.size());
   }
 
   @Test
   public void testIsEmpty() {
     assertFalse(gsonObj.isEmpty());
     assertFalse(jacksonObj.isEmpty());
+    assertFalse(orgObj.isEmpty());
+    assertFalse(jakartaObj.isEmpty());
 
     gsonObj = new GsonJsonCore().parse("{}").asObject();
     jacksonObj = new JacksonJsonCore().parse("{}").asObject();
+    orgObj = new OrgJsonCore().parse("{}").asObject();
+    jakartaObj = new JakartaJsonCore().parse("{}").asObject();
 
     assertTrue(gsonObj.isEmpty());
     assertTrue(jacksonObj.isEmpty());
+    assertTrue(orgObj.isEmpty());
+    assertTrue(jakartaObj.isEmpty());
   }
 
   @Test
@@ -166,6 +195,8 @@ public class JsonObjectBaseTest {
 
     assertEquals(map, gsonObj.toMap());
     assertEquals(map, jacksonObj.toMap());
+    assertEquals(map, orgObj.toMap());
+    assertEquals(map, jakartaObj.toMap());
   }
 
 }

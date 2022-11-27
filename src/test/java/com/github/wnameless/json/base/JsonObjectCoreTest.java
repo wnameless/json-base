@@ -39,6 +39,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import jakarta.json.Json;
+import jakarta.json.JsonValue;
+
 public class JsonObjectCoreTest {
 
   String str = "text";
@@ -72,6 +75,7 @@ public class JsonObjectCoreTest {
   JsonObjectCore<?> gsonObj;
   JsonObjectCore<?> jacksonObj;
   JsonObjectCore<?> orgObj;
+  JsonObjectCore<?> jakartaObj;
 
   @BeforeEach
   public void init() {
@@ -85,6 +89,12 @@ public class JsonObjectCoreTest {
 
     jo.setObj(JSONObject.NULL);
     orgObj = new OrgJsonValue(new JSONObject(jo)).asObject();
+
+    jakartaObj = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
+        .add("num",
+            Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd)
+                .build())
+        .add("bool", bool).add("obj", JsonValue.NULL).build()).asObject();
   }
 
   @Test
@@ -98,6 +108,9 @@ public class JsonObjectCoreTest {
     assertThrows(NullPointerException.class, () -> {
       new OrgJsonObject(null);
     });
+    assertThrows(NullPointerException.class, () -> {
+      new JakartaJsonObject(null);
+    });
   }
 
   @Test
@@ -105,30 +118,37 @@ public class JsonObjectCoreTest {
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
     assertFalse(orgObj.contains("text"));
+    assertFalse(jakartaObj.contains("text"));
 
     gsonObj.set("text", new GsonJsonCore().parse("\"str\""));
     jacksonObj.set("text", new JacksonJsonCore().parse("\"str\""));
     orgObj.set("text", new OrgJsonCore().parse("\"str\""));
+    jakartaObj.set("text", new JakartaJsonCore().parse("\"str\""));
 
     assertEquals(5, gsonObj.size());
     assertEquals(5, jacksonObj.size());
     assertEquals(5, orgObj.size());
+    assertEquals(5, jakartaObj.size());
 
     assertEquals("str", gsonObj.get("text").asString());
     assertEquals("str", jacksonObj.get("text").asString());
     assertEquals("str", orgObj.get("text").asString());
+    assertEquals("str", jakartaObj.get("text").asString());
 
     assertTrue(gsonObj.contains("text"));
     assertTrue(jacksonObj.contains("text"));
     assertTrue(orgObj.contains("text"));
+    assertTrue(jakartaObj.contains("text"));
 
     gsonObj.remove("text");
     jacksonObj.remove("text");
     orgObj.remove("text");
+    jakartaObj.remove("text");
 
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
     assertFalse(orgObj.contains("text"));
+    assertFalse(jakartaObj.contains("text"));
   }
 
   @Test
@@ -137,10 +157,16 @@ public class JsonObjectCoreTest {
     assertEquals(new JacksonJsonObject((ObjectNode) jacksonObj.getSource()),
         jacksonObj);
     assertEquals(new OrgJsonObject((JSONObject) orgObj.getSource()), orgObj);
+    assertEquals(
+        new JakartaJsonObject((jakarta.json.JsonObject) jakartaObj.getSource()),
+        jakartaObj);
 
     assertNotEquals(gsonObj, jacksonObj);
     assertNotEquals(gsonObj, orgObj);
+    assertNotEquals(gsonObj, jakartaObj);
     assertNotEquals(jacksonObj, orgObj);
+    assertNotEquals(jacksonObj, jakartaObj);
+    assertNotEquals(orgObj, jakartaObj);
   }
 
   @Test
@@ -258,6 +284,46 @@ public class JsonObjectCoreTest {
       orgObj.asBigDecimal();
     });
     assertTrue(orgObj.getSource() instanceof JSONObject);
+  }
+
+  @Test
+  public void testJakartaJsonObjectState() {
+    assertTrue(jakartaObj.isObject());
+    assertFalse(jakartaObj.isArray());
+    assertFalse(jakartaObj.isString());
+    assertFalse(jakartaObj.isBoolean());
+    assertFalse(jakartaObj.isNumber());
+    assertFalse(jakartaObj.isNull());
+
+    assertSame(jakartaObj, jakartaObj.asObject());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaObj.asArray();
+    });
+    assertEquals(
+        new JakartaJsonValue((jakarta.json.JsonObject) jakartaObj.getSource()),
+        jakartaObj.asValue());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaObj.asString();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaObj.asBoolean();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaObj.asInt();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaObj.asLong();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaObj.asBigInteger();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaObj.asDouble();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jakartaObj.asBigDecimal();
+    });
+    assertTrue(jakartaObj.getSource() instanceof jakarta.json.JsonObject);
   }
 
 }

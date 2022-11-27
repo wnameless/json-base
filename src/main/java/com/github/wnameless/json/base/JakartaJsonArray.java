@@ -20,6 +20,7 @@ import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Objects;
 
+import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonValue;
 
@@ -32,7 +33,7 @@ import jakarta.json.JsonValue;
  */
 public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
 
-  private final JsonArray jsonArray;
+  private JsonArray jsonArray;
 
   public JakartaJsonArray(JsonArray jsonArray) {
     if (jsonArray == null) throw new NullPointerException();
@@ -166,17 +167,21 @@ public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
 
   @Override
   public void add(JsonSource jsonValue) {
-    jsonArray.add((JsonValue) jsonValue.getSource());
+    jsonArray = Json.createArrayBuilder(jsonArray)
+        .add((JsonValue) jsonValue.getSource()).build();
   }
 
   @Override
   public void set(int index, JsonSource jsonValue) {
-    jsonArray.set(index, (JsonValue) jsonValue.getSource());
+    jsonArray = Json.createArrayBuilder(jsonArray)
+        .set(index, (JsonValue) jsonValue.getSource()).build();
   }
 
   @Override
   public boolean remove(int index) {
-    return jsonArray.remove(index) != null;
+    boolean isRemovable = jsonArray.get(index) != null;
+    jsonArray = Json.createArrayBuilder(jsonArray).remove(index).build();
+    return isRemovable;
   }
 
   @Override
