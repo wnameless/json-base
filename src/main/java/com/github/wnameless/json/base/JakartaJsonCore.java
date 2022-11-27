@@ -18,7 +18,6 @@ package com.github.wnameless.json.base;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.HashMap;
 
 import jakarta.json.Json;
 import jakarta.json.JsonReaderFactory;
@@ -35,7 +34,7 @@ public class JakartaJsonCore implements JsonCore<JakartaJsonValue> {
   private final JsonReaderFactory factory;
 
   public JakartaJsonCore() {
-    factory = Json.createReaderFactory(new HashMap<>());
+    factory = null;
   }
 
   public JakartaJsonCore(JsonReaderFactory factory) {
@@ -45,13 +44,20 @@ public class JakartaJsonCore implements JsonCore<JakartaJsonValue> {
 
   @Override
   public JakartaJsonValue parse(String json) {
+    if (factory != null) {
+      return new JakartaJsonValue(
+          factory.createReader(new StringReader(json)).readValue());
+    }
     return new JakartaJsonValue(
-        factory.createReader(new StringReader(json)).readValue());
+        Json.createReader(new StringReader(json)).readValue());
   }
 
   @Override
   public JakartaJsonValue parse(Reader jsonReader) throws IOException {
-    return new JakartaJsonValue(factory.createReader(jsonReader).readValue());
+    if (factory != null) {
+      return new JakartaJsonValue(factory.createReader(jsonReader).readValue());
+    }
+    return new JakartaJsonValue(Json.createReader(jsonReader).readValue());
   }
 
 }
