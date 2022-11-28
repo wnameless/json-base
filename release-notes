@@ -31,3 +31,4 @@ Version 2.2.1
 Version 2.3.0
 + Add org.json lib support
 + Add Jakarta lib support
+* Change the return type of JsonArrayCore#remove(int) from boolean to JsonArrayCore

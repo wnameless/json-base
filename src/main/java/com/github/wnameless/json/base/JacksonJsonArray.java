@@ -102,8 +102,8 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   }
 
   @Override
-  public boolean remove(int index) {
-    return jsonArray.remove(index) != null;
+  public JacksonJsonValue remove(int index) {
+    return new JacksonJsonValue(jsonArray.remove(index));
   }
 
   @Override

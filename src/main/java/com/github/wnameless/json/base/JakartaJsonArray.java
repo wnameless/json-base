@@ -178,10 +178,10 @@ public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
   }
 
   @Override
-  public boolean remove(int index) {
-    boolean isRemovable = jsonArray.get(index) != null;
+  public JakartaJsonValue remove(int index) {
+    JakartaJsonValue value = new JakartaJsonValue(jsonArray.get(index));
     jsonArray = Json.createArrayBuilder(jsonArray).remove(index).build();
-    return isRemovable;
+    return value;
   }
 
   @Override

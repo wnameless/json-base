@@ -51,8 +51,8 @@ public interface JsonArrayCore<JVC extends JsonValueCore<JVC>>
    * 
    * @param index
    *          a position in this JSON array
-   * @return true if an element removed, false otherwise
+   * @return the removed element
    */
-  boolean remove(int index);
+  JVC remove(int index);
 
 }

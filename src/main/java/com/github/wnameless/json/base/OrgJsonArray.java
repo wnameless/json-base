@@ -190,8 +190,8 @@ public final class OrgJsonArray implements JsonArrayCore<OrgJsonValue> {
   }
 
   @Override
-  public boolean remove(int index) {
-    return jsonArray.remove(index) != null;
+  public OrgJsonValue remove(int index) {
+    return new OrgJsonValue(jsonArray.remove(index));
   }
 
 }

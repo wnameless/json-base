@@ -102,8 +102,8 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
   }
 
   @Override
-  public boolean remove(int index) {
-    return jsonArray.remove(index) != null;
+  public GsonJsonValue remove(int index) {
+    return new GsonJsonValue(jsonArray.remove(index));
   }
 
   @Override
