@@ -137,24 +137,28 @@ public class JsonObjectBaseTest {
         gsonObj.get("num").asArray().toList());
     assertEquals(bool, gsonObj.get("bool").asBoolean());
     assertEquals(null, gsonObj.get("obj").asNull());
+    assertEquals(null, gsonObj.get("none"));
 
     assertEquals(str, jacksonObj.get("str").asString());
     assertEquals(Arrays.asList(i, l, d, bi, bd),
         jacksonObj.get("num").asArray().toList());
     assertEquals(bool, jacksonObj.get("bool").asBoolean());
     assertEquals(null, jacksonObj.get("obj").asNull());
+    assertEquals(null, jacksonObj.get("none"));
 
     assertEquals(str, orgObj.get("str").asString());
     assertEquals(Arrays.asList(i, l, d, bi, bd),
         orgObj.get("num").asArray().toList());
     assertEquals(bool, orgObj.get("bool").asBoolean());
     assertEquals(null, orgObj.get("obj").asNull());
+    assertEquals(null, orgObj.get("none"));
 
     assertEquals(str, jakartaObj.get("str").asString());
     assertEquals(Arrays.asList(i, l, d, bi, bd),
         jakartaObj.get("num").asArray().toList());
     assertEquals(bool, jakartaObj.get("bool").asBoolean());
     assertEquals(null, jakartaObj.get("obj").asNull());
+    assertEquals(null, jakartaObj.get("none"));
   }
 
   @Test

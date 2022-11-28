@@ -55,7 +55,8 @@ public final class JakartaJsonObject
 
   @Override
   public JakartaJsonValue get(String name) {
-    return new JakartaJsonValue(jsonObject.get(name));
+    JsonValue value = jsonObject.get(name);
+    return value == null ? null : new JakartaJsonValue(value);
   }
 
   @Override

@@ -51,7 +51,7 @@ public final class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
 
   @Override
   public OrgJsonValue get(String name) {
-    return new OrgJsonValue(jsonObject.get(name));
+    return contains(name) ? new OrgJsonValue(jsonObject.get(name)) : null;
   }
 
   @Override

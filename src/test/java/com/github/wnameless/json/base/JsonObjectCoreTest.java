@@ -140,10 +140,15 @@ public class JsonObjectCoreTest {
     assertTrue(orgObj.contains("text"));
     assertTrue(jakartaObj.contains("text"));
 
-    gsonObj.remove("text");
-    jacksonObj.remove("text");
-    orgObj.remove("text");
-    jakartaObj.remove("text");
+    assertTrue(gsonObj.remove("text"));
+    assertTrue(jacksonObj.remove("text"));
+    assertTrue(orgObj.remove("text"));
+    assertTrue(jakartaObj.remove("text"));
+
+    assertFalse(gsonObj.remove("text"));
+    assertFalse(jacksonObj.remove("text"));
+    assertFalse(orgObj.remove("text"));
+    assertFalse(jakartaObj.remove("text"));
 
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
