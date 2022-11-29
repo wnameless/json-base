@@ -3,18 +3,18 @@
 
 json-base
 =============
-A set of Java interfaces which decouples JSON implementations such as Jackson, Gson, org.json and Jakarta...
+A set of Java interfaces, which describes all the common JSON data behaviors, can be used to decouple programming logic from JSON implementations such as Jackson, Gson, org.json and Jakarta... 
 
 ## Purpose
-To avoid JSON conversion between different JSON libraries(Jackson, Gson, org.json, Jakarta...) in any JSON consuming Java method by creating generic JSON data interfaces which cover the common JSON data behavior.
+To avoid JSON conversion between different JSON libraries(Jackson, Gson, org.json, Jakarta...) in any JSON consuming Java method by creating generic JSON data interfaces which cover the common JSON data behaviors.
 
 Java 9 Module is supported after v1.1.0, but the minimal Java version is remained Java 8.
 ## Maven Repo
 ```xml
 <dependency>
-	<groupId>com.github.wnameless.json</groupId>
-	<artifactId>json-base</artifactId>
-	<version>${newestVersion}</version>
+    <groupId>com.github.wnameless.json</groupId>
+    <artifactId>json-base</artifactId>
+    <version>${newestVersion}</version>
      <!-- Newest version shows in the maven-central badge above -->
 </dependency>
 ```
@@ -52,7 +52,7 @@ public void acceptJakartaVal(JsonValue jsonValue) {
 }
 ```
 
-Sometimes, you may need a JSON producer in your library. Here is the wrapper:
+Sometimes, you may need a JSON parser in your library. Here is the wrapper:
 ```java
 // GsonJsonCore, OrgJsonCore and JakartaJsonCore are also available
 JsonCore<?> jsonCore = new JacksonJsonCore();
