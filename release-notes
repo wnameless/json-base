@@ -33,3 +33,4 @@ Version 2.3.0
 + Add Jakarta lib support
 * Change the return type of JsonArrayCore#remove(int) from boolean to JsonArrayCore
 * Increase JUnit code coverage to 100%
+- Remove Cobertura maven dependency
