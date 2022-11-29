@@ -16,6 +16,7 @@
 package com.github.wnameless.json.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -81,6 +82,97 @@ public class JsonValueUtilsTest {
   public void testToObject() {
     assertEquals(JsonValueUtils.toObject(gsonObj),
         JsonValueUtils.toObject(jacksonObj));
+
+    assertThrows(IllegalStateException.class, () -> {
+      JsonValueUtils.toObject(new JsonValueBase() {
+
+        @Override
+        public String toJson() {
+          return null;
+        }
+
+        @Override
+        public boolean isObject() {
+          return false;
+        }
+
+        @Override
+        public boolean isArray() {
+          return false;
+        }
+
+        @Override
+        public boolean isString() {
+          return false;
+        }
+
+        @Override
+        public boolean isBoolean() {
+          return false;
+        }
+
+        @Override
+        public boolean isNumber() {
+          return false;
+        }
+
+        @Override
+        public boolean isNull() {
+          return false;
+        }
+
+        @Override
+        public JsonObjectBase asObject() {
+          return null;
+        }
+
+        @Override
+        public JsonArrayBase asArray() {
+          return null;
+        }
+
+        @Override
+        public JsonValueBase asValue() {
+          return null;
+        }
+
+        @Override
+        public String asString() {
+          return null;
+        }
+
+        @Override
+        public boolean asBoolean() {
+          return false;
+        }
+
+        @Override
+        public int asInt() {
+          return 0;
+        }
+
+        @Override
+        public long asLong() {
+          return 0;
+        }
+
+        @Override
+        public BigInteger asBigInteger() {
+          return null;
+        }
+
+        @Override
+        public double asDouble() {
+          return 0;
+        }
+
+        @Override
+        public BigDecimal asBigDecimal() {
+          return null;
+        }
+
+      });
+    });
   }
 
 }

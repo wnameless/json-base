@@ -56,6 +56,7 @@ public class JsonPrinterTest {
     String prettyJson = Resources.toString(url, Charsets.UTF_8);
 
     assertEquals(prettyJson, JsonPrinter.prettyPrint(minimalJson));
+    assertEquals(prettyJson, JsonPrinter.prettyPrint(prettyJson));
   }
 
   @Test

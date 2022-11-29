@@ -92,20 +92,12 @@ public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
 
   @Override
   public int asInt() {
-    if (jsonValue instanceof Integer) {
-      return (Integer) jsonValue;
-    } else {
-      return Integer.valueOf(jsonValue.toString()).intValue();
-    }
+    return ((Number) jsonValue).intValue();
   }
 
   @Override
   public long asLong() {
-    if (jsonValue instanceof Long) {
-      return (Long) jsonValue;
-    } else {
-      return Long.valueOf(jsonValue.toString()).longValue();
-    }
+    return ((Number) jsonValue).longValue();
   }
 
   @Override
@@ -115,11 +107,7 @@ public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
 
   @Override
   public double asDouble() {
-    if (jsonValue instanceof Double) {
-      return (Double) jsonValue;
-    } else {
-      return Double.valueOf(jsonValue.toString()).doubleValue();
-    }
+    return ((Number) jsonValue).doubleValue();
   }
 
   @Override
@@ -136,13 +124,11 @@ public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof OrgJsonValue)) return false;
-    if (jsonValue instanceof JSONArray
-        && ((OrgJsonValue) o).jsonValue instanceof JSONArray) {
-      return ((JSONArray) jsonValue).similar(((OrgJsonValue) o).jsonValue);
-    }
-    if (jsonValue instanceof JSONObject
-        && ((OrgJsonValue) o).jsonValue instanceof JSONObject) {
+    if (jsonValue instanceof JSONObject) {
       return ((JSONObject) jsonValue).similar(((OrgJsonValue) o).jsonValue);
+    }
+    if (jsonValue instanceof JSONArray) {
+      return ((JSONArray) jsonValue).similar(((OrgJsonValue) o).jsonValue);
     }
     return Objects.equals(jsonValue, ((OrgJsonValue) o).jsonValue);
   }

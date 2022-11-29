@@ -142,16 +142,20 @@ public class JsonArrayCoreTest {
 
   @Test
   public void testRemove() {
-    gsonAry.remove(4);
+    assertEquals(new GsonJsonCore().parse("1234567890123456789"),
+        gsonAry.remove(1));
     assertEquals(4, gsonAry.size());
 
-    jacksonAry.remove(4);
+    assertEquals(new JacksonJsonCore().parse("1234567890123456789"),
+        jacksonAry.remove(1));
     assertEquals(4, jacksonAry.size());
 
-    orgAry.remove(4);
+    assertEquals(new OrgJsonCore().parse("1234567890123456789"),
+        orgAry.remove(1));
     assertEquals(4, orgAry.size());
 
-    jakartaAry.remove(4);
+    assertEquals(new JakartaJsonCore().parse("1234567890123456789"),
+        jakartaAry.remove(1));
     assertEquals(4, jakartaAry.size());
   }
 

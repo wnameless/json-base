@@ -32,6 +32,7 @@ import java.util.Map.Entry;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -86,7 +87,13 @@ public class JsonValueBaseTest {
       new JacksonJsonValue(null);
     });
     assertThrows(NullPointerException.class, () -> {
-      new OrgJsonValue(null);
+      new OrgJsonValue((Object) null);
+    });
+    assertThrows(NullPointerException.class, () -> {
+      new OrgJsonValue((JSONTokener) null);
+    });
+    assertThrows(IllegalArgumentException.class, () -> {
+      new OrgJsonValue(new ArrayList<String>());
     });
     assertThrows(NullPointerException.class, () -> {
       new JakartaJsonValue(null);
@@ -103,9 +110,12 @@ public class JsonValueBaseTest {
     jsonValue = new GsonJsonValue(jsonElement);
 
     assertTrue(jsonValue.isObject());
+    assertFalse(jsonValue.asObject().get("str").isObject());
     assertTrue(jsonValue.asObject().get("str").isString());
+    assertFalse(jsonValue.asObject().get("num").isString());
     assertEquals(str, jsonValue.asObject().get("str").asString());
     assertTrue(jsonValue.asObject().get("num").isArray());
+    assertFalse(jsonValue.isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
     assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
     assertEquals(i,
@@ -127,8 +137,6 @@ public class JsonValueBaseTest {
         jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
     assertEquals(bd,
         jsonValue.asObject().get("num").asArray().get(4).asNumber());
-    assertTrue(jsonValue.asObject().get("bool").isBoolean());
-    assertTrue(jsonValue.asObject().get("bool").asBoolean());
     assertTrue(jsonValue.asObject().get("obj").isNull());
     assertSame(null, jsonValue.asObject().get("obj").asNull());
 
@@ -146,6 +154,14 @@ public class JsonValueBaseTest {
         jsonValue.asObject().get("num").toJson());
     assertEquals("true", jsonValue.asObject().get("bool").toJson());
     assertEquals("null", jsonValue.asObject().get("obj").toJson());
+
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertTrue(jsonValue.asObject().get("bool").asBoolean());
+    jo.setBool(false);
+    jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    jsonValue = new GsonJsonValue(jsonElement);
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertFalse(jsonValue.asObject().get("bool").asBoolean());
   }
 
   @Test
@@ -173,9 +189,12 @@ public class JsonValueBaseTest {
     jsonValue = new JacksonJsonValue(jsonNode);
 
     assertTrue(jsonValue.isObject());
+    assertFalse(jsonValue.asObject().get("str").isObject());
     assertTrue(jsonValue.asObject().get("str").isString());
+    assertFalse(jsonValue.asObject().get("num").isString());
     assertEquals(str, jsonValue.asObject().get("str").asString());
     assertTrue(jsonValue.asObject().get("num").isArray());
+    assertFalse(jsonValue.isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
     assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
     assertEquals(i,
@@ -197,8 +216,6 @@ public class JsonValueBaseTest {
         jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
     assertEquals(bd,
         jsonValue.asObject().get("num").asArray().get(4).asNumber());
-    assertTrue(jsonValue.asObject().get("bool").isBoolean());
-    assertTrue(jsonValue.asObject().get("bool").asBoolean());
     assertTrue(jsonValue.asObject().get("obj").isNull());
     assertSame(null, jsonValue.asObject().get("obj").asNull());
 
@@ -216,6 +233,14 @@ public class JsonValueBaseTest {
         jsonValue.asObject().get("num").toJson());
     assertEquals("true", jsonValue.asObject().get("bool").toJson());
     assertEquals("null", jsonValue.asObject().get("obj").toJson());
+
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertTrue(jsonValue.asObject().get("bool").asBoolean());
+    jo.setBool(false);
+    jsonNode = new ObjectMapper().valueToTree(jo);
+    jsonValue = new JacksonJsonValue(jsonNode);
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertFalse(jsonValue.asObject().get("bool").asBoolean());
   }
 
   @Test
@@ -241,9 +266,12 @@ public class JsonValueBaseTest {
     jsonValue = new OrgJsonValue(new JSONObject(jo));
 
     assertTrue(jsonValue.isObject());
+    assertFalse(jsonValue.asObject().get("str").isObject());
     assertTrue(jsonValue.asObject().get("str").isString());
+    assertFalse(jsonValue.asObject().get("num").isString());
     assertEquals(str, jsonValue.asObject().get("str").asString());
     assertTrue(jsonValue.asObject().get("num").isArray());
+    assertFalse(jsonValue.isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
     assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
     assertEquals(i,
@@ -265,8 +293,6 @@ public class JsonValueBaseTest {
         jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
     assertEquals(bd,
         jsonValue.asObject().get("num").asArray().get(4).asNumber());
-    assertTrue(jsonValue.asObject().get("bool").isBoolean());
-    assertTrue(jsonValue.asObject().get("bool").asBoolean());
     assertTrue(jsonValue.asObject().get("obj").isNull());
     assertSame(null, jsonValue.asObject().get("obj").asNull());
 
@@ -277,6 +303,11 @@ public class JsonValueBaseTest {
     new EqualsTester()
         .addEqualityGroup(jsonValue.asObject().get("num").asArray())
         .testEquals();
+    assertTrue(jsonValue.equals(new OrgJsonValue(new JSONObject(jo))));
+    assertFalse(jsonValue.equals(jsonValue.asObject().get("str")));
+    assertTrue(jsonValue.asObject().get("num")
+        .equals(jsonValue.asObject().get("num")));
+    assertFalse(jsonValue.asObject().get("num").equals(jsonValue));
 
     assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
     assertEquals(
@@ -284,6 +315,13 @@ public class JsonValueBaseTest {
         jsonValue.asObject().get("num").toJson());
     assertEquals("true", jsonValue.asObject().get("bool").toJson());
     assertEquals("null", jsonValue.asObject().get("obj").toJson());
+
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertTrue(jsonValue.asObject().get("bool").asBoolean());
+    jo.setBool(false);
+    jsonValue = new OrgJsonValue(new JSONObject(jo));
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertFalse(jsonValue.asObject().get("bool").asBoolean());
   }
 
   @Test
@@ -310,9 +348,12 @@ public class JsonValueBaseTest {
         .add("bool", bool).add("obj", JsonValue.NULL).build());
 
     assertTrue(jsonValue.isObject());
+    assertFalse(jsonValue.asObject().get("str").isObject());
     assertTrue(jsonValue.asObject().get("str").isString());
+    assertFalse(jsonValue.asObject().get("num").isString());
     assertEquals(str, jsonValue.asObject().get("str").asString());
     assertTrue(jsonValue.asObject().get("num").isArray());
+    assertFalse(jsonValue.isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
     assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
     assertEquals(i,
@@ -334,8 +375,6 @@ public class JsonValueBaseTest {
         jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
     assertEquals(bd,
         jsonValue.asObject().get("num").asArray().get(4).asNumber());
-    assertTrue(jsonValue.asObject().get("bool").isBoolean());
-    assertTrue(jsonValue.asObject().get("bool").asBoolean());
     assertTrue(jsonValue.asObject().get("obj").isNull());
     assertSame(null, jsonValue.asObject().get("obj").asNull());
 
@@ -353,6 +392,19 @@ public class JsonValueBaseTest {
         jsonValue.asObject().get("num").toJson());
     assertEquals("true", jsonValue.asObject().get("bool").toJson());
     assertEquals("null", jsonValue.asObject().get("obj").toJson());
+
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertTrue(jsonValue.asObject().get("bool").asBoolean());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jsonValue.asObject().get("num").asBoolean();
+    });
+    jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
+        .add("num",
+            Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd)
+                .build())
+        .add("bool", false).add("obj", JsonValue.NULL).build());
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertFalse(jsonValue.asObject().get("bool").asBoolean());
   }
 
   @Test

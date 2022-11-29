@@ -32,3 +32,4 @@ Version 2.3.0
 + Add org.json lib support
 + Add Jakarta lib support
 * Change the return type of JsonArrayCore#remove(int) from boolean to JsonArrayCore
+* Increase JUnit code coverage to 100%

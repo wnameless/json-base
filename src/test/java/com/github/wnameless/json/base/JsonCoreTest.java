@@ -24,6 +24,7 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -164,6 +165,24 @@ public class JsonCoreTest {
 
     assertThrows(RuntimeException.class, () -> {
       new JakartaJsonCore().parse("\"abc");
+    });
+  }
+
+  @Test
+  public void testJakartaJsonCoreWithReaderFactory() throws IOException {
+    JakartaJsonCore jjc =
+        new JakartaJsonCore(Json.createReaderFactory(new HashMap<>()));
+
+    jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
+            .add(bd).build())
+        .add("bool", bool).add("obj", JsonValue.NULL).build());
+
+    assertEquals(jsonValue, jjc.parse(json));
+    assertEquals(jsonValue, jjc.parse(new StringReader(json)));
+
+    assertThrows(RuntimeException.class, () -> {
+      jjc.parse("\"abc");
     });
   }
 
