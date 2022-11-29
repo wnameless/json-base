@@ -8,8 +8,6 @@ A set of Java interfaces, which defines the common JSON data behaviors, can be u
 ## Purpose
 To avoid JSON conversion between different JSON libraries(Jackson, Gson, org.json, Jakarta...) in any JSON consuming Java method by creating generic JSON data interfaces which cover the common JSON data behaviors.
 
-Java 9 Module is supported after v1.1.0, but the minimal Java version is remained Java 8.
-
 ## Feature List
 | Feature | Description |
 | --- | --- |
