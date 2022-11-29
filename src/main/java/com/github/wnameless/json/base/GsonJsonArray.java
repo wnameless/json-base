@@ -40,58 +40,6 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
   }
 
   @Override
-  public GsonJsonValue get(int index) {
-    return new GsonJsonValue(jsonArray.get(index));
-  }
-
-  @Override
-  public int hashCode() {
-    return jsonArray.hashCode();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof GsonJsonArray)) return false;
-    return Objects.equals(jsonArray, ((GsonJsonArray) o).jsonArray);
-  }
-
-  @Override
-  public String toString() {
-    return jsonArray.toString();
-  }
-
-  @Override
-  public Iterator<GsonJsonValue> iterator() {
-    return new GsonJsonValueIterator(jsonArray.iterator());
-  }
-
-  private class GsonJsonValueIterator implements Iterator<GsonJsonValue> {
-
-    private final Iterator<JsonElement> jsonElementIterator;
-
-    private GsonJsonValueIterator(Iterator<JsonElement> jsonElementIterator) {
-      this.jsonElementIterator = jsonElementIterator;
-    }
-
-    @Override
-    public boolean hasNext() {
-      return jsonElementIterator.hasNext();
-    }
-
-    @Override
-    public GsonJsonValue next() {
-      return new GsonJsonValue(jsonElementIterator.next());
-    }
-
-  }
-
-  @Override
-  public String toJson() {
-    return toString();
-  }
-
-  @Override
   public void add(JsonSource jsonValue) {
     jsonArray.add((JsonElement) jsonValue.getSource());
   }
@@ -104,6 +52,22 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
   @Override
   public GsonJsonValue remove(int index) {
     return new GsonJsonValue(jsonArray.remove(index));
+  }
+
+  @Override
+  public GsonJsonValue get(int index) {
+    return new GsonJsonValue(jsonArray.get(index));
+  }
+
+  @Override
+  public int size() {
+    return jsonArray.size();
+  }
+
+  @Override
+  public Iterator<GsonJsonValue> iterator() {
+    return new TransformIterator<JsonElement, GsonJsonValue>(
+        jsonArray.iterator(), GsonJsonValue::new);
   }
 
   @Override
@@ -134,21 +98,6 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
   @Override
   public boolean isNull() {
     return false;
-  }
-
-  @Override
-  public GsonJsonObject asObject() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public GsonJsonArray asArray() {
-    return this;
-  }
-
-  @Override
-  public GsonJsonValue asValue() {
-    return new GsonJsonValue(jsonArray);
   }
 
   @Override
@@ -187,13 +136,45 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
   }
 
   @Override
+  public GsonJsonObject asObject() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public GsonJsonArray asArray() {
+    return this;
+  }
+
+  @Override
+  public GsonJsonValue asValue() {
+    return new GsonJsonValue(jsonArray);
+  }
+
+  @Override
   public Object getSource() {
     return jsonArray;
   }
 
   @Override
-  public int size() {
-    return jsonArray.size();
+  public String toJson() {
+    return toString();
+  }
+
+  @Override
+  public int hashCode() {
+    return jsonArray.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof GsonJsonArray)) return false;
+    return Objects.equals(jsonArray, ((GsonJsonArray) o).jsonArray);
+  }
+
+  @Override
+  public String toString() {
+    return jsonArray.toString();
   }
 
 }

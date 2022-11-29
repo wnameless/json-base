@@ -17,7 +17,7 @@ package com.github.wnameless.json.base;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -40,8 +40,13 @@ public final class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
   }
 
   @Override
-  public Iterator<String> names() {
-    return jsonObject.keys();
+  public void set(String name, JsonSource jsonValue) {
+    jsonObject.put(name, jsonValue.getSource());
+  }
+
+  @Override
+  public boolean remove(String name) {
+    return jsonObject.remove(name) != null;
   }
 
   @Override
@@ -55,55 +60,20 @@ public final class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
   }
 
   @Override
-  public int hashCode() {
-    return jsonObject.hashCode();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof OrgJsonObject)) return false;
-    return jsonObject.similar(((OrgJsonObject) o).jsonObject);
-  }
-
-  @Override
-  public String toString() {
-    return jsonObject.toString();
-  }
-
-  @Override
   public int size() {
     return jsonObject.length();
   }
 
   @Override
-  public Iterator<Entry<String, OrgJsonValue>> iterator() {
-    return new OrgJsonEntryIterator(jsonObject);
+  public Iterator<String> names() {
+    return jsonObject.keys();
   }
 
-  private final class OrgJsonEntryIterator
-      implements Iterator<Entry<String, OrgJsonValue>> {
-
-    private final JSONObject jsonObject;
-    private final Iterator<String> keys;
-
-    private OrgJsonEntryIterator(JSONObject jsonObject) {
-      this.jsonObject = jsonObject;
-      keys = jsonObject.keys();
-    }
-
-    @Override
-    public boolean hasNext() {
-      return keys.hasNext();
-    }
-
-    @Override
-    public Entry<String, OrgJsonValue> next() {
-      String key = keys.next();
-      return new AbstractMap.SimpleImmutableEntry<>(key,
-          new OrgJsonValue(jsonObject.get(key)));
-    }
-
+  @Override
+  public Iterator<Entry<String, OrgJsonValue>> iterator() {
+    return new TransformIterator<String, Entry<String, OrgJsonValue>>(
+        jsonObject.keys(), key -> new SimpleImmutableEntry<>(key,
+            new OrgJsonValue(jsonObject.get(key))));
   }
 
   @Override
@@ -172,11 +142,6 @@ public final class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
   }
 
   @Override
-  public String toJson() {
-    return toString();
-  }
-
-  @Override
   public OrgJsonObject asObject() {
     return this;
   }
@@ -197,13 +162,25 @@ public final class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
   }
 
   @Override
-  public void set(String name, JsonSource jsonValue) {
-    jsonObject.put(name, jsonValue.getSource());
+  public String toJson() {
+    return toString();
   }
 
   @Override
-  public boolean remove(String name) {
-    return jsonObject.remove(name) != null;
+  public int hashCode() {
+    return jsonObject.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof OrgJsonObject)) return false;
+    return jsonObject.similar(((OrgJsonObject) o).jsonObject);
+  }
+
+  @Override
+  public String toString() {
+    return jsonObject.toString();
   }
 
 }

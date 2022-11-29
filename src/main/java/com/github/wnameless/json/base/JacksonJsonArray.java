@@ -40,58 +40,6 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   }
 
   @Override
-  public JacksonJsonValue get(int index) {
-    return new JacksonJsonValue(jsonArray.get(index));
-  }
-
-  @Override
-  public int hashCode() {
-    return jsonArray.hashCode();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof JacksonJsonArray)) return false;
-    return Objects.equals(jsonArray, ((JacksonJsonArray) o).jsonArray);
-  }
-
-  @Override
-  public String toString() {
-    return jsonArray.toString();
-  }
-
-  @Override
-  public Iterator<JacksonJsonValue> iterator() {
-    return new JacksonJsonValueIterator(jsonArray.iterator());
-  }
-
-  private class JacksonJsonValueIterator implements Iterator<JacksonJsonValue> {
-
-    private final Iterator<JsonNode> jsonValueIterator;
-
-    private JacksonJsonValueIterator(Iterator<JsonNode> jsonValueIterator) {
-      this.jsonValueIterator = jsonValueIterator;
-    }
-
-    @Override
-    public boolean hasNext() {
-      return jsonValueIterator.hasNext();
-    }
-
-    @Override
-    public JacksonJsonValue next() {
-      return new JacksonJsonValue(jsonValueIterator.next());
-    }
-
-  }
-
-  @Override
-  public String toJson() {
-    return toString();
-  }
-
-  @Override
   public void add(JsonSource jsonValue) {
     jsonArray.add((JsonNode) jsonValue.getSource());
   }
@@ -104,6 +52,22 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   @Override
   public JacksonJsonValue remove(int index) {
     return new JacksonJsonValue(jsonArray.remove(index));
+  }
+
+  @Override
+  public JacksonJsonValue get(int index) {
+    return new JacksonJsonValue(jsonArray.get(index));
+  }
+
+  @Override
+  public int size() {
+    return jsonArray.size();
+  }
+
+  @Override
+  public Iterator<JacksonJsonValue> iterator() {
+    return new TransformIterator<JsonNode, JacksonJsonValue>(
+        jsonArray.iterator(), JacksonJsonValue::new);
   }
 
   @Override
@@ -134,21 +98,6 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   @Override
   public boolean isNull() {
     return false;
-  }
-
-  @Override
-  public JacksonJsonObject asObject() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public JacksonJsonArray asArray() {
-    return this;
-  }
-
-  @Override
-  public JacksonJsonValue asValue() {
-    return new JacksonJsonValue(jsonArray);
   }
 
   @Override
@@ -187,13 +136,45 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
   }
 
   @Override
+  public JacksonJsonObject asObject() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public JacksonJsonArray asArray() {
+    return this;
+  }
+
+  @Override
+  public JacksonJsonValue asValue() {
+    return new JacksonJsonValue(jsonArray);
+  }
+
+  @Override
   public Object getSource() {
     return jsonArray;
   }
 
   @Override
-  public int size() {
-    return jsonArray.size();
+  public String toJson() {
+    return toString();
+  }
+
+  @Override
+  public int hashCode() {
+    return jsonArray.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof JacksonJsonArray)) return false;
+    return Objects.equals(jsonArray, ((JacksonJsonArray) o).jsonArray);
+  }
+
+  @Override
+  public String toString() {
+    return jsonArray.toString();
   }
 
 }

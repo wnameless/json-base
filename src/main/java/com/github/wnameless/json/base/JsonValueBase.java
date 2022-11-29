@@ -75,27 +75,6 @@ public interface JsonValueBase<JVB extends JsonValueBase<JVB>>
   public boolean isNull();
 
   /**
-   * Converts this to a JSON object wrapper.
-   * 
-   * @return a JSON object wrapper
-   */
-  public JsonObjectBase<JVB> asObject();
-
-  /**
-   * Converts this to a JSON array wrapper.
-   * 
-   * @return a JSON array wrapper
-   */
-  public JsonArrayBase<JVB> asArray();
-
-  /**
-   * Converts this to a JSON value wrapper.
-   * 
-   * @return a JSON value wrapper
-   */
-  public JsonValueBase<JVB> asValue();
-
-  /**
    * Converts this to a Java {@link String}.
    * 
    * @return a {@link String}
@@ -165,5 +144,26 @@ public interface JsonValueBase<JVB extends JsonValueBase<JVB>>
   default Object asNull() {
     return null;
   }
+
+  /**
+   * Converts this to a JSON object wrapper.
+   * 
+   * @return a JSON object wrapper
+   */
+  public JsonObjectBase<JVB> asObject();
+
+  /**
+   * Converts this to a JSON array wrapper.
+   * 
+   * @return a JSON array wrapper
+   */
+  public JsonArrayBase<JVB> asArray();
+
+  /**
+   * Converts this to a JSON value wrapper.
+   * 
+   * @return a JSON value wrapper
+   */
+  public JsonValueBase<JVB> asValue();
 
 }

@@ -17,7 +17,7 @@ package com.github.wnameless.json.base;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -42,68 +42,6 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   }
 
   @Override
-  public GsonJsonValue get(String name) {
-    JsonElement element = jsonObject.get(name);
-    return element == null ? null : new GsonJsonValue(element);
-  }
-
-  @Override
-  public int hashCode() {
-    return jsonObject.hashCode();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof GsonJsonObject)) return false;
-    return Objects.equals(jsonObject, ((GsonJsonObject) o).jsonObject);
-  }
-
-  @Override
-  public String toString() {
-    return jsonObject.toString();
-  }
-
-  @Override
-  public Iterator<Entry<String, GsonJsonValue>> iterator() {
-    return new GsonJsonEntryIterator(jsonObject.entrySet().iterator());
-  }
-
-  private final class GsonJsonEntryIterator
-      implements Iterator<Entry<String, GsonJsonValue>> {
-
-    private final Iterator<Entry<String, JsonElement>> jsonElementIterator;
-
-    private GsonJsonEntryIterator(
-        Iterator<Entry<String, JsonElement>> jsonElementIterator) {
-      this.jsonElementIterator = jsonElementIterator;
-    }
-
-    @Override
-    public boolean hasNext() {
-      return jsonElementIterator.hasNext();
-    }
-
-    @Override
-    public Entry<String, GsonJsonValue> next() {
-      Entry<String, JsonElement> member = jsonElementIterator.next();
-      return new AbstractMap.SimpleImmutableEntry<>(member.getKey(),
-          new GsonJsonValue(member.getValue()));
-    }
-
-  }
-
-  @Override
-  public String toJson() {
-    return toString();
-  }
-
-  @Override
-  public int size() {
-    return jsonObject.size();
-  }
-
-  @Override
   public void set(String name, JsonSource jsonValue) {
     jsonObject.add(name, (JsonElement) jsonValue.getSource());
   }
@@ -116,6 +54,30 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   @Override
   public boolean contains(String name) {
     return jsonObject.has(name);
+  }
+
+  @Override
+  public GsonJsonValue get(String name) {
+    JsonElement element = jsonObject.get(name);
+    return element == null ? null : new GsonJsonValue(element);
+  }
+
+  @Override
+  public int size() {
+    return jsonObject.size();
+  }
+
+  @Override
+  public Iterator<String> names() {
+    return jsonObject.keySet().iterator();
+  }
+
+  @Override
+  public Iterator<Entry<String, GsonJsonValue>> iterator() {
+    return new TransformIterator<Entry<String, JsonElement>, Entry<String, GsonJsonValue>>(
+        jsonObject.entrySet().iterator(),
+        member -> new SimpleImmutableEntry<>(member.getKey(),
+            new GsonJsonValue(member.getValue())));
   }
 
   @Override
@@ -146,21 +108,6 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   @Override
   public boolean isNull() {
     return false;
-  }
-
-  @Override
-  public GsonJsonObject asObject() {
-    return this;
-  }
-
-  @Override
-  public GsonJsonArray asArray() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public GsonJsonValue asValue() {
-    return new GsonJsonValue(jsonObject);
   }
 
   @Override
@@ -199,13 +146,45 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   }
 
   @Override
+  public GsonJsonObject asObject() {
+    return this;
+  }
+
+  @Override
+  public GsonJsonArray asArray() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public GsonJsonValue asValue() {
+    return new GsonJsonValue(jsonObject);
+  }
+
+  @Override
   public Object getSource() {
     return jsonObject;
   }
 
   @Override
-  public Iterator<String> names() {
-    return jsonObject.keySet().iterator();
+  public String toJson() {
+    return toString();
+  }
+
+  @Override
+  public int hashCode() {
+    return jsonObject.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof GsonJsonObject)) return false;
+    return Objects.equals(jsonObject, ((GsonJsonObject) o).jsonObject);
+  }
+
+  @Override
+  public String toString() {
+    return jsonObject.toString();
   }
 
 }

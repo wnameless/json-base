@@ -41,6 +41,25 @@ public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
   }
 
   @Override
+  public void add(JsonSource jsonValue) {
+    jsonArray = Json.createArrayBuilder(jsonArray)
+        .add((JsonValue) jsonValue.getSource()).build();
+  }
+
+  @Override
+  public void set(int index, JsonSource jsonValue) {
+    jsonArray = Json.createArrayBuilder(jsonArray)
+        .set(index, (JsonValue) jsonValue.getSource()).build();
+  }
+
+  @Override
+  public JakartaJsonValue remove(int index) {
+    JakartaJsonValue value = new JakartaJsonValue(jsonArray.get(index));
+    jsonArray = Json.createArrayBuilder(jsonArray).remove(index).build();
+    return value;
+  }
+
+  @Override
   public JakartaJsonValue get(int index) {
     return new JakartaJsonValue(jsonArray.get(index));
   }
@@ -52,27 +71,8 @@ public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
 
   @Override
   public Iterator<JakartaJsonValue> iterator() {
-    return new JakartaJsonValueIterator(jsonArray.iterator());
-  }
-
-  private class JakartaJsonValueIterator implements Iterator<JakartaJsonValue> {
-
-    private final Iterator<JsonValue> jsonValueIterator;
-
-    private JakartaJsonValueIterator(Iterator<JsonValue> jsonValueIterator) {
-      this.jsonValueIterator = jsonValueIterator;
-    }
-
-    @Override
-    public boolean hasNext() {
-      return jsonValueIterator.hasNext();
-    }
-
-    @Override
-    public JakartaJsonValue next() {
-      return new JakartaJsonValue(jsonValueIterator.next());
-    }
-
+    return new TransformIterator<JsonValue, JakartaJsonValue>(
+        jsonArray.iterator(), JakartaJsonValue::new);
   }
 
   @Override
@@ -141,11 +141,6 @@ public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
   }
 
   @Override
-  public String toJson() {
-    return toString();
-  }
-
-  @Override
   public JakartaJsonObject asObject() {
     throw new UnsupportedOperationException();
   }
@@ -166,22 +161,8 @@ public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
   }
 
   @Override
-  public void add(JsonSource jsonValue) {
-    jsonArray = Json.createArrayBuilder(jsonArray)
-        .add((JsonValue) jsonValue.getSource()).build();
-  }
-
-  @Override
-  public void set(int index, JsonSource jsonValue) {
-    jsonArray = Json.createArrayBuilder(jsonArray)
-        .set(index, (JsonValue) jsonValue.getSource()).build();
-  }
-
-  @Override
-  public JakartaJsonValue remove(int index) {
-    JakartaJsonValue value = new JakartaJsonValue(jsonArray.get(index));
-    jsonArray = Json.createArrayBuilder(jsonArray).remove(index).build();
-    return value;
+  public String toJson() {
+    return toString();
   }
 
   @Override

@@ -17,7 +17,7 @@ package com.github.wnameless.json.base;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -43,68 +43,6 @@ public final class JacksonJsonObject
   }
 
   @Override
-  public JacksonJsonValue get(String name) {
-    JsonNode node = jsonObject.get(name);
-    return node == null ? null : new JacksonJsonValue(node);
-  }
-
-  @Override
-  public int hashCode() {
-    return jsonObject.hashCode();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof JacksonJsonObject)) return false;
-    return Objects.equals(jsonObject, ((JacksonJsonObject) o).jsonObject);
-  }
-
-  @Override
-  public String toString() {
-    return jsonObject.toString();
-  }
-
-  @Override
-  public Iterator<Entry<String, JacksonJsonValue>> iterator() {
-    return new JacksonJsonEntryIterator(jsonObject.fields());
-  }
-
-  private final class JacksonJsonEntryIterator
-      implements Iterator<Entry<String, JacksonJsonValue>> {
-
-    private final Iterator<Entry<String, JsonNode>> jsonNodeIterator;
-
-    private JacksonJsonEntryIterator(
-        Iterator<Entry<String, JsonNode>> jsonNodeIterator) {
-      this.jsonNodeIterator = jsonNodeIterator;
-    }
-
-    @Override
-    public boolean hasNext() {
-      return jsonNodeIterator.hasNext();
-    }
-
-    @Override
-    public Entry<String, JacksonJsonValue> next() {
-      Entry<String, JsonNode> member = jsonNodeIterator.next();
-      return new AbstractMap.SimpleImmutableEntry<>(member.getKey(),
-          new JacksonJsonValue(member.getValue()));
-    }
-
-  }
-
-  @Override
-  public String toJson() {
-    return toString();
-  }
-
-  @Override
-  public int size() {
-    return jsonObject.size();
-  }
-
-  @Override
   public void set(String name, JsonSource jsonValue) {
     jsonObject.set(name, (JsonNode) jsonValue.getSource());
   }
@@ -117,6 +55,30 @@ public final class JacksonJsonObject
   @Override
   public boolean contains(String name) {
     return jsonObject.has(name);
+  }
+
+  @Override
+  public JacksonJsonValue get(String name) {
+    JsonNode node = jsonObject.get(name);
+    return node == null ? null : new JacksonJsonValue(node);
+  }
+
+  @Override
+  public int size() {
+    return jsonObject.size();
+  }
+
+  @Override
+  public Iterator<String> names() {
+    return jsonObject.fieldNames();
+  }
+
+  @Override
+  public Iterator<Entry<String, JacksonJsonValue>> iterator() {
+    return new TransformIterator<Entry<String, JsonNode>, Entry<String, JacksonJsonValue>>(
+        jsonObject.fields(),
+        member -> new SimpleImmutableEntry<>(member.getKey(),
+            new JacksonJsonValue(member.getValue())));
   }
 
   @Override
@@ -147,21 +109,6 @@ public final class JacksonJsonObject
   @Override
   public boolean isNull() {
     return false;
-  }
-
-  @Override
-  public JacksonJsonObject asObject() {
-    return this;
-  }
-
-  @Override
-  public JacksonJsonArray asArray() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public JacksonJsonValue asValue() {
-    return new JacksonJsonValue(jsonObject);
   }
 
   @Override
@@ -200,13 +147,45 @@ public final class JacksonJsonObject
   }
 
   @Override
+  public JacksonJsonObject asObject() {
+    return this;
+  }
+
+  @Override
+  public JacksonJsonArray asArray() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public JacksonJsonValue asValue() {
+    return new JacksonJsonValue(jsonObject);
+  }
+
+  @Override
   public Object getSource() {
     return jsonObject;
   }
 
   @Override
-  public Iterator<String> names() {
-    return jsonObject.fieldNames();
+  public String toJson() {
+    return toString();
+  }
+
+  @Override
+  public int hashCode() {
+    return jsonObject.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof JacksonJsonObject)) return false;
+    return Objects.equals(jsonObject, ((JacksonJsonObject) o).jsonObject);
+  }
+
+  @Override
+  public String toString() {
+    return jsonObject.toString();
   }
 
 }

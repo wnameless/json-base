@@ -38,25 +38,23 @@ public final class OrgJsonArray implements JsonArrayCore<OrgJsonValue> {
   }
 
   @Override
+  public void add(JsonSource jsonValue) {
+    jsonArray.put(jsonValue.getSource());
+  }
+
+  @Override
+  public void set(int index, JsonSource jsonValue) {
+    jsonArray.put(index, jsonValue.getSource());
+  }
+
+  @Override
+  public OrgJsonValue remove(int index) {
+    return new OrgJsonValue(jsonArray.remove(index));
+  }
+
+  @Override
   public OrgJsonValue get(int index) {
     return new OrgJsonValue(jsonArray.get(index));
-  }
-
-  @Override
-  public int hashCode() {
-    return jsonArray.hashCode();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof OrgJsonArray)) return false;
-    return jsonArray.similar(((OrgJsonArray) o).jsonArray);
-  }
-
-  @Override
-  public String toString() {
-    return jsonArray.toString();
   }
 
   @Override
@@ -66,27 +64,8 @@ public final class OrgJsonArray implements JsonArrayCore<OrgJsonValue> {
 
   @Override
   public Iterator<OrgJsonValue> iterator() {
-    return new OrgJsonValueIterator(jsonArray.iterator());
-  }
-
-  private class OrgJsonValueIterator implements Iterator<OrgJsonValue> {
-
-    private final Iterator<Object> objectIterator;
-
-    private OrgJsonValueIterator(Iterator<Object> objectIterator) {
-      this.objectIterator = objectIterator;
-    }
-
-    @Override
-    public boolean hasNext() {
-      return objectIterator.hasNext();
-    }
-
-    @Override
-    public OrgJsonValue next() {
-      return new OrgJsonValue(objectIterator.next());
-    }
-
+    return new TransformIterator<Object, OrgJsonValue>(jsonArray.iterator(),
+        OrgJsonValue::new);
   }
 
   @Override
@@ -155,11 +134,6 @@ public final class OrgJsonArray implements JsonArrayCore<OrgJsonValue> {
   }
 
   @Override
-  public String toJson() {
-    return toString();
-  }
-
-  @Override
   public OrgJsonObject asObject() {
     throw new UnsupportedOperationException();
   }
@@ -180,18 +154,25 @@ public final class OrgJsonArray implements JsonArrayCore<OrgJsonValue> {
   }
 
   @Override
-  public void add(JsonSource jsonValue) {
-    jsonArray.put(jsonValue.getSource());
+  public String toJson() {
+    return toString();
   }
 
   @Override
-  public void set(int index, JsonSource jsonValue) {
-    jsonArray.put(index, jsonValue.getSource());
+  public int hashCode() {
+    return jsonArray.hashCode();
   }
 
   @Override
-  public OrgJsonValue remove(int index) {
-    return new OrgJsonValue(jsonArray.remove(index));
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof OrgJsonArray)) return false;
+    return jsonArray.similar(((OrgJsonArray) o).jsonArray);
+  }
+
+  @Override
+  public String toString() {
+    return jsonArray.toString();
   }
 
 }

@@ -33,13 +33,6 @@ public interface JsonObjectBase<JVB extends JsonValueBase<JVB>>
     extends Iterable<Entry<String, JVB>>, JsonValueBase<JVB> {
 
   /**
-   * Returns field names of this JSON object.
-   * 
-   * @return an {@link Iterator} of field names
-   */
-  Iterator<String> names();
-
-  /**
    * Checks if this JSON object contains given field name.
    * 
    * @param name
@@ -63,6 +56,13 @@ public interface JsonObjectBase<JVB extends JsonValueBase<JVB>>
    * @return an int
    */
   int size();
+
+  /**
+   * Returns field names of this JSON object.
+   * 
+   * @return an {@link Iterator} of field names
+   */
+  Iterator<String> names();
 
   /**
    * Checks if this JSON object is empty.

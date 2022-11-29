@@ -17,7 +17,7 @@ package com.github.wnameless.json.base;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -44,8 +44,16 @@ public final class JakartaJsonObject
   }
 
   @Override
-  public Iterator<String> names() {
-    return jsonObject.keySet().iterator();
+  public void set(String name, JsonSource jsonValue) {
+    jsonObject = Json.createObjectBuilder(jsonObject)
+        .add(name, (JsonValue) jsonValue.getSource()).build();
+  }
+
+  @Override
+  public boolean remove(String name) {
+    boolean isRemovable = jsonObject.containsKey(name);
+    jsonObject = Json.createObjectBuilder(jsonObject).remove(name).build();
+    return isRemovable;
   }
 
   @Override
@@ -65,32 +73,16 @@ public final class JakartaJsonObject
   }
 
   @Override
-  public Iterator<Entry<String, JakartaJsonValue>> iterator() {
-    return new JakartaJsonEntryIterator(jsonObject.entrySet().iterator());
+  public Iterator<String> names() {
+    return jsonObject.keySet().iterator();
   }
 
-  private final class JakartaJsonEntryIterator
-      implements Iterator<Entry<String, JakartaJsonValue>> {
-
-    private final Iterator<Entry<String, JsonValue>> jsonValueIterator;
-
-    private JakartaJsonEntryIterator(
-        Iterator<Entry<String, JsonValue>> jsonValueIterator) {
-      this.jsonValueIterator = jsonValueIterator;
-    }
-
-    @Override
-    public boolean hasNext() {
-      return jsonValueIterator.hasNext();
-    }
-
-    @Override
-    public Entry<String, JakartaJsonValue> next() {
-      Entry<String, JsonValue> member = jsonValueIterator.next();
-      return new AbstractMap.SimpleImmutableEntry<>(member.getKey(),
-          new JakartaJsonValue(member.getValue()));
-    }
-
+  @Override
+  public Iterator<Entry<String, JakartaJsonValue>> iterator() {
+    return new TransformIterator<Entry<String, JsonValue>, Entry<String, JakartaJsonValue>>(
+        jsonObject.entrySet().iterator(),
+        member -> new SimpleImmutableEntry<>(member.getKey(),
+            new JakartaJsonValue(member.getValue())));
   }
 
   @Override
@@ -159,11 +151,6 @@ public final class JakartaJsonObject
   }
 
   @Override
-  public String toJson() {
-    return toString();
-  }
-
-  @Override
   public JakartaJsonObject asObject() {
     return this;
   }
@@ -184,16 +171,8 @@ public final class JakartaJsonObject
   }
 
   @Override
-  public void set(String name, JsonSource jsonValue) {
-    jsonObject = Json.createObjectBuilder(jsonObject)
-        .add(name, (JsonValue) jsonValue.getSource()).build();
-  }
-
-  @Override
-  public boolean remove(String name) {
-    boolean isRemovable = jsonObject.containsKey(name);
-    jsonObject = Json.createObjectBuilder(jsonObject).remove(name).build();
-    return isRemovable;
+  public String toJson() {
+    return toString();
   }
 
   @Override
