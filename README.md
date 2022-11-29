@@ -3,10 +3,10 @@
 
 json-base
 =============
-A set of Java interfaces which decouples JSON implementations such as Jackson, org.json and Gson...
+A set of Java interfaces which decouples JSON implementations such as Jackson, Gson, org.json and Jakarta...
 
 ## Purpose
-To avoid JSON conversion between different JSON libraries(Jackson, org.json, Gson...) in any JSON consuming Java method by creating generic JSON data interfaces which cover the common JSON data behavior.
+To avoid JSON conversion between different JSON libraries(Jackson, Gson, org.json, Jakarta...) in any JSON consuming Java method by creating generic JSON data interfaces which cover the common JSON data behavior.
 
 Java 9 Module is supported after v1.1.0, but the minimal Java version is remained Java 8.
 ## Maven Repo
@@ -20,21 +20,33 @@ Java 9 Module is supported after v1.1.0, but the minimal Java version is remaine
 ```
 
 ## Quick Start
-User can now program zir library logic focus to the JSON data wrapper interfaces.
+User can now program zir library logic based on the JSON data wrapper interfaces.
 ```java
 public void acceptJsonVal(JsonValueBase<?> val) {
   ...
 }
 
 // At the same time, user can consume popular JSON implementations easily in zir library
-public void  acceptGsonVal(JsonElement jsonElement) {
+public void acceptJacksonVal(JsonNode jsonNode) {
+  JsonValueCore<JacksonJsonValue> val = new JacksonJsonValue(jsonNode);
+  acceptJsonVal(val);
+  ...
+}
+
+public void acceptGsonVal(JsonElement jsonElement) {
   JsonValueCore<GsonJsonValue> val = new GsonJsonValue(jsonElement);
   acceptJsonVal(val);
   ...
 }
 
-public void  acceptJacksonVal(JsonNode jsonNode) {
-  JsonValueCore<JacksonJsonValue> val = new JacksonJsonValue(jsonNode);
+public void acceptOrgVal(JSONTokener jsonTokener) {
+  JsonValueCore<OrgJsonValue> val = new OrgJsonValue(jsonTokener);
+  acceptJsonVal(val);
+  ...
+}
+
+public void acceptJakartaVal(JsonValue jsonValue) {
+  JsonValueCore<JakartaJsonValue> val = new JakartaJsonValue(jsonValue);
   acceptJsonVal(val);
   ...
 }
@@ -42,7 +54,7 @@ public void  acceptJacksonVal(JsonNode jsonNode) {
 
 Sometimes, you may need a JSON producer in your library. Here is the wrapper:
 ```java
-// GsonJsonCore is also available
+// GsonJsonCore, OrgJsonCore and JakartaJsonCore are also available
 JsonCore<?> jsonCore = new JacksonJsonCore();
 JsonValueCore<?> val = jsonCore.parse("{\"abc\":123}");
 ```
@@ -95,7 +107,7 @@ System.out.println(JsonPrinter.prettyPrint(obj.toJson()));
 ```
 
 ## Important
-Although this library provides wrappers for Jackson, org.json and Gson, you still need to include the JSON implementation library which you are using in your dependencies.
+Although this library provides wrappers for Jackson, Gson, org.json and Jakarta, you still need to include the JSON implementation library which you are using in your dependencies.
 
 ## JSON data common interfaces
 If user want to implement zir own JSON data wrappers, here are some interfaces to work with.
