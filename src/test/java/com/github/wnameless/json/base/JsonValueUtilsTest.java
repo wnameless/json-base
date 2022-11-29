@@ -78,6 +78,7 @@ public class JsonValueUtilsTest {
     jacksonObj = new JacksonJsonValue(jsonNode).asObject();
   }
 
+  @SuppressWarnings("rawtypes")
   @Test
   public void testToObject() {
     assertEquals(JsonValueUtils.toObject(gsonObj),
