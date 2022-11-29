@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.function.Function;
 
 /**
+ * 
  * An iterator wrapper is made to transform each element inside an iterator.
  * 
  * @author Wei-Ming Wu
