@@ -14,7 +14,7 @@ To avoid JSON conversion between different JSON libraries(Jackson, Gson, org.jso
 | JSON-in JSON-out | Any JSON processing can always be started by JsonCore#parse and ended by Jsonable#toJson |
 | Any JSON implementation is completely decoupled | The JSON implementation can be switched by implementing corresponding interfaces |
 | Popular JSON  implementations are supported by default | Jackson, Gson, org.json, Jakarta |
-| Not involved in any Object serialization or deserialization | Th json-base lib just focuses on JSON data itself and nothing more |
+| Not involved in any Object serialization or deserialization | The json-base lib just focuses on JSON data itself and nothing more |
 | All special features of the selected JSON implementation are kept  | For example, the Gson object, which is used to create GsonJsonCore, can be configurated in advanced  |
 | All special manipulations, which require original Java types in selected JSON implementation, are capable | For example, the JsonNode object of Jackson library can always be retrieved by calling JsonSource#getSource |
 | Java 9 modularity | This lib supports Java 9 modularity, but keeps Java 8 as the minimum version |
