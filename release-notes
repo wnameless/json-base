@@ -35,5 +35,5 @@ Version 2.3.0
 * Increase JUnit code coverage to 100%
 - Remove Cobertura maven dependency
 
-Version 2.3.1
+Version 2.4.0
 + Add #stream to JsonArrayBase and JsonObjectBase
