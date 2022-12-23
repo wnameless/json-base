@@ -17,12 +17,9 @@ package com.github.wnameless.json.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.IOException;
 import java.net.URL;
-
 import org.junit.jupiter.api.Test;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 

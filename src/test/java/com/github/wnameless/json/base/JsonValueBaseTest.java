@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -29,12 +28,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.testing.EqualsTester;
@@ -42,7 +39,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
-
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
 
@@ -55,8 +51,7 @@ public class JsonValueBaseTest {
   boolean bool = true;
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
-  BigDecimal bd =
-      new BigDecimal("45.678912367891236789123678912367891236789123");
+  BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
 
   JsonPOJO jo = new JsonPOJO() {
     {
@@ -105,8 +100,7 @@ public class JsonValueBaseTest {
     Gson gson = new GsonBuilder().serializeNulls().create();
     str = "\"text\\";
     jo.setStr(str);
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     jsonValue = new GsonJsonValue(jsonElement);
 
     assertTrue(jsonValue.isObject());
@@ -118,25 +112,17 @@ public class JsonValueBaseTest {
     assertFalse(jsonValue.isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
     assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
-    assertEquals(i,
-        jsonValue.asObject().get("num").asArray().get(0).asNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asNumber());
     assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
     assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
-    assertEquals(l,
-        jsonValue.asObject().get("num").asArray().get(1).asNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asNumber());
     assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
-    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
-        0.0);
-    assertEquals(d,
-        jsonValue.asObject().get("num").asArray().get(2).asNumber());
-    assertEquals(bi,
-        jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
-    assertEquals(bi,
-        jsonValue.asObject().get("num").asArray().get(3).asNumber());
-    assertEquals(bd,
-        jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
-    assertEquals(bd,
-        jsonValue.asObject().get("num").asArray().get(4).asNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(), 0.0);
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asNumber());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asNumber());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asNumber());
     assertTrue(jsonValue.asObject().get("obj").isNull());
     assertSame(null, jsonValue.asObject().get("obj").asNull());
 
@@ -144,9 +130,7 @@ public class JsonValueBaseTest {
 
     new EqualsTester().addEqualityGroup(jsonValue).testEquals();
     new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
-    new EqualsTester()
-        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
-        .testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject().get("num").asArray()).testEquals();
 
     assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
     assertEquals(
@@ -167,8 +151,7 @@ public class JsonValueBaseTest {
   @Test
   public void testGsonValueToJson() {
     Gson gson = new GsonBuilder().serializeNulls().create();
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     GsonJsonValue jsonValue = new GsonJsonValue(jsonElement);
     assertEquals(
         "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}",
@@ -197,25 +180,17 @@ public class JsonValueBaseTest {
     assertFalse(jsonValue.isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
     assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
-    assertEquals(i,
-        jsonValue.asObject().get("num").asArray().get(0).asNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asNumber());
     assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
     assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
-    assertEquals(l,
-        jsonValue.asObject().get("num").asArray().get(1).asNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asNumber());
     assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
-    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
-        0.0);
-    assertEquals(d,
-        jsonValue.asObject().get("num").asArray().get(2).asNumber());
-    assertEquals(bi,
-        jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
-    assertEquals(bi,
-        jsonValue.asObject().get("num").asArray().get(3).asNumber());
-    assertEquals(bd,
-        jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
-    assertEquals(bd,
-        jsonValue.asObject().get("num").asArray().get(4).asNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(), 0.0);
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asNumber());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asNumber());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asNumber());
     assertTrue(jsonValue.asObject().get("obj").isNull());
     assertSame(null, jsonValue.asObject().get("obj").asNull());
 
@@ -223,9 +198,7 @@ public class JsonValueBaseTest {
 
     new EqualsTester().addEqualityGroup(jsonValue).testEquals();
     new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
-    new EqualsTester()
-        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
-        .testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject().get("num").asArray()).testEquals();
 
     assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
     assertEquals(
@@ -274,25 +247,17 @@ public class JsonValueBaseTest {
     assertFalse(jsonValue.isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
     assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
-    assertEquals(i,
-        jsonValue.asObject().get("num").asArray().get(0).asNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asNumber());
     assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
     assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
-    assertEquals(l,
-        jsonValue.asObject().get("num").asArray().get(1).asNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asNumber());
     assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
-    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
-        0.0);
-    assertEquals(d,
-        jsonValue.asObject().get("num").asArray().get(2).asNumber());
-    assertEquals(bi,
-        jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
-    assertEquals(bi,
-        jsonValue.asObject().get("num").asArray().get(3).asNumber());
-    assertEquals(bd,
-        jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
-    assertEquals(bd,
-        jsonValue.asObject().get("num").asArray().get(4).asNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(), 0.0);
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asNumber());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asNumber());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asNumber());
     assertTrue(jsonValue.asObject().get("obj").isNull());
     assertSame(null, jsonValue.asObject().get("obj").asNull());
 
@@ -300,13 +265,10 @@ public class JsonValueBaseTest {
 
     new EqualsTester().addEqualityGroup(jsonValue).testEquals();
     new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
-    new EqualsTester()
-        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
-        .testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject().get("num").asArray()).testEquals();
     assertTrue(jsonValue.equals(new OrgJsonValue(new JSONObject(jo))));
     assertFalse(jsonValue.equals(jsonValue.asObject().get("str")));
-    assertTrue(jsonValue.asObject().get("num")
-        .equals(jsonValue.asObject().get("num")));
+    assertTrue(jsonValue.asObject().get("num").equals(jsonValue.asObject().get("num")));
     assertFalse(jsonValue.asObject().get("num").equals(jsonValue));
 
     assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
@@ -343,8 +305,7 @@ public class JsonValueBaseTest {
   public void testJakartaValue() {
     str = "\"text\\";
     jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
-        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
-            .add(bd).build())
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", bool).add("obj", JsonValue.NULL).build());
 
     assertTrue(jsonValue.isObject());
@@ -356,25 +317,17 @@ public class JsonValueBaseTest {
     assertFalse(jsonValue.isArray());
     assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
     assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
-    assertEquals(i,
-        jsonValue.asObject().get("num").asArray().get(0).asNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asNumber());
     assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
     assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
-    assertEquals(l,
-        jsonValue.asObject().get("num").asArray().get(1).asNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asNumber());
     assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
-    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(),
-        0.0);
-    assertEquals(d,
-        jsonValue.asObject().get("num").asArray().get(2).asNumber());
-    assertEquals(bi,
-        jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
-    assertEquals(bi,
-        jsonValue.asObject().get("num").asArray().get(3).asNumber());
-    assertEquals(bd,
-        jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
-    assertEquals(bd,
-        jsonValue.asObject().get("num").asArray().get(4).asNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(), 0.0);
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asNumber());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asNumber());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asNumber());
     assertTrue(jsonValue.asObject().get("obj").isNull());
     assertSame(null, jsonValue.asObject().get("obj").asNull());
 
@@ -382,9 +335,7 @@ public class JsonValueBaseTest {
 
     new EqualsTester().addEqualityGroup(jsonValue).testEquals();
     new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
-    new EqualsTester()
-        .addEqualityGroup(jsonValue.asObject().get("num").asArray())
-        .testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject().get("num").asArray()).testEquals();
 
     assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
     assertEquals(
@@ -399,9 +350,7 @@ public class JsonValueBaseTest {
       jsonValue.asObject().get("num").asBoolean();
     });
     jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
-        .add("num",
-            Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd)
-                .build())
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", false).add("obj", JsonValue.NULL).build());
     assertTrue(jsonValue.asObject().get("bool").isBoolean());
     assertFalse(jsonValue.asObject().get("bool").asBoolean());
@@ -410,8 +359,7 @@ public class JsonValueBaseTest {
   @Test
   public void testJakartaValueToJson() {
     jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
-        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
-            .add(bd).build())
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", bool).add("obj", JsonValue.NULL).build());
     assertEquals(
         "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}",
@@ -427,12 +375,10 @@ public class JsonValueBaseTest {
   @Test
   public void testGsonArrayIterable() {
     Gson gson = new GsonBuilder().serializeNulls().create();
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     GsonJsonValue gsonJson = new GsonJsonValue(jsonElement);
 
-    JsonArrayBase<GsonJsonValue> array =
-        gsonJson.asObject().get("num").asArray();
+    JsonArrayBase<GsonJsonValue> array = gsonJson.asObject().get("num").asArray();
     Iterator<GsonJsonValue> iter = array.iterator();
 
     assertEquals(array.get(0), iter.next());
@@ -443,8 +389,7 @@ public class JsonValueBaseTest {
     assertFalse(iter.hasNext());
 
     assertFalse(array.isEmpty());
-    jsonElement = gson.toJsonTree(new ArrayList<>(),
-        new TypeToken<ArrayList<?>>() {}.getType());
+    jsonElement = gson.toJsonTree(new ArrayList<>(), new TypeToken<ArrayList<?>>() {}.getType());
     gsonJson = new GsonJsonValue(jsonElement);
     array = gsonJson.asArray();
     assertTrue(array.isEmpty());
@@ -453,8 +398,7 @@ public class JsonValueBaseTest {
   @Test
   public void testGsonObjectIterable() {
     Gson gson = new GsonBuilder().serializeNulls().create();
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     GsonJsonValue jsonValue = new GsonJsonValue(jsonElement);
     GsonJsonObject gsonObject = jsonValue.asObject();
 
@@ -479,8 +423,7 @@ public class JsonValueBaseTest {
     assertFalse(iter.hasNext());
 
     assertFalse(gsonObject.isEmpty());
-    jsonElement =
-        gson.toJsonTree(new Object(), new TypeToken<Object>() {}.getType());
+    jsonElement = gson.toJsonTree(new Object(), new TypeToken<Object>() {}.getType());
     jsonValue = new GsonJsonValue(jsonElement);
     gsonObject = jsonValue.asObject();
     assertTrue(gsonObject.isEmpty());
@@ -491,8 +434,7 @@ public class JsonValueBaseTest {
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     JacksonJsonValue jacksonJson = new JacksonJsonValue(jsonNode);
 
-    JsonArrayBase<JacksonJsonValue> array =
-        jacksonJson.asObject().get("num").asArray();
+    JsonArrayBase<JacksonJsonValue> array = jacksonJson.asObject().get("num").asArray();
     Iterator<JacksonJsonValue> iter = array.iterator();
 
     assertEquals(array.get(0), iter.next());
@@ -570,8 +512,7 @@ public class JsonValueBaseTest {
     Iterator<Entry<String, OrgJsonValue>> iter = orgObject.iterator();
 
     Entry<String, OrgJsonValue> element = iter.next();
-    List<String> keys =
-        new ArrayList<>(Arrays.asList("str", "num", "bool", "obj"));
+    List<String> keys = new ArrayList<>(Arrays.asList("str", "num", "bool", "obj"));
     // assertEquals("str", element.getKey());
     assertEquals(orgObject.get(element.getKey()), element.getValue());
     keys.remove(element.getKey());
@@ -601,14 +542,11 @@ public class JsonValueBaseTest {
 
   @Test
   public void testJakartaArrayIterable() {
-    JakartaJsonValue jakartaJson = new JakartaJsonValue(Json
-        .createObjectBuilder().add("str", str)
-        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
-            .add(bd).build())
+    JakartaJsonValue jakartaJson = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", bool).add("obj", JsonValue.NULL).build());
 
-    JsonArrayBase<JakartaJsonValue> array =
-        jakartaJson.asObject().get("num").asArray();
+    JsonArrayBase<JakartaJsonValue> array = jakartaJson.asObject().get("num").asArray();
     Iterator<JakartaJsonValue> iter = array.iterator();
 
     assertEquals(array.get(0), iter.next());
@@ -626,10 +564,8 @@ public class JsonValueBaseTest {
 
   @Test
   public void testJakartaObjectIterable() {
-    JakartaJsonValue jakartaJson = new JakartaJsonValue(Json
-        .createObjectBuilder().add("str", str)
-        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
-            .add(bd).build())
+    JakartaJsonValue jakartaJson = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", bool).add("obj", JsonValue.NULL).build());
     JakartaJsonObject jakartaObject = jakartaJson.asObject();
 

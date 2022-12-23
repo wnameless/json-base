@@ -16,21 +16,17 @@
 package com.github.wnameless.json.base;
 
 import static org.junit.Assert.assertSame;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
@@ -44,8 +40,7 @@ public class JsonValueCoreTest {
   boolean bool = true;
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
-  BigDecimal bd =
-      new BigDecimal("45.678912367891236789123678912367891236789123");
+  BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
 
   JsonPOJO jo = new JsonPOJO() {
     {
@@ -70,8 +65,7 @@ public class JsonValueCoreTest {
   @Test
   public void testGsonGetSource() {
     Gson gson = new GsonBuilder().serializeNulls().create();
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     jsonValue = new GsonJsonValue(jsonElement);
 
     assertSame(jsonElement, jsonValue.getSource());
@@ -96,8 +90,7 @@ public class JsonValueCoreTest {
   @Test
   public void testJakartaGetSource() {
     JsonObject JsonObject = Json.createObjectBuilder().add("str", str)
-        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
-            .add(bd).build())
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", bool).add("obj", JsonValue.NULL).build();
     jsonValue = new JakartaJsonValue(JsonObject);
 

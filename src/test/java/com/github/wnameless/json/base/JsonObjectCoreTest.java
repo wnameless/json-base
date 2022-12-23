@@ -21,15 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -38,7 +35,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
 
@@ -51,8 +47,7 @@ public class JsonObjectCoreTest {
   boolean bool = true;
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
-  BigDecimal bd =
-      new BigDecimal("45.678912367891236789123678912367891236789123");
+  BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
 
   JsonPOJO jo = new JsonPOJO() {
     {
@@ -80,8 +75,7 @@ public class JsonObjectCoreTest {
   @BeforeEach
   public void init() {
     Gson gson = new GsonBuilder().serializeNulls().create();
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     gsonObj = new GsonJsonValue(jsonElement).asObject();
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
@@ -91,9 +85,7 @@ public class JsonObjectCoreTest {
     orgObj = new OrgJsonValue(new JSONObject(jo)).asObject();
 
     jakartaObj = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
-        .add("num",
-            Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd)
-                .build())
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", bool).add("obj", JsonValue.NULL).build()).asObject();
   }
 
@@ -159,11 +151,9 @@ public class JsonObjectCoreTest {
   @Test
   public void testEquals() {
     assertEquals(new GsonJsonObject((JsonObject) gsonObj.getSource()), gsonObj);
-    assertEquals(new JacksonJsonObject((ObjectNode) jacksonObj.getSource()),
-        jacksonObj);
+    assertEquals(new JacksonJsonObject((ObjectNode) jacksonObj.getSource()), jacksonObj);
     assertEquals(new OrgJsonObject((JSONObject) orgObj.getSource()), orgObj);
-    assertEquals(
-        new JakartaJsonObject((jakarta.json.JsonObject) jakartaObj.getSource()),
+    assertEquals(new JakartaJsonObject((jakarta.json.JsonObject) jakartaObj.getSource()),
         jakartaObj);
 
     assertNotEquals(gsonObj, jacksonObj);
@@ -187,8 +177,7 @@ public class JsonObjectCoreTest {
     assertThrows(UnsupportedOperationException.class, () -> {
       gsonObj.asArray();
     });
-    assertEquals(new GsonJsonValue((JsonElement) gsonObj.getSource()),
-        gsonObj.asValue());
+    assertEquals(new GsonJsonValue((JsonElement) gsonObj.getSource()), gsonObj.asValue());
     assertThrows(UnsupportedOperationException.class, () -> {
       gsonObj.asString();
     });
@@ -226,8 +215,7 @@ public class JsonObjectCoreTest {
     assertThrows(UnsupportedOperationException.class, () -> {
       jacksonObj.asArray();
     });
-    assertEquals(new JacksonJsonValue((JsonNode) jacksonObj.getSource()),
-        jacksonObj.asValue());
+    assertEquals(new JacksonJsonValue((JsonNode) jacksonObj.getSource()), jacksonObj.asValue());
     assertThrows(UnsupportedOperationException.class, () -> {
       jacksonObj.asString();
     });
@@ -265,8 +253,7 @@ public class JsonObjectCoreTest {
     assertThrows(UnsupportedOperationException.class, () -> {
       orgObj.asArray();
     });
-    assertEquals(new OrgJsonValue((JSONObject) orgObj.getSource()),
-        orgObj.asValue());
+    assertEquals(new OrgJsonValue((JSONObject) orgObj.getSource()), orgObj.asValue());
     assertThrows(UnsupportedOperationException.class, () -> {
       orgObj.asString();
     });
@@ -304,8 +291,7 @@ public class JsonObjectCoreTest {
     assertThrows(UnsupportedOperationException.class, () -> {
       jakartaObj.asArray();
     });
-    assertEquals(
-        new JakartaJsonValue((jakarta.json.JsonObject) jakartaObj.getSource()),
+    assertEquals(new JakartaJsonValue((jakarta.json.JsonObject) jakartaObj.getSource()),
         jakartaObj.asValue());
     assertThrows(UnsupportedOperationException.class, () -> {
       jakartaObj.asString();

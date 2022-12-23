@@ -18,24 +18,22 @@ package com.github.wnameless.json.base;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
-
 import jakarta.json.Json;
 
 public class JsonArrayBaseTest {
@@ -47,8 +45,7 @@ public class JsonArrayBaseTest {
   boolean bool = true;
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
-  BigDecimal bd =
-      new BigDecimal("45.678912367891236789123678912367891236789123");
+  BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
 
   JsonPOJO jo = new JsonPOJO() {
     {
@@ -68,24 +65,22 @@ public class JsonArrayBaseTest {
     }
   };
 
-  JsonArrayBase<?> gsonAry;
-  JsonArrayBase<?> jacksonAry;
-  JsonArrayBase<?> orgAry;
-  JsonArrayBase<?> jakartaAry;
+  JsonArrayBase<GsonJsonValue> gsonAry;
+  JsonArrayBase<JacksonJsonValue> jacksonAry;
+  JsonArrayBase<OrgJsonValue> orgAry;
+  JsonArrayBase<JakartaJsonValue> jakartaAry;
 
   @BeforeEach
   public void init() {
     Gson gson = new GsonBuilder().serializeNulls().create();
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     gsonAry = new GsonJsonValue(jsonElement).asObject().get("num").asArray();
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonAry = new JacksonJsonValue(jsonNode).asObject().get("num").asArray();
 
     jo.setObj(JSONObject.NULL);
-    orgAry =
-        new OrgJsonValue(new JSONObject(jo)).asObject().get("num").asArray();
+    orgAry = new OrgJsonValue(new JSONObject(jo)).asObject().get("num").asArray();
 
     jakartaAry = new JakartaJsonArray(
         Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build());
@@ -153,6 +148,18 @@ public class JsonArrayBaseTest {
     assertEquals(num, jacksonAry.toList());
     assertEquals(num, orgAry.toList());
     assertEquals(num, jakartaAry.toList());
+  }
+
+  @Test
+  public void testStream() {
+    assertEquals(StreamSupport.stream(gsonAry.spliterator(), false).collect(Collectors.toList()),
+        gsonAry.stream().collect(Collectors.toList()));
+    assertEquals(StreamSupport.stream(jacksonAry.spliterator(), false).collect(Collectors.toList()),
+        jacksonAry.stream().collect(Collectors.toList()));
+    assertEquals(StreamSupport.stream(orgAry.spliterator(), false).collect(Collectors.toList()),
+        orgAry.stream().collect(Collectors.toList()));
+    assertEquals(StreamSupport.stream(jakartaAry.spliterator(), false).collect(Collectors.toList()),
+        jakartaAry.stream().collect(Collectors.toList()));
   }
 
 }

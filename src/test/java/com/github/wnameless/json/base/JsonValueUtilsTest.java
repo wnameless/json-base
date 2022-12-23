@@ -17,14 +17,11 @@ package com.github.wnameless.json.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
@@ -42,8 +39,7 @@ public class JsonValueUtilsTest {
   boolean bool = true;
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
-  BigDecimal bd =
-      new BigDecimal("45.678912367891236789123678912367891236789123");
+  BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
 
   JsonPOJO jo = new JsonPOJO() {
     {
@@ -70,8 +66,7 @@ public class JsonValueUtilsTest {
   @BeforeEach
   public void init() {
     Gson gson = new GsonBuilder().serializeNulls().create();
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     gsonObj = new GsonJsonValue(jsonElement).asObject();
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
@@ -81,8 +76,7 @@ public class JsonValueUtilsTest {
   @SuppressWarnings("rawtypes")
   @Test
   public void testToObject() {
-    assertEquals(JsonValueUtils.toObject(gsonObj),
-        JsonValueUtils.toObject(jacksonObj));
+    assertEquals(JsonValueUtils.toObject(gsonObj), JsonValueUtils.toObject(jacksonObj));
 
     assertThrows(IllegalStateException.class, () -> {
       JsonValueUtils.toObject(new JsonValueBase() {

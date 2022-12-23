@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -28,11 +27,11 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterators;
@@ -40,7 +39,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
-
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
 
@@ -53,8 +51,7 @@ public class JsonObjectBaseTest {
   boolean bool = true;
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
-  BigDecimal bd =
-      new BigDecimal("45.678912367891236789123678912367891236789123");
+  BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
 
   JsonPOJO jo = new JsonPOJO() {
     {
@@ -74,16 +71,15 @@ public class JsonObjectBaseTest {
     }
   };
 
-  JsonObjectBase<?> gsonObj;
-  JsonObjectBase<?> jacksonObj;
-  JsonObjectBase<?> orgObj;
-  JsonObjectBase<?> jakartaObj;
+  JsonObjectBase<GsonJsonValue> gsonObj;
+  JsonObjectBase<JacksonJsonValue> jacksonObj;
+  JsonObjectBase<OrgJsonValue> orgObj;
+  JsonObjectBase<JakartaJsonValue> jakartaObj;
 
   @BeforeEach
   public void init() {
     Gson gson = new GsonBuilder().serializeNulls().create();
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     gsonObj = new GsonJsonValue(jsonElement).asObject();
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
@@ -93,27 +89,22 @@ public class JsonObjectBaseTest {
     orgObj = new OrgJsonValue(new JSONObject(jo)).asObject();
 
     jakartaObj = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
-        .add("num",
-            Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd)
-                .build())
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", bool).add("obj", JsonValue.NULL).build()).asObject();
   }
 
   @Test
   public void testNames() {
-    assertArrayEquals(new String[] { "str", "num", "bool", "obj" },
+    assertArrayEquals(new String[] {"str", "num", "bool", "obj"},
         Iterators.toArray(gsonObj.names(), String.class));
 
-    assertArrayEquals(new String[] { "str", "num", "bool", "obj" },
+    assertArrayEquals(new String[] {"str", "num", "bool", "obj"},
         Iterators.toArray(jacksonObj.names(), String.class));
 
-    assertEquals(
-        new HashSet<>(
-            Arrays.asList(new String[] { "str", "num", "bool", "obj" })),
-        new HashSet<>(
-            Arrays.asList(Iterators.toArray(orgObj.names(), String.class))));
+    assertEquals(new HashSet<>(Arrays.asList(new String[] {"str", "num", "bool", "obj"})),
+        new HashSet<>(Arrays.asList(Iterators.toArray(orgObj.names(), String.class))));
 
-    assertArrayEquals(new String[] { "str", "num", "bool", "obj" },
+    assertArrayEquals(new String[] {"str", "num", "bool", "obj"},
         Iterators.toArray(jakartaObj.names(), String.class));
   }
 
@@ -133,29 +124,25 @@ public class JsonObjectBaseTest {
   @Test
   public void testGet() {
     assertEquals(str, gsonObj.get("str").asString());
-    assertEquals(Arrays.asList(i, l, d, bi, bd),
-        gsonObj.get("num").asArray().toList());
+    assertEquals(Arrays.asList(i, l, d, bi, bd), gsonObj.get("num").asArray().toList());
     assertEquals(bool, gsonObj.get("bool").asBoolean());
     assertEquals(null, gsonObj.get("obj").asNull());
     assertEquals(null, gsonObj.get("none"));
 
     assertEquals(str, jacksonObj.get("str").asString());
-    assertEquals(Arrays.asList(i, l, d, bi, bd),
-        jacksonObj.get("num").asArray().toList());
+    assertEquals(Arrays.asList(i, l, d, bi, bd), jacksonObj.get("num").asArray().toList());
     assertEquals(bool, jacksonObj.get("bool").asBoolean());
     assertEquals(null, jacksonObj.get("obj").asNull());
     assertEquals(null, jacksonObj.get("none"));
 
     assertEquals(str, orgObj.get("str").asString());
-    assertEquals(Arrays.asList(i, l, d, bi, bd),
-        orgObj.get("num").asArray().toList());
+    assertEquals(Arrays.asList(i, l, d, bi, bd), orgObj.get("num").asArray().toList());
     assertEquals(bool, orgObj.get("bool").asBoolean());
     assertEquals(null, orgObj.get("obj").asNull());
     assertEquals(null, orgObj.get("none"));
 
     assertEquals(str, jakartaObj.get("str").asString());
-    assertEquals(Arrays.asList(i, l, d, bi, bd),
-        jakartaObj.get("num").asArray().toList());
+    assertEquals(Arrays.asList(i, l, d, bi, bd), jakartaObj.get("num").asArray().toList());
     assertEquals(bool, jakartaObj.get("bool").asBoolean());
     assertEquals(null, jakartaObj.get("obj").asNull());
     assertEquals(null, jakartaObj.get("none"));
@@ -201,6 +188,18 @@ public class JsonObjectBaseTest {
     assertEquals(map, jacksonObj.toMap());
     assertEquals(map, orgObj.toMap());
     assertEquals(map, jakartaObj.toMap());
+  }
+
+  @Test
+  public void testStream() {
+    assertEquals(StreamSupport.stream(gsonObj.spliterator(), false).collect(Collectors.toList()),
+        gsonObj.stream().collect(Collectors.toList()));
+    assertEquals(StreamSupport.stream(jacksonObj.spliterator(), false).collect(Collectors.toList()),
+        jacksonObj.stream().collect(Collectors.toList()));
+    assertEquals(StreamSupport.stream(orgObj.spliterator(), false).collect(Collectors.toList()),
+        orgObj.stream().collect(Collectors.toList()));
+    assertEquals(StreamSupport.stream(jakartaObj.spliterator(), false).collect(Collectors.toList()),
+        jakartaObj.stream().collect(Collectors.toList()));
   }
 
 }

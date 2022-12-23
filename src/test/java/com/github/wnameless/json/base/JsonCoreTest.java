@@ -18,18 +18,15 @@ package com.github.wnameless.json.base;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.jupiter.api.Test;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +34,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
-
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
 
@@ -53,8 +49,7 @@ public class JsonCoreTest {
   boolean bool = true;
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
-  BigDecimal bd =
-      new BigDecimal("45.678912367891236789123678912367891236789123");
+  BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
 
   JsonPOJO jo = new JsonPOJO() {
     {
@@ -92,8 +87,7 @@ public class JsonCoreTest {
   @Test
   public void testGsonJsonCore() throws IOException {
     Gson gson = new Gson();
-    JsonElement jsonElement =
-        gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
+    JsonElement jsonElement = gson.toJsonTree(jo, new TypeToken<JsonPOJO>() {}.getType());
     jsonValue = new GsonJsonValue(jsonElement);
     assertNotEquals(jsonValue, new GsonJsonCore().parse(json));
 
@@ -102,8 +96,7 @@ public class JsonCoreTest {
     jsonValue = new GsonJsonValue(jsonElement);
 
     assertEquals(jsonValue, new GsonJsonCore(gson).parse(json));
-    assertEquals(jsonValue,
-        new GsonJsonCore(gson).parse(new StringReader(json)));
+    assertEquals(jsonValue, new GsonJsonCore(gson).parse(new StringReader(json)));
 
     assertThrows(RuntimeException.class, () -> {
       new GsonJsonCore().parse("\"abc");
@@ -123,8 +116,7 @@ public class JsonCoreTest {
     jsonValue = new JacksonJsonValue(jsonNode);
 
     assertEquals(jsonValue, new JacksonJsonCore(mapper).parse(json));
-    assertEquals(jsonValue,
-        new JacksonJsonCore(mapper).parse(new StringReader(json)));
+    assertEquals(jsonValue, new JacksonJsonCore(mapper).parse(new StringReader(json)));
 
     assertThrows(RuntimeException.class, () -> {
       new JacksonJsonCore().parse("\"abc");
@@ -155,13 +147,11 @@ public class JsonCoreTest {
   @Test
   public void testJakartaJsonCore() throws IOException {
     jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
-        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
-            .add(bd).build())
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", bool).add("obj", JsonValue.NULL).build());
 
     assertEquals(jsonValue, new JakartaJsonCore().parse(json));
-    assertEquals(jsonValue,
-        new JakartaJsonCore().parse(new StringReader(json)));
+    assertEquals(jsonValue, new JakartaJsonCore().parse(new StringReader(json)));
 
     assertThrows(RuntimeException.class, () -> {
       new JakartaJsonCore().parse("\"abc");
@@ -170,12 +160,10 @@ public class JsonCoreTest {
 
   @Test
   public void testJakartaJsonCoreWithReaderFactory() throws IOException {
-    JakartaJsonCore jjc =
-        new JakartaJsonCore(Json.createReaderFactory(new HashMap<>()));
+    JakartaJsonCore jjc = new JakartaJsonCore(Json.createReaderFactory(new HashMap<>()));
 
     jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
-        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi)
-            .add(bd).build())
+        .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
         .add("bool", bool).add("obj", JsonValue.NULL).build());
 
     assertEquals(jsonValue, jjc.parse(json));
