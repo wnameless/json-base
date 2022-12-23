@@ -15,7 +15,6 @@
  */
 package com.github.wnameless.json.base;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -88,7 +87,6 @@ public interface JsonObjectBase<JVB extends JsonValueBase<JVB>>
    * @return a {@link Stream}
    */
   default Stream<Entry<String, JVB>> stream() {
-    new ArrayList<String>();
     return StreamSupport.stream(spliterator(), false);
   }
 

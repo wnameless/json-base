@@ -213,6 +213,10 @@ public interface JsonArrayBase<JVB extends JsonValueBase<?>>
   default List<Object> toList() {
     return JsonValueUtils.toList(this);
   }
+  
+  default Stream<JVB> stream() {
+    return StreamSupport.stream(spliterator(), false);
+  }
 
 }
 ```
@@ -250,6 +254,10 @@ public interface JsonObjectBase<JVB extends JsonValueBase<?>>
 
   default Map<String, Object> toMap() {
     return JsonValueUtils.toMap(this);
+  }
+  
+  default Stream<Entry<String, JVB>> stream() {
+    return StreamSupport.stream(spliterator(), false);
   }
 
 }
