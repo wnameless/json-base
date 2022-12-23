@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Objects;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
@@ -66,8 +65,8 @@ public final class JacksonJsonArray implements JsonArrayCore<JacksonJsonValue> {
 
   @Override
   public Iterator<JacksonJsonValue> iterator() {
-    return new TransformIterator<JsonNode, JacksonJsonValue>(
-        jsonArray.iterator(), JacksonJsonValue::new);
+    return new TransformIterator<JsonNode, JacksonJsonValue>(jsonArray.iterator(),
+        JacksonJsonValue::new);
   }
 
   @Override

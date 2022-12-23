@@ -16,16 +16,17 @@
 package com.github.wnameless.json.base;
 
 import java.util.List;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * 
- * {@link JsonArrayBase} extends {@link JsonValueBase} and adds essential
- * methods which should be included in any JSON array implementation.
+ * {@link JsonArrayBase} extends {@link JsonValueBase} and adds essential methods which should be
+ * included in any JSON array implementation.
  * 
  * @author Wei-Ming Wu
  *
- * @param <JVB>
- *          the type of a JSON implementation wrapper
+ * @param <JVB> the type of a JSON implementation wrapper
  */
 public interface JsonArrayBase<JVB extends JsonValueBase<JVB>>
     extends Iterable<JVB>, JsonValueBase<JVB> {
@@ -33,8 +34,7 @@ public interface JsonArrayBase<JVB extends JsonValueBase<JVB>>
   /**
    * Returns a JSON value wrapper by given index.
    * 
-   * @param index
-   *          a position in this JSON array
+   * @param index a position in this JSON array
    * @return a JSON value wrapper
    */
   JVB get(int index);
@@ -62,6 +62,15 @@ public interface JsonArrayBase<JVB extends JsonValueBase<JVB>>
    */
   default List<Object> toList() {
     return JsonValueUtils.toList(this);
+  }
+
+  /**
+   * Turns this JSON array into a Stream of {@link JsonValueBase}.
+   * 
+   * @return a {@link Stream}
+   */
+  default Stream<JVB> stream() {
+    return StreamSupport.stream(spliterator(), false);
   }
 
 }

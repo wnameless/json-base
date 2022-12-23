@@ -15,19 +15,21 @@
  */
 package com.github.wnameless.json.base;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * 
- * {@link JsonObjectBase} extends {@link JsonValueBase} and adds essential
- * methods which should be included in any JSON object implementation.
+ * {@link JsonObjectBase} extends {@link JsonValueBase} and adds essential methods which should be
+ * included in any JSON object implementation.
  * 
  * @author Wei-Ming Wu
  *
- * @param <JVB>
- *          the type of a JSON implementation wrapper
+ * @param <JVB> the type of a JSON implementation wrapper
  */
 public interface JsonObjectBase<JVB extends JsonValueBase<JVB>>
     extends Iterable<Entry<String, JVB>>, JsonValueBase<JVB> {
@@ -35,8 +37,7 @@ public interface JsonObjectBase<JVB extends JsonValueBase<JVB>>
   /**
    * Checks if this JSON object contains given field name.
    * 
-   * @param name
-   *          a field name
+   * @param name a field name
    * @return true if this JSON object contains given field name, false otherwise
    */
   boolean contains(String name);
@@ -44,8 +45,7 @@ public interface JsonObjectBase<JVB extends JsonValueBase<JVB>>
   /**
    * Returns a JSON value wrapper by given field name.
    * 
-   * @param name
-   *          a field name
+   * @param name a field name
    * @return a JSON value wrapper
    */
   JVB get(String name);
@@ -80,6 +80,16 @@ public interface JsonObjectBase<JVB extends JsonValueBase<JVB>>
    */
   default Map<String, Object> toMap() {
     return JsonValueUtils.toMap(this);
+  }
+
+  /**
+   * Turns this JSON object into a Stream of Entry&lt;String, {@link JsonValueBase}&gt;.
+   * 
+   * @return a {@link Stream}
+   */
+  default Stream<Entry<String, JVB>> stream() {
+    new ArrayList<String>();
+    return StreamSupport.stream(spliterator(), false);
   }
 
 }

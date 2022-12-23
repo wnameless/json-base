@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Objects;
-
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonValue;
@@ -42,14 +41,13 @@ public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
 
   @Override
   public void add(JsonSource jsonValue) {
-    jsonArray = Json.createArrayBuilder(jsonArray)
-        .add((JsonValue) jsonValue.getSource()).build();
+    jsonArray = Json.createArrayBuilder(jsonArray).add((JsonValue) jsonValue.getSource()).build();
   }
 
   @Override
   public void set(int index, JsonSource jsonValue) {
-    jsonArray = Json.createArrayBuilder(jsonArray)
-        .set(index, (JsonValue) jsonValue.getSource()).build();
+    jsonArray =
+        Json.createArrayBuilder(jsonArray).set(index, (JsonValue) jsonValue.getSource()).build();
   }
 
   @Override
@@ -71,8 +69,8 @@ public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
 
   @Override
   public Iterator<JakartaJsonValue> iterator() {
-    return new TransformIterator<JsonValue, JakartaJsonValue>(
-        jsonArray.iterator(), JakartaJsonValue::new);
+    return new TransformIterator<JsonValue, JakartaJsonValue>(jsonArray.iterator(),
+        JakartaJsonValue::new);
   }
 
   @Override

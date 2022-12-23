@@ -34,3 +34,6 @@ Version 2.3.0
 * Change the return type of JsonArrayCore#remove(int) from boolean to JsonArrayCore
 * Increase JUnit code coverage to 100%
 - Remove Cobertura maven dependency
+
+Version 2.3.1
++ Add #stream to JsonArrayBase and JsonObjectBase

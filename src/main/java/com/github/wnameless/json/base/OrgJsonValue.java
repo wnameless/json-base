@@ -18,7 +18,6 @@ package com.github.wnameless.json.base;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -37,9 +36,9 @@ public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
 
   public OrgJsonValue(Object jsonValue) {
     if (jsonValue == null) throw new NullPointerException();
-    if (!(jsonValue instanceof Boolean || jsonValue instanceof String
-        || jsonValue instanceof Number || jsonValue instanceof JSONArray
-        || jsonValue instanceof JSONObject || jsonValue == JSONObject.NULL)) {
+    if (!(jsonValue instanceof Boolean || jsonValue instanceof String || jsonValue instanceof Number
+        || jsonValue instanceof JSONArray || jsonValue instanceof JSONObject
+        || jsonValue == JSONObject.NULL)) {
       throw new IllegalArgumentException();
     }
     this.jsonValue = jsonValue;

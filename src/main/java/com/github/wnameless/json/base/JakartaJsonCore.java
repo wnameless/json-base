@@ -18,7 +18,6 @@ package com.github.wnameless.json.base;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-
 import jakarta.json.Json;
 import jakarta.json.JsonReaderFactory;
 
@@ -45,11 +44,9 @@ public class JakartaJsonCore implements JsonCore<JakartaJsonValue> {
   @Override
   public JakartaJsonValue parse(String json) {
     if (factory != null) {
-      return new JakartaJsonValue(
-          factory.createReader(new StringReader(json)).readValue());
+      return new JakartaJsonValue(factory.createReader(new StringReader(json)).readValue());
     }
-    return new JakartaJsonValue(
-        Json.createReader(new StringReader(json)).readValue());
+    return new JakartaJsonValue(Json.createReader(new StringReader(json)).readValue());
   }
 
   @Override

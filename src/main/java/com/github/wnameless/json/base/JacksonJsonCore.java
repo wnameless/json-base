@@ -17,7 +17,6 @@ package com.github.wnameless.json.base;
 
 import java.io.IOException;
 import java.io.Reader;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

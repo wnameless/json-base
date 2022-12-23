@@ -21,7 +21,6 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -75,8 +74,7 @@ public final class GsonJsonObject implements JsonObjectCore<GsonJsonValue> {
   @Override
   public Iterator<Entry<String, GsonJsonValue>> iterator() {
     return new TransformIterator<Entry<String, JsonElement>, Entry<String, GsonJsonValue>>(
-        jsonObject.entrySet().iterator(),
-        member -> new SimpleImmutableEntry<>(member.getKey(),
+        jsonObject.entrySet().iterator(), member -> new SimpleImmutableEntry<>(member.getKey(),
             new GsonJsonValue(member.getValue())));
   }
 

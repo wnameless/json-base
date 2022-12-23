@@ -18,7 +18,6 @@ package com.github.wnameless.json.base;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
-
 import jakarta.json.JsonNumber;
 import jakarta.json.JsonString;
 import jakarta.json.JsonValue;

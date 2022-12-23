@@ -18,7 +18,6 @@ package com.github.wnameless.json.base;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Iterator;
-
 import org.json.JSONArray;
 
 /**
@@ -64,8 +63,7 @@ public final class OrgJsonArray implements JsonArrayCore<OrgJsonValue> {
 
   @Override
   public Iterator<OrgJsonValue> iterator() {
-    return new TransformIterator<Object, OrgJsonValue>(jsonArray.iterator(),
-        OrgJsonValue::new);
+    return new TransformIterator<Object, OrgJsonValue>(jsonArray.iterator(), OrgJsonValue::new);
   }
 
   @Override

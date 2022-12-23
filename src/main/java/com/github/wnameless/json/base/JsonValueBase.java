@@ -20,17 +20,14 @@ import java.math.BigInteger;
 
 /**
  * 
- * {@link JsonValueBase} defines all essential methods which should be included
- * in any JSON implementation object. This interface should be used as a wrapper
- * to a JSON value implementation.
+ * {@link JsonValueBase} defines all essential methods which should be included in any JSON
+ * implementation object. This interface should be used as a wrapper to a JSON value implementation.
  * 
  * @author Wei-Ming Wu
  *
- * @param <JVB>
- *          the type of a JSON implementation wrapper
+ * @param <JVB> the type of a JSON implementation wrapper
  */
-public interface JsonValueBase<JVB extends JsonValueBase<JVB>>
-    extends Jsonable {
+public interface JsonValueBase<JVB extends JsonValueBase<JVB>> extends Jsonable {
 
   /**
    * Checks if this is represented as a JSON object.
@@ -126,9 +123,8 @@ public interface JsonValueBase<JVB extends JsonValueBase<JVB>>
   /**
    * Converts this to a Java {@link Number}.<br>
    * <br>
-   * Converted {@link Number} is chosen from {@link Integer}, {@link Long},
-   * {@link BigInteger}, {@link Double} and {@link BigDecimal} based on the size
-   * and scale of numeric.
+   * Converted {@link Number} is chosen from {@link Integer}, {@link Long}, {@link BigInteger},
+   * {@link Double} and {@link BigDecimal} based on the size and scale of numeric.
    * 
    * @return a {@link Number}
    */

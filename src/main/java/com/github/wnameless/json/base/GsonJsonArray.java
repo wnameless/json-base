@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Objects;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
@@ -66,8 +65,8 @@ public final class GsonJsonArray implements JsonArrayCore<GsonJsonValue> {
 
   @Override
   public Iterator<GsonJsonValue> iterator() {
-    return new TransformIterator<JsonElement, GsonJsonValue>(
-        jsonArray.iterator(), GsonJsonValue::new);
+    return new TransformIterator<JsonElement, GsonJsonValue>(jsonArray.iterator(),
+        GsonJsonValue::new);
   }
 
   @Override

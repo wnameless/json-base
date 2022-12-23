@@ -24,16 +24,14 @@ import java.io.Reader;
  * 
  * @author Wei-Ming Wu
  *
- * @param <JVC>
- *          the type of a JSON implementation wrapper
+ * @param <JVC> the type of a JSON implementation wrapper
  */
 public interface JsonCore<JVC extends JsonValueCore<JVC>> {
 
   /**
    * Creates a {@link JsonValueCore} by given JSON string.
    * 
-   * @param json
-   *          any JSON string
+   * @param json any JSON string
    * @return a {@link JsonValueCore}
    */
   JsonValueCore<JVC> parse(String json);
@@ -41,11 +39,9 @@ public interface JsonCore<JVC extends JsonValueCore<JVC>> {
   /**
    * Creates a {@link JsonValueCore} by given JSON string reader.
    * 
-   * @param jsonReader
-   *          any JSON string reader
+   * @param jsonReader any JSON string reader
    * @return a {@link JsonValueCore}
-   * @throws IOException
-   *           if error occurs during reading
+   * @throws IOException if error occurs during reading
    */
   JsonValueCore<JVC> parse(Reader jsonReader) throws IOException;
 

@@ -18,7 +18,6 @@ package com.github.wnameless.json.base;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
-
 import com.google.gson.JsonElement;
 
 /**
@@ -49,20 +48,17 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
 
   @Override
   public boolean isString() {
-    return jsonValue.isJsonPrimitive()
-        ? jsonValue.getAsJsonPrimitive().isString() : false;
+    return jsonValue.isJsonPrimitive() ? jsonValue.getAsJsonPrimitive().isString() : false;
   }
 
   @Override
   public boolean isBoolean() {
-    return jsonValue.isJsonPrimitive()
-        ? jsonValue.getAsJsonPrimitive().isBoolean() : false;
+    return jsonValue.isJsonPrimitive() ? jsonValue.getAsJsonPrimitive().isBoolean() : false;
   }
 
   @Override
   public boolean isNumber() {
-    return jsonValue.isJsonPrimitive()
-        ? jsonValue.getAsJsonPrimitive().isNumber() : false;
+    return jsonValue.isJsonPrimitive() ? jsonValue.getAsJsonPrimitive().isNumber() : false;
   }
 
   @Override

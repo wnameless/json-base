@@ -17,13 +17,12 @@ package com.github.wnameless.json.base;
 
 /**
  * 
- * {@link JsonArrayCore} extends {@link JsonArrayBase}, {@link JsonValueCore}
- * and adds few methods to make it mutable.
+ * {@link JsonArrayCore} extends {@link JsonArrayBase}, {@link JsonValueCore} and adds few methods
+ * to make it mutable.
  * 
  * @author Wei-Ming Wu
  *
- * @param <JVC>
- *          the type of a JSON implementation wrapper
+ * @param <JVC> the type of a JSON implementation wrapper
  */
 public interface JsonArrayCore<JVC extends JsonValueCore<JVC>>
     extends JsonArrayBase<JVC>, JsonValueCore<JVC> {
@@ -31,26 +30,22 @@ public interface JsonArrayCore<JVC extends JsonValueCore<JVC>>
   /**
    * Sets an element by given {@link JsonSource}.
    * 
-   * @param jsonSource
-   *          a {@link JsonSource}
+   * @param jsonSource a {@link JsonSource}
    */
   void add(JsonSource jsonSource);
 
   /**
    * Sets an element by given index and {@link JsonSource}.
    * 
-   * @param index
-   *          a position in this JSON array
-   * @param jsonSource
-   *          a {@link JsonSource}
+   * @param index a position in this JSON array
+   * @param jsonSource a {@link JsonSource}
    */
   void set(int index, JsonSource jsonSource);
 
   /**
    * Removes an element by given index.
    * 
-   * @param index
-   *          a position in this JSON array
+   * @param index a position in this JSON array
    * @return the removed element
    */
   JVC remove(int index);

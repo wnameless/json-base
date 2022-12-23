@@ -71,9 +71,8 @@ public final class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
 
   @Override
   public Iterator<Entry<String, OrgJsonValue>> iterator() {
-    return new TransformIterator<String, Entry<String, OrgJsonValue>>(
-        jsonObject.keys(), key -> new SimpleImmutableEntry<>(key,
-            new OrgJsonValue(jsonObject.get(key))));
+    return new TransformIterator<String, Entry<String, OrgJsonValue>>(jsonObject.keys(),
+        key -> new SimpleImmutableEntry<>(key, new OrgJsonValue(jsonObject.get(key))));
   }
 
   @Override

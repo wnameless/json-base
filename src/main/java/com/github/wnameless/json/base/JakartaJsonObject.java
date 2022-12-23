@@ -21,7 +21,6 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
@@ -33,8 +32,7 @@ import jakarta.json.JsonValue;
  * @author Wei-Ming Wu
  *
  */
-public final class JakartaJsonObject
-    implements JsonObjectCore<JakartaJsonValue> {
+public final class JakartaJsonObject implements JsonObjectCore<JakartaJsonValue> {
 
   private JsonObject jsonObject;
 
@@ -45,8 +43,8 @@ public final class JakartaJsonObject
 
   @Override
   public void set(String name, JsonSource jsonValue) {
-    jsonObject = Json.createObjectBuilder(jsonObject)
-        .add(name, (JsonValue) jsonValue.getSource()).build();
+    jsonObject =
+        Json.createObjectBuilder(jsonObject).add(name, (JsonValue) jsonValue.getSource()).build();
   }
 
   @Override
@@ -80,8 +78,7 @@ public final class JakartaJsonObject
   @Override
   public Iterator<Entry<String, JakartaJsonValue>> iterator() {
     return new TransformIterator<Entry<String, JsonValue>, Entry<String, JakartaJsonValue>>(
-        jsonObject.entrySet().iterator(),
-        member -> new SimpleImmutableEntry<>(member.getKey(),
+        jsonObject.entrySet().iterator(), member -> new SimpleImmutableEntry<>(member.getKey(),
             new JakartaJsonValue(member.getValue())));
   }
 

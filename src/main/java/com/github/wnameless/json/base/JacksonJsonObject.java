@@ -21,7 +21,6 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -32,8 +31,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * @author Wei-Ming Wu
  *
  */
-public final class JacksonJsonObject
-    implements JsonObjectCore<JacksonJsonValue> {
+public final class JacksonJsonObject implements JsonObjectCore<JacksonJsonValue> {
 
   private final ObjectNode jsonObject;
 
@@ -76,8 +74,7 @@ public final class JacksonJsonObject
   @Override
   public Iterator<Entry<String, JacksonJsonValue>> iterator() {
     return new TransformIterator<Entry<String, JsonNode>, Entry<String, JacksonJsonValue>>(
-        jsonObject.fields(),
-        member -> new SimpleImmutableEntry<>(member.getKey(),
+        jsonObject.fields(), member -> new SimpleImmutableEntry<>(member.getKey(),
             new JacksonJsonValue(member.getValue())));
   }
 

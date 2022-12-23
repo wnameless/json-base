@@ -17,9 +17,8 @@ package com.github.wnameless.json.base;
 
 /**
  * 
- * {@link JsonPrinter} reprints any JSON input into minimal or pretty form. It
- * only uses Java native string processing to generate the output and no
- * additional explicit JSON library is required.
+ * {@link JsonPrinter} reprints any JSON input into minimal or pretty form. It only uses Java native
+ * string processing to generate the output and no additional explicit JSON library is required.
  * 
  * @author Wei-Ming Wu
  *
@@ -31,8 +30,7 @@ public final class JsonPrinter {
   /**
    * Returns a minimal print JSON of any JSON input.
    * 
-   * @param json
-   *          any JSON
+   * @param json any JSON
    * @return a minimal print JSON
    */
   public static String minimalPrint(String json) {
@@ -69,8 +67,7 @@ public final class JsonPrinter {
   /**
    * Returns a pretty print JSON of any JSON input.
    * 
-   * @param json
-   *          any JSON
+   * @param json any JSON
    * @return a pretty print JSON
    */
   public static String prettyPrint(String json) {
@@ -80,10 +77,8 @@ public final class JsonPrinter {
   /**
    * Returns a pretty print JSON of any JSON input.
    * 
-   * @param json
-   *          any JSON
-   * @param indentStr
-   *          a string to use as an indent
+   * @param json any JSON
+   * @param indentStr a string to use as an indent
    * @return a pretty print JSON
    */
   public static String prettyPrint(String json, String indentStr) {
@@ -166,8 +161,8 @@ public final class JsonPrinter {
     return prettyPrintBuilder.toString();
   }
 
-  private static void appendNewLine(StringBuilder stringBuilder,
-      int indentLevel, String indentStr) {
+  private static void appendNewLine(StringBuilder stringBuilder, int indentLevel,
+      String indentStr) {
     stringBuilder.append('\n');
     for (int i = 0; i < indentLevel; i++) {
       stringBuilder.append(indentStr);

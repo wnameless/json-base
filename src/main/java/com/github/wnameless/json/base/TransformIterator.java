@@ -24,10 +24,8 @@ import java.util.function.Function;
  * 
  * @author Wei-Ming Wu
  *
- * @param <I>
- *          the type of the element in input iterator
- * @param <O>
- *          the type of the element in output iterator
+ * @param <I> the type of the element in input iterator
+ * @param <O> the type of the element in output iterator
  */
 public final class TransformIterator<I, O> implements Iterator<O> {
 
@@ -37,10 +35,8 @@ public final class TransformIterator<I, O> implements Iterator<O> {
   /**
    * Creates a {@link TransformIterator}.
    * 
-   * @param iterator
-   *          an {@link Iterator}
-   * @param transformer
-   *          is used to transform each element of the input iterator
+   * @param iterator an {@link Iterator}
+   * @param transformer is used to transform each element of the input iterator
    */
   public TransformIterator(Iterator<I> iterator, Function<I, O> transformer) {
     if (iterator == null) throw new NullPointerException();
