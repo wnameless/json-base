@@ -115,6 +115,11 @@ public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
   }
 
   @Override
+  public Number asNumber() {
+    return (Number) jsonValue;
+  }
+
+  @Override
   public int hashCode() {
     return jsonValue.hashCode();
   }
