@@ -121,7 +121,7 @@ System.out.println(JsonPrinter.prettyPrint(obj.toJson()));
 Although this library provides wrappers for Jackson, Gson, org.json and Jakarta, you still need to include the JSON implementation library which you are using in your dependencies.
 
 ## JSON data common interfaces
-If user want to implement zir own JSON data wrappers, here are some interfaces to work with.
+If user wants to implement zir own JSON data wrappers, here are some interfaces to work with.
 
 For immutable JSON data: JsonValueBase, JsonArrayBase, JsonObjectBase <br>
 For mutable JSON data: JsonCore, JsonValueCore, JsonArrayCore, JsonObjectCore
