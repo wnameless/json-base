@@ -169,4 +169,53 @@ public final class JsonPrinter {
     }
   }
 
+  /**
+   * Converts any Java String to the JSON string representation, which is quoted and escaped
+   * properly.
+   * 
+   * @param javaString any Java String
+   * @return a representation of JSON string
+   */
+  public static String toJsonString(String javaString) {
+    if (javaString == null || javaString.isEmpty()) {
+      return "\"\"";
+    }
+
+    StringBuilder sb = new StringBuilder();
+
+    sb.append('"');
+    for (int i = 0; i < javaString.length(); i++) {
+      char c = javaString.charAt(i);
+      switch (c) {
+        case '"':
+          sb.append('\\');
+          sb.append(c);
+          break;
+        case '\\':
+          sb.append("\\\\");
+          break;
+        case '\b':
+          sb.append("\\b");
+          break;
+        case '\n':
+          sb.append("\\n");
+          break;
+        case '\t':
+          sb.append("\\t");
+          break;
+        case '\f':
+          sb.append("\\f");
+          break;
+        case '\r':
+          sb.append("\\r");
+          break;
+        default:
+          sb.append(c);
+      }
+    }
+    sb.append('"');
+
+    return sb.toString();
+  }
+
 }
