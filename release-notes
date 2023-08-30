@@ -37,3 +37,7 @@ Version 2.3.0
 
 Version 2.4.0
 + Add #stream to JsonArrayBase and JsonObjectBase
+
+Version 2.4.1
+* Improve OrgJsonValue#asNumber
++ Add JsonPrinter#toJsonString
