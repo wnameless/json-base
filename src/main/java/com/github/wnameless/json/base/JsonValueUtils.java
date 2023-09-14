@@ -71,8 +71,11 @@ public final class JsonValueUtils {
     if (bd.scale() <= 0) {
       return bd.toBigInteger();
     }
-    if (BigDecimal.valueOf(bd.doubleValue()).compareTo(bd) == 0) {
-      return bd.doubleValue();
+    BigDecimal doubleBD = new BigDecimal(String.valueOf(bd.doubleValue()));
+    if (doubleBD.compareTo(bd) == 0) {
+      if (doubleBD.scale() == bd.scale()) {
+        return bd.doubleValue();
+      }
     }
     return bd;
   }

@@ -76,4 +76,15 @@ public class JsonPrinterTest {
     assertEquals(prettyJson, JsonPrinter.prettyPrint(minimalJson));
   }
 
+  @Test
+  public void testToJsonString() {
+    String str = "";
+    assertEquals("\"\"", JsonPrinter.toJsonString(str));
+    str = null;
+    assertEquals("\"\"", JsonPrinter.toJsonString(str));
+    str = "\"\\\b\n\t\f\rabc";
+    assertEquals("\"\\\"\\\\\\b\\n" + //
+        "\\t\\f\\rabc\"", JsonPrinter.toJsonString(str));
+  }
+
 }

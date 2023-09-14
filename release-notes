@@ -41,3 +41,9 @@ Version 2.4.0
 Version 2.4.1
 * Improve OrgJsonValue#asNumber
 + Add JsonPrinter#toJsonString
+
+Version 2.4.2
+* Upgrade POM
+
+Version 2.4.3
+* Modify JsonValueUtils#toJavaNumber for preserving precise scale of the float number

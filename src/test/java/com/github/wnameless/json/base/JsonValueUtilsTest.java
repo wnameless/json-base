@@ -16,7 +16,9 @@
 package com.github.wnameless.json.base;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -168,6 +170,26 @@ public class JsonValueUtilsTest {
 
       });
     });
+  }
+
+  @Test
+  public void testToJavaNumber() {
+    BigDecimal bd = new BigDecimal("123");
+    assertEquals(123, JsonValueUtils.toJavaNumber(bd));
+    bd = new BigDecimal(123L);
+    assertEquals(123, JsonValueUtils.toJavaNumber(bd));
+    bd = new BigDecimal(12345678901L);
+    assertEquals(12345678901L, JsonValueUtils.toJavaNumber(bd));
+    bd = new BigDecimal("12345678901234567890");
+    assertEquals(new BigInteger("12345678901234567890"), JsonValueUtils.toJavaNumber(bd));
+    bd = new BigDecimal("123.456");
+    assertEquals(123.456, JsonValueUtils.toJavaNumber(bd));
+    assertTrue(JsonValueUtils.toJavaNumber(bd) instanceof Double);
+    bd = new BigDecimal("123.4560");
+    assertEquals(4, bd.scale());
+    assertNotEquals(123.456, JsonValueUtils.toJavaNumber(bd));
+    assertTrue(JsonValueUtils.toJavaNumber(bd) instanceof BigDecimal);
+    assertEquals(123.456, JsonValueUtils.toJavaNumber(bd).doubleValue());
   }
 
 }
