@@ -93,7 +93,7 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
 
   @Override
   public BigInteger asBigInteger() {
-    return new BigInteger(jsonValue.toString());
+    return jsonValue.getAsBigInteger();
   }
 
   @Override
@@ -103,7 +103,7 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
 
   @Override
   public BigDecimal asBigDecimal() {
-    return new BigDecimal(jsonValue.toString());
+    return jsonValue.getAsBigDecimal();
   }
 
   @Override
