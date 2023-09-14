@@ -3,7 +3,7 @@
 
   <groupId>com.github.wnameless.json</groupId>
   <artifactId>json-base</artifactId>
-  <version>2.4.3</version>
+  <version>2.4.4-SNAPSHOT</version>
 
   <name>json-base</name>
   <description>A set of Java interfaces, which defines the common JSON data behaviors, can be used to decouple programming logic from JSON implementations such as Jackson, Gson, org.json and Jakarta...</description>
@@ -22,7 +22,7 @@
     <connection>scm:git:git@github.com:wnameless/json-base.git</connection>
     <developerConnection>scm:git:git@github.com:wnameless/json-base.git</developerConnection>
     <url>git@github.com:wnameless/json-base.git</url>
-    <tag>json-base-2.4.3</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <developers>
