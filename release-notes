@@ -47,3 +47,6 @@ Version 2.4.2
 
 Version 2.4.3
 * Modify JsonValueUtils#toJavaNumber for preserving precise scale of the float number
+
+Version 2.5.0
++ Lazy loading ObjectMapper and Gson

@@ -31,8 +31,16 @@ public class JacksonJsonCore implements JsonCore<JacksonJsonValue> {
 
   private ObjectMapper mapper;
 
+  private static class LazyHolder {
+    public static final ObjectMapper INSTANCE = new ObjectMapper();
+  }
+
+  private ObjectMapper getInstance() {
+    return mapper == null ? LazyHolder.INSTANCE : mapper;
+  }
+
   public JacksonJsonCore() {
-    mapper = new ObjectMapper();
+    mapper = null;
   }
 
   public JacksonJsonCore(ObjectMapper mapper) {
@@ -43,7 +51,7 @@ public class JacksonJsonCore implements JsonCore<JacksonJsonValue> {
   @Override
   public JacksonJsonValue parse(String json) {
     try {
-      return new JacksonJsonValue(mapper.readTree(json));
+      return new JacksonJsonValue(getInstance().readTree(json));
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
@@ -51,7 +59,7 @@ public class JacksonJsonCore implements JsonCore<JacksonJsonValue> {
 
   @Override
   public JacksonJsonValue parse(Reader jsonReader) throws IOException {
-    return new JacksonJsonValue(mapper.readTree(jsonReader));
+    return new JacksonJsonValue(getInstance().readTree(jsonReader));
   }
 
 }

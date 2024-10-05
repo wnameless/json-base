@@ -32,8 +32,16 @@ public class GsonJsonCore implements JsonCore<GsonJsonValue> {
 
   private final Gson gson;
 
+  private static class LazyHolder {
+    public static final Gson INSTANCE = new GsonBuilder().serializeNulls().create();
+  }
+
+  private Gson getInstance() {
+    return gson == null ? LazyHolder.INSTANCE : gson;
+  }
+
   public GsonJsonCore() {
-    gson = new GsonBuilder().serializeNulls().create();
+    gson = null;
   }
 
   public GsonJsonCore(Gson gson) {
@@ -43,12 +51,12 @@ public class GsonJsonCore implements JsonCore<GsonJsonValue> {
 
   @Override
   public GsonJsonValue parse(String json) {
-    return new GsonJsonValue(gson.fromJson(json, JsonElement.class));
+    return new GsonJsonValue(getInstance().fromJson(json, JsonElement.class));
   }
 
   @Override
   public GsonJsonValue parse(Reader jsonReader) throws IOException {
-    return new GsonJsonValue(gson.fromJson(jsonReader, JsonElement.class));
+    return new GsonJsonValue(getInstance().fromJson(jsonReader, JsonElement.class));
   }
 
 }
