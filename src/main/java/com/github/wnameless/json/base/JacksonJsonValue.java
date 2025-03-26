@@ -50,7 +50,7 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
 
   @Override
   public boolean isString() {
-    return jsonValue.isTextual();
+    return jsonValue.isTextual() || jsonValue.isBinary();
   }
 
   @Override

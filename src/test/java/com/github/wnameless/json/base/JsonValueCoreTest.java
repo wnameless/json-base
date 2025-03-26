@@ -18,6 +18,7 @@ package com.github.wnameless.json.base;
 import static org.junit.Assert.assertSame;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,7 @@ public class JsonValueCoreTest {
   long l = 1234567890123456789L;
   double d = 45.67;
   boolean bool = true;
+  byte[] bytes = "123".getBytes(StandardCharsets.UTF_8);
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
   BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
@@ -56,6 +58,7 @@ public class JsonValueCoreTest {
         }
       });
       setBool(bool);
+      setBytes(bytes);
       setObj(obj);
     }
   };

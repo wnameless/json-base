@@ -22,6 +22,7 @@ public class JsonPOJO {
   private String str;
   private List<?> num;
   private boolean bool;
+  private byte[] bytes;
   private Object obj;
 
   public String getStr() {
@@ -46,6 +47,14 @@ public class JsonPOJO {
 
   public void setBool(boolean bool) {
     this.bool = bool;
+  }
+
+  public byte[] getBytes() {
+    return bytes;
+  }
+
+  public void setBytes(byte[] bytes) {
+    this.bytes = bytes;
   }
 
   public Object getObj() {

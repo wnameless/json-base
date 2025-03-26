@@ -21,8 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -49,6 +51,7 @@ public class JsonObjectBaseTest {
   long l = 1234567890123456789L;
   double d = 45.67;
   boolean bool = true;
+  byte[] bytes = "123".getBytes(StandardCharsets.UTF_8);
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
   BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
@@ -67,6 +70,7 @@ public class JsonObjectBaseTest {
         }
       });
       setBool(bool);
+      setBytes(bytes);
       setObj(obj);
     }
   };
@@ -95,13 +99,13 @@ public class JsonObjectBaseTest {
 
   @Test
   public void testNames() {
-    assertArrayEquals(new String[] {"str", "num", "bool", "obj"},
+    assertArrayEquals(new String[] {"str", "num", "bool", "bytes", "obj"},
         Iterators.toArray(gsonObj.names(), String.class));
 
-    assertArrayEquals(new String[] {"str", "num", "bool", "obj"},
+    assertArrayEquals(new String[] {"str", "num", "bool", "bytes", "obj"},
         Iterators.toArray(jacksonObj.names(), String.class));
 
-    assertEquals(new HashSet<>(Arrays.asList(new String[] {"str", "num", "bool", "obj"})),
+    assertEquals(new HashSet<>(Arrays.asList(new String[] {"str", "num", "bool", "bytes", "obj"})),
         new HashSet<>(Arrays.asList(Iterators.toArray(orgObj.names(), String.class))));
 
     assertArrayEquals(new String[] {"str", "num", "bool", "obj"},
@@ -125,18 +129,21 @@ public class JsonObjectBaseTest {
   public void testGet() {
     assertEquals(str, gsonObj.get("str").asString());
     assertEquals(Arrays.asList(i, l, d, bi, bd), gsonObj.get("num").asArray().toList());
+    assertEquals(Arrays.asList((int) bytes[0], (int) bytes[1], (int) bytes[2]), gsonObj.get("bytes").asArray().toList());
     assertEquals(bool, gsonObj.get("bool").asBoolean());
     assertEquals(null, gsonObj.get("obj").asNull());
     assertEquals(null, gsonObj.get("none"));
 
     assertEquals(str, jacksonObj.get("str").asString());
     assertEquals(Arrays.asList(i, l, d, bi, bd), jacksonObj.get("num").asArray().toList());
+    assertEquals(Base64.getEncoder().encodeToString(bytes), jacksonObj.get("bytes").asString());
     assertEquals(bool, jacksonObj.get("bool").asBoolean());
     assertEquals(null, jacksonObj.get("obj").asNull());
     assertEquals(null, jacksonObj.get("none"));
 
     assertEquals(str, orgObj.get("str").asString());
     assertEquals(Arrays.asList(i, l, d, bi, bd), orgObj.get("num").asArray().toList());
+    assertEquals(Arrays.asList(bytes[0], bytes[1], bytes[2]), orgObj.get("bytes").asArray().toList());
     assertEquals(bool, orgObj.get("bool").asBoolean());
     assertEquals(null, orgObj.get("obj").asNull());
     assertEquals(null, orgObj.get("none"));
@@ -150,9 +157,9 @@ public class JsonObjectBaseTest {
 
   @Test
   public void testSize() {
-    assertEquals(4, gsonObj.size());
-    assertEquals(4, jacksonObj.size());
-    assertEquals(4, orgObj.size());
+    assertEquals(5, gsonObj.size());
+    assertEquals(5, jacksonObj.size());
+    assertEquals(5, orgObj.size());
     assertEquals(4, jakartaObj.size());
   }
 
@@ -184,10 +191,13 @@ public class JsonObjectBaseTest {
     map.put("bool", bool);
     map.put("obj", obj);
 
-    assertEquals(map, gsonObj.toMap());
-    assertEquals(map, jacksonObj.toMap());
-    assertEquals(map, orgObj.toMap());
     assertEquals(map, jakartaObj.toMap());
+    map.put("bytes", Arrays.asList((int) bytes[0], (int) bytes[1], (int) bytes[2]));
+    assertEquals(map, gsonObj.toMap());
+    map.put("bytes", Base64.getEncoder().encodeToString(bytes));
+    assertEquals(map, jacksonObj.toMap());
+    map.put("bytes", Arrays.asList(bytes[0], bytes[1], bytes[2]));
+    assertEquals(map, orgObj.toMap());
   }
 
   @Test

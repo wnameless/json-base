@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +44,7 @@ public class JsonArrayBaseTest {
   long l = 1234567890123456789L;
   double d = 45.67;
   boolean bool = true;
+  byte[] bytes = "123".getBytes(StandardCharsets.UTF_8);
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
   BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
@@ -61,6 +63,7 @@ public class JsonArrayBaseTest {
         }
       });
       setBool(bool);
+      setBytes(bytes);
       setObj(obj);
     }
   };

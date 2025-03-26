@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +46,7 @@ public class JsonObjectCoreTest {
   long l = 1234567890123456789L;
   double d = 45.67;
   boolean bool = true;
+  byte[] bytes = "123".getBytes(StandardCharsets.UTF_8);
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
   BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
@@ -63,6 +65,7 @@ public class JsonObjectCoreTest {
         }
       });
       setBool(bool);
+      setBytes(bytes);
       setObj(obj);
     }
   };
@@ -117,9 +120,9 @@ public class JsonObjectCoreTest {
     orgObj.set("text", new OrgJsonCore().parse("\"str\""));
     jakartaObj.set("text", new JakartaJsonCore().parse("\"str\""));
 
-    assertEquals(5, gsonObj.size());
-    assertEquals(5, jacksonObj.size());
-    assertEquals(5, orgObj.size());
+    assertEquals(6, gsonObj.size());
+    assertEquals(6, jacksonObj.size());
+    assertEquals(6, orgObj.size());
     assertEquals(5, jakartaObj.size());
 
     assertEquals("str", gsonObj.get("text").asString());
