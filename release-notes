@@ -50,3 +50,6 @@ Version 2.4.3
 
 Version 2.5.0
 + Lazy loading ObjectMapper and Gson
+
+Version 2.5.1
+* Fix handling of byte arrays with Jackson
