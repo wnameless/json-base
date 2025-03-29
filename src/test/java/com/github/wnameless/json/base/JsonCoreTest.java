@@ -40,13 +40,14 @@ import jakarta.json.JsonValue;
 public class JsonCoreTest {
 
   String json =
-      "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"obj\":null}";
+      "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"bytes\":null,\"obj\":null}";
 
   String str = "text";
   int i = 123;
   long l = 1234567890123456789L;
   double d = 45.67;
   boolean bool = true;
+  byte[] bytes = null;
   Object obj = null;
   BigInteger bi = new BigInteger("1234567890123456789012345678901234567890");
   BigDecimal bd = new BigDecimal("45.678912367891236789123678912367891236789123");
@@ -65,6 +66,7 @@ public class JsonCoreTest {
         }
       });
       setBool(bool);
+      setBytes(bytes);
       setObj(obj);
     }
   };
@@ -107,7 +109,7 @@ public class JsonCoreTest {
   public void testJacksonJsonCore() throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     JsonNode jsonNode = mapper.valueToTree(jo);
-    jsonValue = new OrgJsonValue(json);
+    jsonValue = new JacksonJsonValue(jsonNode);
     assertNotEquals(jsonValue, new JacksonJsonCore().parse(json));
 
     mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
@@ -131,6 +133,7 @@ public class JsonCoreTest {
 
     jo.setObj(JSONObject.NULL);
     jsonObject = new JSONObject(jo);
+    jsonObject.put("bytes", JSONObject.NULL);
     jsonValue = new OrgJsonValue(jsonObject);
     assertEquals(jsonValue, new OrgJsonCore().parse(json));
 
@@ -148,7 +151,7 @@ public class JsonCoreTest {
   public void testJakartaJsonCore() throws IOException {
     jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
         .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
-        .add("bool", bool).add("obj", JsonValue.NULL).build());
+        .add("bool", bool).add("bytes", JsonValue.NULL).add("obj", JsonValue.NULL).build());
 
     assertEquals(jsonValue, new JakartaJsonCore().parse(json));
     assertEquals(jsonValue, new JakartaJsonCore().parse(new StringReader(json)));
@@ -164,7 +167,7 @@ public class JsonCoreTest {
 
     jsonValue = new JakartaJsonValue(Json.createObjectBuilder().add("str", str)
         .add("num", Json.createArrayBuilder().add(i).add(l).add(d).add(bi).add(bd).build())
-        .add("bool", bool).add("obj", JsonValue.NULL).build());
+        .add("bool", bool).add("bytes", JsonValue.NULL).add("obj", JsonValue.NULL).build());
 
     assertEquals(jsonValue, jjc.parse(json));
     assertEquals(jsonValue, jjc.parse(new StringReader(json)));
