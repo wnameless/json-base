@@ -1,4 +1,4 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless.json/json-base/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless.json/json-base)
+![Maven Central Version](https://img.shields.io/maven-central/v/com.github.wnameless.json/json-base)
 [![codecov](https://codecov.io/gh/wnameless/json-base/branch/master/graph/badge.svg)](https://codecov.io/gh/wnameless/json-base)
 
 json-base
@@ -9,16 +9,16 @@ A set of Java interfaces, which defines the common JSON data behaviors, can be u
 To avoid JSON conversion between different JSON libraries(Jackson, Gson, org.json, Jakarta...) in any JSON consuming Java method by creating generic JSON data interfaces which cover the common JSON data behaviors.
 
 ## Feature List
-| Feature | Description |
-| --- | --- |
-| JSON-in JSON-out | Any JSON processing can always be started by JsonCore#parse and ended by Jsonable#toJson |
-| Any JSON implementation is completely decoupled | The JSON implementation can be switched by implementing corresponding interfaces |
-| Popular JSON  implementations are supported by default | Jackson, Gson, org.json, Jakarta |
-| Not involved in any Object serialization or deserialization | The json-base lib just focuses on JSON data itself and nothing more |
-| All special features of the selected JSON implementation are kept  | For example, the Gson object, which is used to create GsonJsonCore, can be configurated in advanced  |
+| Feature                                                                                                   | Description                                                                                                 |
+| --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| JSON-in JSON-out                                                                                          | Any JSON processing can always be started by JsonCore#parse and ended by Jsonable#toJson                    |
+| Any JSON implementation is completely decoupled                                                           | The JSON implementation can be switched by implementing corresponding interfaces                            |
+| Popular JSON  implementations are supported by default                                                    | Jackson, Gson, org.json, Jakarta                                                                            |
+| Not involved in any Object serialization or deserialization                                               | The json-base lib just focuses on JSON data itself and nothing more                                         |
+| All special features of the selected JSON implementation are kept                                         | For example, the Gson object, which is used to create GsonJsonCore, can be configurated in advanced         |
 | All special manipulations, which require original Java types in selected JSON implementation, are capable | For example, the JsonNode object of Jackson library can always be retrieved by calling JsonSource#getSource |
-| Java 9 modularity | This lib supports Java 9 modularity, but keeps Java 8 as the minimum version |
-| Fully tested | The code coverage of json-base is 100% |
+| Java 9 modularity                                                                                         | This lib supports Java 9 modularity, but keeps Java 8 as the minimum version                                |
+| Fully tested                                                                                              | The code coverage of json-base is 100%                                                                      |
 
 ## Maven Repo
 ```xml

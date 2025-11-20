@@ -53,3 +53,8 @@ Version 2.5.0
 
 Version 2.5.1
 * Fix handling of byte arrays with Jackson
+
+Version 3.0.0
+* Java 17 required
++ Support Jackson 3
++ Add Jackson3JsonCore, Jackson3JsonValue, Jackson3JsonObject, Jackson3JsonArray
