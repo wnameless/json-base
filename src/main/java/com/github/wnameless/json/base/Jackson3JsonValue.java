@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2019 Wei-Ming Wu
+ * Copyright 2025 Wei-Ming Wu
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -17,23 +17,25 @@ package com.github.wnameless.json.base;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Objects;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * 
- * The Jackson implementation of {@link JsonValueCore}.
+ * The Jackson 3 implementation of {@link JsonValueCore}.
  * 
  * @author Wei-Ming Wu
  *
  */
-public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
+public final class Jackson3JsonValue implements JsonValueCore<Jackson3JsonValue> {
 
   private final JsonNode jsonValue;
 
-  public JacksonJsonValue(JsonNode jsonValue) {
+  public Jackson3JsonValue(JsonNode jsonValue) {
     if (jsonValue == null) throw new NullPointerException();
     this.jsonValue = jsonValue;
   }
@@ -50,7 +52,7 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
 
   @Override
   public boolean isString() {
-    return jsonValue.isTextual() || jsonValue.isBinary();
+    return jsonValue.isString() || jsonValue.isBinary() || jsonValue.isEmbeddedValue();
   }
 
   @Override
@@ -69,23 +71,27 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
   }
 
   @Override
-  public JacksonJsonObject asObject() {
-    return new JacksonJsonObject((ObjectNode) jsonValue);
+  public Jackson3JsonObject asObject() {
+    return new Jackson3JsonObject((ObjectNode) jsonValue);
   }
 
   @Override
-  public JacksonJsonArray asArray() {
-    return new JacksonJsonArray((ArrayNode) jsonValue);
+  public Jackson3JsonArray asArray() {
+    return new Jackson3JsonArray((ArrayNode) jsonValue);
   }
 
   @Override
-  public JacksonJsonValue asValue() {
+  public Jackson3JsonValue asValue() {
     return this;
   }
 
   @Override
   public String asString() {
-    return jsonValue.asText();
+    if (jsonValue.isEmbeddedValue()) {
+      return new String(Base64.getEncoder().encode(jsonValue.binaryValue()),
+          StandardCharsets.UTF_8);
+    }
+    return jsonValue.asString();
   }
 
   @Override
@@ -126,7 +132,7 @@ public final class JacksonJsonValue implements JsonValueCore<JacksonJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    return o instanceof JacksonJsonValue jv && Objects.equals(jsonValue, jv.jsonValue);
+    return o instanceof Jackson3JsonValue jv && Objects.equals(jsonValue, jv.jsonValue);
   }
 
   @Override

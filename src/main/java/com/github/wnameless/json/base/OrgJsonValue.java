@@ -127,14 +127,14 @@ public final class OrgJsonValue implements JsonValueCore<OrgJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof OrgJsonValue)) return false;
-    if (jsonValue instanceof JSONObject) {
-      return ((JSONObject) jsonValue).similar(((OrgJsonValue) o).jsonValue);
+    if (!(o instanceof OrgJsonValue jv)) return false;
+    if (jsonValue instanceof JSONObject jo) {
+      return jo.similar(jv.jsonValue);
     }
-    if (jsonValue instanceof JSONArray) {
-      return ((JSONArray) jsonValue).similar(((OrgJsonValue) o).jsonValue);
+    if (jsonValue instanceof JSONArray ja) {
+      return ja.similar(jv.jsonValue);
     }
-    return Objects.equals(jsonValue, ((OrgJsonValue) o).jsonValue);
+    return Objects.equals(jsonValue, jv.jsonValue);
   }
 
   @Override

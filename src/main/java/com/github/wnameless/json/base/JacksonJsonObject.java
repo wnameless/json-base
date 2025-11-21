@@ -74,7 +74,7 @@ public final class JacksonJsonObject implements JsonObjectCore<JacksonJsonValue>
   @Override
   public Iterator<Entry<String, JacksonJsonValue>> iterator() {
     return new TransformIterator<Entry<String, JsonNode>, Entry<String, JacksonJsonValue>>(
-        jsonObject.fields(), member -> new SimpleImmutableEntry<>(member.getKey(),
+        jsonObject.properties().iterator(), member -> new SimpleImmutableEntry<>(member.getKey(),
             new JacksonJsonValue(member.getValue())));
   }
 
@@ -176,8 +176,7 @@ public final class JacksonJsonObject implements JsonObjectCore<JacksonJsonValue>
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof JacksonJsonObject)) return false;
-    return Objects.equals(jsonObject, ((JacksonJsonObject) o).jsonObject);
+    return o instanceof JacksonJsonObject jo && Objects.equals(jsonObject, jo.jsonObject);
   }
 
   @Override

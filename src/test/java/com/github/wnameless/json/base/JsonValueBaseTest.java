@@ -16,10 +16,7 @@
 package com.github.wnameless.json.base;
 
 import static org.junit.Assert.assertSame;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -84,6 +81,9 @@ public class JsonValueBaseTest {
     });
     assertThrows(NullPointerException.class, () -> {
       new JacksonJsonValue(null);
+    });
+    assertThrows(NullPointerException.class, () -> {
+      new Jackson3JsonValue(null);
     });
     assertThrows(NullPointerException.class, () -> {
       new OrgJsonValue((Object) null);
@@ -203,7 +203,8 @@ public class JsonValueBaseTest {
     assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
     assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asNumber());
     assertTrue(jsonValue.asObject().get("bytes").isString());
-    assertEquals(Base64.getEncoder().encodeToString(bytes), jsonValue.asObject().get("bytes").asString());
+    assertEquals(Base64.getEncoder().encodeToString(bytes),
+        jsonValue.asObject().get("bytes").asString());
     assertTrue(jsonValue.asObject().get("obj").isNull());
     assertSame(null, jsonValue.asObject().get("obj").asNull());
 
@@ -233,6 +234,78 @@ public class JsonValueBaseTest {
   public void testJacksonValueToJson() {
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     JacksonJsonValue jsonValue = new JacksonJsonValue(jsonNode);
+    assertEquals(
+        "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"bytes\":\"MTIz\",\"obj\":null}",
+        jsonValue.toJson());
+    assertEquals(
+        "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"bytes\":\"MTIz\",\"obj\":null}",
+        jsonValue.asObject().toJson());
+    assertEquals(
+        "[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123]",
+        jsonValue.asObject().get("num").asArray().toJson());
+  }
+
+  @Test
+  public void testJackson3Value() {
+    str = "\"text\\";
+    jo.setStr(str);
+    tools.jackson.databind.JsonNode jsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    jsonValue = new Jackson3JsonValue(jsonNode);
+
+    assertTrue(jsonValue.isObject());
+    assertFalse(jsonValue.asObject().get("str").isObject());
+    assertTrue(jsonValue.asObject().get("str").isString());
+    assertFalse(jsonValue.asObject().get("num").isString());
+    assertEquals(str, jsonValue.asObject().get("str").asString());
+    assertTrue(jsonValue.asObject().get("num").isArray());
+    assertFalse(jsonValue.isArray());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(0).isNumber());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asInt());
+    assertEquals(i, jsonValue.asObject().get("num").asArray().get(0).asNumber());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(1).isNumber());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asLong());
+    assertEquals(l, jsonValue.asObject().get("num").asArray().get(1).asNumber());
+    assertTrue(jsonValue.asObject().get("num").asArray().get(2).isNumber());
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asDouble(), 0.0);
+    assertEquals(d, jsonValue.asObject().get("num").asArray().get(2).asNumber());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asBigInteger());
+    assertEquals(bi, jsonValue.asObject().get("num").asArray().get(3).asNumber());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asBigDecimal());
+    assertEquals(bd, jsonValue.asObject().get("num").asArray().get(4).asNumber());
+    assertTrue(jsonValue.asObject().get("bytes").isString());
+    assertEquals(Base64.getEncoder().encodeToString(bytes),
+        jsonValue.asObject().get("bytes").asString());
+    assertTrue(jsonValue.asObject().get("obj").isNull());
+    assertSame(null, jsonValue.asObject().get("obj").asNull());
+
+    assertSame(jsonValue, jsonValue.asValue());
+
+    new EqualsTester().addEqualityGroup(jsonValue).testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject()).testEquals();
+    new EqualsTester().addEqualityGroup(jsonValue.asObject().get("num").asArray()).testEquals();
+
+    assertEquals("\"\\\"text\\\\\"", jsonValue.asObject().get("str").toJson());
+    assertEquals(
+        "[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123]",
+        jsonValue.asObject().get("num").toJson());
+    assertEquals("true", jsonValue.asObject().get("bool").toJson());
+    assertEquals("null", jsonValue.asObject().get("obj").toJson());
+
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertTrue(jsonValue.asObject().get("bool").asBoolean());
+    jo.setBool(false);
+    jsonNode = new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    jsonValue = new Jackson3JsonValue(jsonNode);
+    assertTrue(jsonValue.asObject().get("bool").isBoolean());
+    assertFalse(jsonValue.asObject().get("bool").asBoolean());
+  }
+
+  @Test
+  public void testJackson3ValueToJson() {
+    tools.jackson.databind.JsonNode jsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    Jackson3JsonValue jsonValue = new Jackson3JsonValue(jsonNode);
     assertEquals(
         "{\"str\":\"text\",\"num\":[123,1234567890123456789,45.67,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"bytes\":\"MTIz\",\"obj\":null}",
         jsonValue.toJson());
@@ -509,6 +582,67 @@ public class JsonValueBaseTest {
     assertFalse(jacksonObject.isEmpty());
     jsonNode = new ObjectMapper().valueToTree(new HashMap<>());
     jacksonJson = new JacksonJsonValue(jsonNode);
+    jacksonObject = jacksonJson.asObject();
+    assertTrue(jacksonObject.isEmpty());
+  }
+
+  @Test
+  public void testJackson3ArrayIterable() {
+    tools.jackson.databind.JsonNode jsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    Jackson3JsonValue jacksonJson = new Jackson3JsonValue(jsonNode);
+
+    JsonArrayBase<Jackson3JsonValue> array = jacksonJson.asObject().get("num").asArray();
+    Iterator<Jackson3JsonValue> iter = array.iterator();
+
+    assertEquals(array.get(0), iter.next());
+    assertEquals(array.get(1), iter.next());
+    assertEquals(array.get(2), iter.next());
+    assertEquals(array.get(3), iter.next());
+    assertEquals(array.get(4), iter.next());
+    assertFalse(iter.hasNext());
+
+    assertFalse(array.isEmpty());
+    jsonNode = new tools.jackson.databind.ObjectMapper().valueToTree(new ArrayList<>());
+    jacksonJson = new Jackson3JsonValue(jsonNode);
+    array = jacksonJson.asArray();
+    assertTrue(array.isEmpty());
+  }
+
+  @Test
+  public void testJackson3ObjectIterable() {
+    tools.jackson.databind.JsonNode jsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    Jackson3JsonValue jacksonJson = new Jackson3JsonValue(jsonNode);
+    Jackson3JsonObject jacksonObject = jacksonJson.asObject();
+
+    Iterator<Entry<String, Jackson3JsonValue>> iter = jacksonObject.iterator();
+
+    Entry<String, Jackson3JsonValue> element = iter.next();
+    assertEquals("str", element.getKey());
+    assertEquals(jacksonObject.get("str"), element.getValue());
+
+    element = iter.next();
+    assertEquals("num", element.getKey());
+    assertEquals(jacksonObject.get("num"), element.getValue());
+
+    element = iter.next();
+    assertEquals("bool", element.getKey());
+    assertEquals(jacksonObject.get("bool"), element.getValue());
+
+    element = iter.next();
+    assertEquals("bytes", element.getKey());
+    assertEquals(jacksonObject.get("bytes"), element.getValue());
+
+    element = iter.next();
+    assertEquals("obj", element.getKey());
+    assertEquals(jacksonObject.get("obj"), element.getValue());
+
+    assertFalse(iter.hasNext());
+
+    assertFalse(jacksonObject.isEmpty());
+    jsonNode = new tools.jackson.databind.ObjectMapper().valueToTree(new HashMap<>());
+    jacksonJson = new Jackson3JsonValue(jsonNode);
     jacksonObject = jacksonJson.asObject();
     assertTrue(jacksonObject.isEmpty());
   }

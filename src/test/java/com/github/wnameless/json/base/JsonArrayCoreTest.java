@@ -16,11 +16,7 @@
 package com.github.wnameless.json.base;
 
 import static org.junit.Assert.assertSame;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -72,6 +68,7 @@ public class JsonArrayCoreTest {
 
   JsonArrayCore<?> gsonAry;
   JsonArrayCore<?> jacksonAry;
+  JsonArrayCore<?> jackson3Ary;
   JsonArrayCore<?> orgAry;
   JsonArrayCore<?> jakartaAry;
 
@@ -83,6 +80,10 @@ public class JsonArrayCoreTest {
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonAry = new JacksonJsonValue(jsonNode).asObject().get("num").asArray();
+
+    tools.jackson.databind.JsonNode j3JsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    jackson3Ary = new Jackson3JsonValue(j3JsonNode).asObject().get("num").asArray();
 
     orgAry = new OrgJsonValue(new JSONObject(jo)).asObject().get("num").asArray();
 
@@ -97,6 +98,9 @@ public class JsonArrayCoreTest {
     });
     assertThrows(NullPointerException.class, () -> {
       new JacksonJsonArray(null);
+    });
+    assertThrows(NullPointerException.class, () -> {
+      new Jackson3JsonArray(null);
     });
     assertThrows(NullPointerException.class, () -> {
       new OrgJsonArray(null);
@@ -114,6 +118,9 @@ public class JsonArrayCoreTest {
     jacksonAry.add(new JacksonJsonCore().parse("0"));
     assertEquals(new JacksonJsonCore().parse("0"), jacksonAry.get(5));
 
+    jackson3Ary.add(new Jackson3JsonCore().parse("0"));
+    assertEquals(new Jackson3JsonCore().parse("0"), jackson3Ary.get(5));
+
     orgAry.add(new OrgJsonCore().parse("0"));
     assertEquals(new OrgJsonCore().parse("0"), orgAry.get(5));
 
@@ -128,6 +135,9 @@ public class JsonArrayCoreTest {
 
     jacksonAry.set(4, new JacksonJsonCore().parse("0"));
     assertEquals(new JacksonJsonCore().parse("0"), jacksonAry.get(4));
+
+    jackson3Ary.set(4, new Jackson3JsonCore().parse("0"));
+    assertEquals(new Jackson3JsonCore().parse("0"), jackson3Ary.get(4));
 
     orgAry.set(4, new OrgJsonCore().parse("0"));
     assertEquals(new OrgJsonCore().parse("0"), orgAry.get(4));
@@ -144,6 +154,9 @@ public class JsonArrayCoreTest {
     assertEquals(new JacksonJsonCore().parse("1234567890123456789"), jacksonAry.remove(1));
     assertEquals(4, jacksonAry.size());
 
+    assertEquals(new Jackson3JsonCore().parse("1234567890123456789"), jackson3Ary.remove(1));
+    assertEquals(4, jackson3Ary.size());
+
     assertEquals(new OrgJsonCore().parse("1234567890123456789"), orgAry.remove(1));
     assertEquals(4, orgAry.size());
 
@@ -155,14 +168,21 @@ public class JsonArrayCoreTest {
   public void testEquals() {
     assertEquals(new GsonJsonArray((JsonArray) gsonAry.getSource()), gsonAry);
     assertEquals(new JacksonJsonArray((ArrayNode) jacksonAry.getSource()), jacksonAry);
+    assertEquals(
+        new Jackson3JsonArray((tools.jackson.databind.node.ArrayNode) jackson3Ary.getSource()),
+        jackson3Ary);
     assertEquals(new OrgJsonArray((JSONArray) orgAry.getSource()), orgAry);
     assertEquals(new JakartaJsonArray((jakarta.json.JsonArray) jakartaAry.getSource()), jakartaAry);
 
     assertNotEquals(gsonAry, jacksonAry);
+    assertNotEquals(gsonAry, jackson3Ary);
     assertNotEquals(gsonAry, orgAry);
     assertNotEquals(gsonAry, jakartaAry);
+    assertNotEquals(jacksonAry, jackson3Ary);
     assertNotEquals(jacksonAry, orgAry);
     assertNotEquals(jacksonAry, jakartaAry);
+    assertNotEquals(jackson3Ary, orgAry);
+    assertNotEquals(jackson3Ary, jakartaAry);
     assertNotEquals(orgAry, jakartaAry);
   }
 
@@ -240,6 +260,45 @@ public class JsonArrayCoreTest {
       jacksonAry.asBigDecimal();
     });
     assertTrue(jacksonAry.getSource() instanceof ArrayNode);
+  }
+
+  @Test
+  public void testJackson3JsonObjectState() {
+    assertFalse(jackson3Ary.isObject());
+    assertTrue(jackson3Ary.isArray());
+    assertFalse(jackson3Ary.isString());
+    assertFalse(jackson3Ary.isBoolean());
+    assertFalse(jackson3Ary.isNumber());
+    assertFalse(jackson3Ary.isNull());
+
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Ary.asObject();
+    });
+    assertSame(jackson3Ary, jackson3Ary.asArray());
+    assertEquals(new Jackson3JsonValue((tools.jackson.databind.JsonNode) jackson3Ary.getSource()),
+        jackson3Ary.asValue());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Ary.asString();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Ary.asBoolean();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Ary.asInt();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Ary.asLong();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Ary.asBigInteger();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Ary.asDouble();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Ary.asBigDecimal();
+    });
+    assertTrue(jackson3Ary.getSource() instanceof tools.jackson.databind.node.ArrayNode);
   }
 
   @Test

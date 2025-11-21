@@ -20,7 +20,6 @@ import java.math.BigInteger;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Iterator;
 import java.util.Map.Entry;
-
 import org.json.JSONObject;
 
 /**
@@ -173,8 +172,7 @@ public final class OrgJsonObject implements JsonObjectCore<OrgJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof OrgJsonObject)) return false;
-    return jsonObject.similar(((OrgJsonObject) o).jsonObject);
+    return o instanceof OrgJsonObject jo && jsonObject.similar(jo.jsonObject);
   }
 
   @Override

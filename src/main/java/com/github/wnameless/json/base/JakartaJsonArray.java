@@ -171,8 +171,7 @@ public final class JakartaJsonArray implements JsonArrayCore<JakartaJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof JakartaJsonArray)) return false;
-    return Objects.equals(jsonArray, ((JakartaJsonArray) o).jsonArray);
+    return o instanceof JakartaJsonArray ja && Objects.equals(jsonArray, ja.jsonArray);
   }
 
   @Override

@@ -15,12 +15,11 @@
  */
 package com.github.wnameless.json.base;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
-import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 public class JsonPrinterTest {
@@ -38,9 +37,9 @@ public class JsonPrinterTest {
   @Test
   public void testMinimalPrint() throws IOException {
     URL url = Resources.getResource("minimal.json");
-    String minimalJson = Resources.toString(url, Charsets.UTF_8);
+    String minimalJson = Resources.toString(url, StandardCharsets.UTF_8);
     url = Resources.getResource("pretty.json");
-    String prettyJson = Resources.toString(url, Charsets.UTF_8);
+    String prettyJson = Resources.toString(url, StandardCharsets.UTF_8);
 
     assertEquals(minimalJson, JsonPrinter.minimalPrint(prettyJson));
   }
@@ -48,9 +47,9 @@ public class JsonPrinterTest {
   @Test
   public void testPrettyPrint() throws IOException {
     URL url = Resources.getResource("minimal.json");
-    String minimalJson = Resources.toString(url, Charsets.UTF_8);
+    String minimalJson = Resources.toString(url, StandardCharsets.UTF_8);
     url = Resources.getResource("pretty.json");
-    String prettyJson = Resources.toString(url, Charsets.UTF_8);
+    String prettyJson = Resources.toString(url, StandardCharsets.UTF_8);
 
     assertEquals(prettyJson, JsonPrinter.prettyPrint(minimalJson));
     assertEquals(prettyJson, JsonPrinter.prettyPrint(prettyJson));
@@ -59,9 +58,9 @@ public class JsonPrinterTest {
   @Test
   public void testMinimalPrintWithDoubleQuotesEscaped() throws IOException {
     URL url = Resources.getResource("minimal-double-quotes-escaped.json");
-    String minimalJson = Resources.toString(url, Charsets.UTF_8);
+    String minimalJson = Resources.toString(url, StandardCharsets.UTF_8);
     url = Resources.getResource("pretty-double-quotes-escaped.json");
-    String prettyJson = Resources.toString(url, Charsets.UTF_8);
+    String prettyJson = Resources.toString(url, StandardCharsets.UTF_8);
 
     assertEquals(minimalJson, JsonPrinter.minimalPrint(prettyJson));
   }
@@ -69,9 +68,9 @@ public class JsonPrinterTest {
   @Test
   public void testPrettyPrintWithDoubleQuotesEscaped() throws IOException {
     URL url = Resources.getResource("minimal-double-quotes-escaped.json");
-    String minimalJson = Resources.toString(url, Charsets.UTF_8);
+    String minimalJson = Resources.toString(url, StandardCharsets.UTF_8);
     url = Resources.getResource("pretty-double-quotes-escaped.json");
-    String prettyJson = Resources.toString(url, Charsets.UTF_8);
+    String prettyJson = Resources.toString(url, StandardCharsets.UTF_8);
 
     assertEquals(prettyJson, JsonPrinter.prettyPrint(minimalJson));
   }

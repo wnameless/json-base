@@ -15,9 +15,7 @@
  */
 package com.github.wnameless.json.base;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -70,6 +68,7 @@ public class JsonArrayBaseTest {
 
   JsonArrayBase<GsonJsonValue> gsonAry;
   JsonArrayBase<JacksonJsonValue> jacksonAry;
+  JsonArrayBase<Jackson3JsonValue> jackson3Ary;
   JsonArrayBase<OrgJsonValue> orgAry;
   JsonArrayBase<JakartaJsonValue> jakartaAry;
 
@@ -81,6 +80,10 @@ public class JsonArrayBaseTest {
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonAry = new JacksonJsonValue(jsonNode).asObject().get("num").asArray();
+
+    tools.jackson.databind.JsonNode j3JsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    jackson3Ary = new Jackson3JsonValue(j3JsonNode).asObject().get("num").asArray();
 
     jo.setObj(JSONObject.NULL);
     orgAry = new OrgJsonValue(new JSONObject(jo)).asObject().get("num").asArray();
@@ -103,6 +106,12 @@ public class JsonArrayBaseTest {
     assertEquals(bi, jacksonAry.get(3).asNumber());
     assertEquals(bd, jacksonAry.get(4).asNumber());
 
+    assertEquals(i, jackson3Ary.get(0).asNumber());
+    assertEquals(l, jackson3Ary.get(1).asNumber());
+    assertEquals(d, jackson3Ary.get(2).asNumber());
+    assertEquals(bi, jackson3Ary.get(3).asNumber());
+    assertEquals(bd, jackson3Ary.get(4).asNumber());
+
     assertEquals(i, orgAry.get(0).asNumber());
     assertEquals(l, orgAry.get(1).asNumber());
     assertEquals(d, orgAry.get(2).asNumber());
@@ -120,6 +129,7 @@ public class JsonArrayBaseTest {
   public void testSize() {
     assertEquals(5, gsonAry.size());
     assertEquals(5, jacksonAry.size());
+    assertEquals(5, jackson3Ary.size());
     assertEquals(5, orgAry.size());
     assertEquals(5, jakartaAry.size());
   }
@@ -128,16 +138,19 @@ public class JsonArrayBaseTest {
   public void testIsEmpty() {
     assertFalse(gsonAry.isEmpty());
     assertFalse(jacksonAry.isEmpty());
+    assertFalse(jackson3Ary.isEmpty());
     assertFalse(orgAry.isEmpty());
     assertFalse(jakartaAry.isEmpty());
 
     gsonAry = new GsonJsonCore().parse("[]").asArray();
     jacksonAry = new JacksonJsonCore().parse("[]").asArray();
+    jackson3Ary = new Jackson3JsonCore().parse("[]").asArray();
     orgAry = new OrgJsonCore().parse("[]").asArray();
     jakartaAry = new JakartaJsonCore().parse("[]").asArray();
 
     assertTrue(gsonAry.isEmpty());
     assertTrue(jacksonAry.isEmpty());
+    assertTrue(jackson3Ary.isEmpty());
     assertTrue(orgAry.isEmpty());
     assertTrue(jakartaAry.isEmpty());
   }
@@ -149,6 +162,7 @@ public class JsonArrayBaseTest {
 
     assertEquals(num, gsonAry.toList());
     assertEquals(num, jacksonAry.toList());
+    assertEquals(num, jackson3Ary.toList());
     assertEquals(num, orgAry.toList());
     assertEquals(num, jakartaAry.toList());
   }
@@ -159,6 +173,9 @@ public class JsonArrayBaseTest {
         gsonAry.stream().collect(Collectors.toList()));
     assertEquals(StreamSupport.stream(jacksonAry.spliterator(), false).collect(Collectors.toList()),
         jacksonAry.stream().collect(Collectors.toList()));
+    assertEquals(
+        StreamSupport.stream(jackson3Ary.spliterator(), false).collect(Collectors.toList()),
+        jackson3Ary.stream().collect(Collectors.toList()));
     assertEquals(StreamSupport.stream(orgAry.spliterator(), false).collect(Collectors.toList()),
         orgAry.stream().collect(Collectors.toList()));
     assertEquals(StreamSupport.stream(jakartaAry.spliterator(), false).collect(Collectors.toList()),

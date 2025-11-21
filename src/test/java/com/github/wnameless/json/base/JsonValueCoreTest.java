@@ -83,6 +83,15 @@ public class JsonValueCoreTest {
   }
 
   @Test
+  public void testJackson3GetSource() {
+    tools.jackson.databind.JsonNode jsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    jsonValue = new Jackson3JsonValue(jsonNode);
+
+    assertSame(jsonNode, jsonValue.getSource());
+  }
+
+  @Test
   public void testOrgGetSource() {
     JSONObject jsonObject = new JSONObject(jo);
     jsonValue = new OrgJsonValue(jsonObject);

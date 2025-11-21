@@ -16,7 +16,9 @@
 package com.github.wnameless.json.base;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({"str", "num", "bool", "bytes", "obj"})
 public class JsonPOJO {
 
   private String str;

@@ -180,8 +180,7 @@ public final class JakartaJsonObject implements JsonObjectCore<JakartaJsonValue>
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof JakartaJsonObject)) return false;
-    return Objects.equals(jsonObject, ((JakartaJsonObject) o).jsonObject);
+    return o instanceof JakartaJsonObject jo && Objects.equals(jsonObject, jo.jsonObject);
   }
 
   @Override

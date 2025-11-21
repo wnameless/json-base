@@ -15,9 +15,7 @@
  */
 package com.github.wnameless.json.base;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.io.StringReader;
 import java.math.BigDecimal;
@@ -36,6 +34,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import jakarta.json.Json;
 import jakarta.json.JsonValue;
+import tools.jackson.databind.json.JsonMapper;
 
 public class JsonCoreTest {
 
@@ -82,6 +81,9 @@ public class JsonCoreTest {
       new JacksonJsonCore(null);
     });
     assertThrows(NullPointerException.class, () -> {
+      new Jackson3JsonCore(null);
+    });
+    assertThrows(NullPointerException.class, () -> {
       new JakartaJsonCore(null);
     });
   }
@@ -122,6 +124,45 @@ public class JsonCoreTest {
 
     assertThrows(RuntimeException.class, () -> {
       new JacksonJsonCore().parse("\"abc");
+    });
+  }
+
+  @Test
+  public void testJackson3JsonCore() throws IOException {
+    json =
+        "{\"str\":\"text\",\"num\":[123,1234567890123456789,1234567890123456789012345678901234567890,45.678912367891236789123678912367891236789123],\"bool\":true,\"bytes\":null,\"obj\":null}";
+    jo = new JsonPOJO() {
+      {
+        setStr(str);
+        setNum(new ArrayList<Number>() {
+          private static final long serialVersionUID = 1L;
+          {
+            add(i);
+            add(l);
+            add(bi);
+            add(bd);
+          }
+        });
+        setBool(bool);
+        setBytes(bytes);
+        setObj(obj);
+      }
+    };
+
+    tools.jackson.databind.ObjectMapper mapper = JsonMapper.builder()
+        .enable(tools.jackson.databind.DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS).build();
+    tools.jackson.databind.JsonNode jsonNode = mapper.valueToTree(jo);
+    jsonValue = new Jackson3JsonValue(jsonNode);
+    assertNotEquals(jsonValue, new Jackson3JsonCore().parse(json));
+
+    jsonNode = mapper.valueToTree(jo);
+    jsonValue = new Jackson3JsonValue(jsonNode);
+
+    assertEquals(jsonValue, new Jackson3JsonCore(mapper).parse(json));
+    assertEquals(jsonValue, new Jackson3JsonCore(mapper).parse(new StringReader(json)));
+
+    assertThrows(RuntimeException.class, () -> {
+      new Jackson3JsonCore().parse("\"abc");
     });
   }
 

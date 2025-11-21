@@ -15,10 +15,7 @@
  */
 package com.github.wnameless.json.base;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -66,6 +63,7 @@ public class JsonValueUtilsTest {
 
   JsonObjectBase<?> gsonObj;
   JsonObjectBase<?> jacksonObj;
+  JsonObjectBase<?> jackson3Obj;
 
   @BeforeEach
   public void init() {
@@ -75,12 +73,17 @@ public class JsonValueUtilsTest {
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonObj = new JacksonJsonValue(jsonNode).asObject();
+
+    tools.jackson.databind.JsonNode j3JsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    jackson3Obj = new Jackson3JsonValue(j3JsonNode).asObject();
   }
 
   @SuppressWarnings("rawtypes")
   @Test
   public void testToObject() {
     assertEquals(JsonValueUtils.toObject(gsonObj), JsonValueUtils.toObject(jacksonObj));
+    assertEquals(JsonValueUtils.toObject(gsonObj), JsonValueUtils.toObject(jackson3Obj));
 
     assertThrows(IllegalStateException.class, () -> {
       JsonValueUtils.toObject(new JsonValueBase() {

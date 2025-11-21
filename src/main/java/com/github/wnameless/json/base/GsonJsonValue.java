@@ -124,8 +124,7 @@ public final class GsonJsonValue implements JsonValueCore<GsonJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof GsonJsonValue)) return false;
-    return Objects.equals(jsonValue, ((GsonJsonValue) o).jsonValue);
+    return o instanceof GsonJsonValue jv && Objects.equals(jsonValue, jv.jsonValue);
   }
 
   @Override

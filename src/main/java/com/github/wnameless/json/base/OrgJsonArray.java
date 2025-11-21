@@ -164,8 +164,7 @@ public final class OrgJsonArray implements JsonArrayCore<OrgJsonValue> {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof OrgJsonArray)) return false;
-    return jsonArray.similar(((OrgJsonArray) o).jsonArray);
+    return o instanceof OrgJsonArray ja && jsonArray.similar(ja.jsonArray);
   }
 
   @Override

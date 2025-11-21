@@ -15,10 +15,7 @@
  */
 package com.github.wnameless.json.base;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -77,6 +74,7 @@ public class JsonObjectBaseTest {
 
   JsonObjectBase<GsonJsonValue> gsonObj;
   JsonObjectBase<JacksonJsonValue> jacksonObj;
+  JsonObjectBase<Jackson3JsonValue> jackson3Obj;
   JsonObjectBase<OrgJsonValue> orgObj;
   JsonObjectBase<JakartaJsonValue> jakartaObj;
 
@@ -88,6 +86,10 @@ public class JsonObjectBaseTest {
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonObj = new JacksonJsonValue(jsonNode).asObject();
+
+    tools.jackson.databind.JsonNode j3JsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    jackson3Obj = new Jackson3JsonValue(j3JsonNode).asObject();
 
     jo.setObj(JSONObject.NULL);
     orgObj = new OrgJsonValue(new JSONObject(jo)).asObject();
@@ -105,6 +107,9 @@ public class JsonObjectBaseTest {
     assertArrayEquals(new String[] {"str", "num", "bool", "bytes", "obj"},
         Iterators.toArray(jacksonObj.names(), String.class));
 
+    assertArrayEquals(new String[] {"str", "num", "bool", "bytes", "obj"},
+        Iterators.toArray(jackson3Obj.names(), String.class));
+
     assertEquals(new HashSet<>(Arrays.asList(new String[] {"str", "num", "bool", "bytes", "obj"})),
         new HashSet<>(Arrays.asList(Iterators.toArray(orgObj.names(), String.class))));
 
@@ -116,11 +121,13 @@ public class JsonObjectBaseTest {
   public void testContains() {
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
+    assertFalse(jackson3Obj.contains("text"));
     assertFalse(orgObj.contains("text"));
     assertFalse(jakartaObj.contains("text"));
 
     assertTrue(gsonObj.contains("str"));
     assertTrue(jacksonObj.contains("str"));
+    assertTrue(jackson3Obj.contains("str"));
     assertTrue(orgObj.contains("str"));
     assertTrue(jakartaObj.contains("str"));
   }
@@ -129,7 +136,8 @@ public class JsonObjectBaseTest {
   public void testGet() {
     assertEquals(str, gsonObj.get("str").asString());
     assertEquals(Arrays.asList(i, l, d, bi, bd), gsonObj.get("num").asArray().toList());
-    assertEquals(Arrays.asList((int) bytes[0], (int) bytes[1], (int) bytes[2]), gsonObj.get("bytes").asArray().toList());
+    assertEquals(Arrays.asList((int) bytes[0], (int) bytes[1], (int) bytes[2]),
+        gsonObj.get("bytes").asArray().toList());
     assertEquals(bool, gsonObj.get("bool").asBoolean());
     assertEquals(null, gsonObj.get("obj").asNull());
     assertEquals(null, gsonObj.get("none"));
@@ -141,9 +149,17 @@ public class JsonObjectBaseTest {
     assertEquals(null, jacksonObj.get("obj").asNull());
     assertEquals(null, jacksonObj.get("none"));
 
+    assertEquals(str, jackson3Obj.get("str").asString());
+    assertEquals(Arrays.asList(i, l, d, bi, bd), jackson3Obj.get("num").asArray().toList());
+    assertEquals(Base64.getEncoder().encodeToString(bytes), jackson3Obj.get("bytes").asString());
+    assertEquals(bool, jackson3Obj.get("bool").asBoolean());
+    assertEquals(null, jackson3Obj.get("obj").asNull());
+    assertEquals(null, jackson3Obj.get("none"));
+
     assertEquals(str, orgObj.get("str").asString());
     assertEquals(Arrays.asList(i, l, d, bi, bd), orgObj.get("num").asArray().toList());
-    assertEquals(Arrays.asList(bytes[0], bytes[1], bytes[2]), orgObj.get("bytes").asArray().toList());
+    assertEquals(Arrays.asList(bytes[0], bytes[1], bytes[2]),
+        orgObj.get("bytes").asArray().toList());
     assertEquals(bool, orgObj.get("bool").asBoolean());
     assertEquals(null, orgObj.get("obj").asNull());
     assertEquals(null, orgObj.get("none"));
@@ -159,6 +175,7 @@ public class JsonObjectBaseTest {
   public void testSize() {
     assertEquals(5, gsonObj.size());
     assertEquals(5, jacksonObj.size());
+    assertEquals(5, jackson3Obj.size());
     assertEquals(5, orgObj.size());
     assertEquals(4, jakartaObj.size());
   }
@@ -167,16 +184,19 @@ public class JsonObjectBaseTest {
   public void testIsEmpty() {
     assertFalse(gsonObj.isEmpty());
     assertFalse(jacksonObj.isEmpty());
+    assertFalse(jackson3Obj.isEmpty());
     assertFalse(orgObj.isEmpty());
     assertFalse(jakartaObj.isEmpty());
 
     gsonObj = new GsonJsonCore().parse("{}").asObject();
     jacksonObj = new JacksonJsonCore().parse("{}").asObject();
+    jackson3Obj = new Jackson3JsonCore().parse("{}").asObject();
     orgObj = new OrgJsonCore().parse("{}").asObject();
     jakartaObj = new JakartaJsonCore().parse("{}").asObject();
 
     assertTrue(gsonObj.isEmpty());
     assertTrue(jacksonObj.isEmpty());
+    assertTrue(jackson3Obj.isEmpty());
     assertTrue(orgObj.isEmpty());
     assertTrue(jakartaObj.isEmpty());
   }
@@ -196,6 +216,8 @@ public class JsonObjectBaseTest {
     assertEquals(map, gsonObj.toMap());
     map.put("bytes", Base64.getEncoder().encodeToString(bytes));
     assertEquals(map, jacksonObj.toMap());
+    map.put("bytes", Base64.getEncoder().encodeToString(bytes));
+    assertEquals(map, jackson3Obj.toMap());
     map.put("bytes", Arrays.asList(bytes[0], bytes[1], bytes[2]));
     assertEquals(map, orgObj.toMap());
   }
@@ -206,6 +228,9 @@ public class JsonObjectBaseTest {
         gsonObj.stream().collect(Collectors.toList()));
     assertEquals(StreamSupport.stream(jacksonObj.spliterator(), false).collect(Collectors.toList()),
         jacksonObj.stream().collect(Collectors.toList()));
+    assertEquals(
+        StreamSupport.stream(jackson3Obj.spliterator(), false).collect(Collectors.toList()),
+        jackson3Obj.stream().collect(Collectors.toList()));
     assertEquals(StreamSupport.stream(orgObj.spliterator(), false).collect(Collectors.toList()),
         orgObj.stream().collect(Collectors.toList()));
     assertEquals(StreamSupport.stream(jakartaObj.spliterator(), false).collect(Collectors.toList()),

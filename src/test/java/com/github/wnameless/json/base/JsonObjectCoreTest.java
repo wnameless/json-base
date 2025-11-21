@@ -16,11 +16,7 @@
 package com.github.wnameless.json.base;
 
 import static org.junit.Assert.assertSame;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -72,6 +68,7 @@ public class JsonObjectCoreTest {
 
   JsonObjectCore<?> gsonObj;
   JsonObjectCore<?> jacksonObj;
+  JsonObjectCore<?> jackson3Obj;
   JsonObjectCore<?> orgObj;
   JsonObjectCore<?> jakartaObj;
 
@@ -83,6 +80,10 @@ public class JsonObjectCoreTest {
 
     JsonNode jsonNode = new ObjectMapper().valueToTree(jo);
     jacksonObj = new JacksonJsonValue(jsonNode).asObject();
+
+    tools.jackson.databind.JsonNode j3JsonNode =
+        new tools.jackson.databind.ObjectMapper().valueToTree(jo);
+    jackson3Obj = new Jackson3JsonValue(j3JsonNode).asObject();
 
     jo.setObj(JSONObject.NULL);
     orgObj = new OrgJsonValue(new JSONObject(jo)).asObject();
@@ -101,6 +102,9 @@ public class JsonObjectCoreTest {
       new JacksonJsonObject(null);
     });
     assertThrows(NullPointerException.class, () -> {
+      new Jackson3JsonObject(null);
+    });
+    assertThrows(NullPointerException.class, () -> {
       new OrgJsonObject(null);
     });
     assertThrows(NullPointerException.class, () -> {
@@ -112,41 +116,49 @@ public class JsonObjectCoreTest {
   public void testSetRemove() {
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
+    assertFalse(jackson3Obj.contains("text"));
     assertFalse(orgObj.contains("text"));
     assertFalse(jakartaObj.contains("text"));
 
     gsonObj.set("text", new GsonJsonCore().parse("\"str\""));
     jacksonObj.set("text", new JacksonJsonCore().parse("\"str\""));
+    jackson3Obj.set("text", new Jackson3JsonCore().parse("\"str\""));
     orgObj.set("text", new OrgJsonCore().parse("\"str\""));
     jakartaObj.set("text", new JakartaJsonCore().parse("\"str\""));
 
     assertEquals(6, gsonObj.size());
     assertEquals(6, jacksonObj.size());
+    assertEquals(6, jackson3Obj.size());
     assertEquals(6, orgObj.size());
     assertEquals(5, jakartaObj.size());
 
     assertEquals("str", gsonObj.get("text").asString());
     assertEquals("str", jacksonObj.get("text").asString());
+    assertEquals("str", jackson3Obj.get("text").asString());
     assertEquals("str", orgObj.get("text").asString());
     assertEquals("str", jakartaObj.get("text").asString());
 
     assertTrue(gsonObj.contains("text"));
     assertTrue(jacksonObj.contains("text"));
+    assertTrue(jackson3Obj.contains("text"));
     assertTrue(orgObj.contains("text"));
     assertTrue(jakartaObj.contains("text"));
 
     assertTrue(gsonObj.remove("text"));
     assertTrue(jacksonObj.remove("text"));
+    assertTrue(jackson3Obj.remove("text"));
     assertTrue(orgObj.remove("text"));
     assertTrue(jakartaObj.remove("text"));
 
     assertFalse(gsonObj.remove("text"));
     assertFalse(jacksonObj.remove("text"));
+    assertFalse(jackson3Obj.remove("text"));
     assertFalse(orgObj.remove("text"));
     assertFalse(jakartaObj.remove("text"));
 
     assertFalse(gsonObj.contains("text"));
     assertFalse(jacksonObj.contains("text"));
+    assertFalse(jackson3Obj.contains("text"));
     assertFalse(orgObj.contains("text"));
     assertFalse(jakartaObj.contains("text"));
   }
@@ -155,15 +167,22 @@ public class JsonObjectCoreTest {
   public void testEquals() {
     assertEquals(new GsonJsonObject((JsonObject) gsonObj.getSource()), gsonObj);
     assertEquals(new JacksonJsonObject((ObjectNode) jacksonObj.getSource()), jacksonObj);
+    assertEquals(
+        new Jackson3JsonObject((tools.jackson.databind.node.ObjectNode) jackson3Obj.getSource()),
+        jackson3Obj);
     assertEquals(new OrgJsonObject((JSONObject) orgObj.getSource()), orgObj);
     assertEquals(new JakartaJsonObject((jakarta.json.JsonObject) jakartaObj.getSource()),
         jakartaObj);
 
     assertNotEquals(gsonObj, jacksonObj);
+    assertNotEquals(gsonObj, jackson3Obj);
     assertNotEquals(gsonObj, orgObj);
     assertNotEquals(gsonObj, jakartaObj);
+    assertNotEquals(jacksonObj, jackson3Obj);
     assertNotEquals(jacksonObj, orgObj);
     assertNotEquals(jacksonObj, jakartaObj);
+    assertNotEquals(jackson3Obj, orgObj);
+    assertNotEquals(jackson3Obj, jakartaObj);
     assertNotEquals(orgObj, jakartaObj);
   }
 
@@ -241,6 +260,45 @@ public class JsonObjectCoreTest {
       jacksonObj.asBigDecimal();
     });
     assertTrue(jacksonObj.getSource() instanceof ObjectNode);
+  }
+
+  @Test
+  public void testJackson3JsonObjectState() {
+    assertTrue(jackson3Obj.isObject());
+    assertFalse(jackson3Obj.isArray());
+    assertFalse(jackson3Obj.isString());
+    assertFalse(jackson3Obj.isBoolean());
+    assertFalse(jackson3Obj.isNumber());
+    assertFalse(jackson3Obj.isNull());
+
+    assertSame(jackson3Obj, jackson3Obj.asObject());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Obj.asArray();
+    });
+    assertEquals(new Jackson3JsonValue((tools.jackson.databind.JsonNode) jackson3Obj.getSource()),
+        jackson3Obj.asValue());
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Obj.asString();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Obj.asBoolean();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Obj.asInt();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Obj.asLong();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Obj.asBigInteger();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Obj.asDouble();
+    });
+    assertThrows(UnsupportedOperationException.class, () -> {
+      jackson3Obj.asBigDecimal();
+    });
+    assertTrue(jackson3Obj.getSource() instanceof tools.jackson.databind.node.ObjectNode);
   }
 
   @Test
