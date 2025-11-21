@@ -10,15 +10,15 @@ To avoid JSON conversion between different JSON libraries(Jackson, Gson, org.jso
 
 ## Feature List
 | Feature                                                                                                   | Description                                                                                                 |
-| --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| JSON-in JSON-out                                                                                          | Any JSON processing can always be started by JsonCore#parse and ended by Jsonable#toJson                    |
-| Any JSON implementation is completely decoupled                                                           | The JSON implementation can be switched by implementing corresponding interfaces                            |
-| Popular JSON  implementations are supported by default                                                    | Jackson, Gson, org.json, Jakarta                                                                            |
-| Not involved in any Object serialization or deserialization                                               | The json-base lib just focuses on JSON data itself and nothing more                                         |
-| All special features of the selected JSON implementation are kept                                         | For example, the Gson object, which is used to create GsonJsonCore, can be configurated in advanced         |
-| All special manipulations, which require original Java types in selected JSON implementation, are capable | For example, the JsonNode object of Jackson library can always be retrieved by calling JsonSource#getSource |
-| Java 9 modularity                                                                                         | This lib supports Java 9 modularity, but keeps Java 8 as the minimum version                                |
-| Fully tested                                                                                              | The code coverage of json-base is 100%                                                                      |
+| --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| JSON-in JSON-out                                                                                          | Any JSON processing can always be started by JsonCore#parse and ended by Jsonable#toJson.                         |
+| Any JSON implementation is completely decoupled                                                           | The JSON implementation can be switched by implementing corresponding interfaces.                                 |
+| Popular JSON  implementations are supported by default                                                    | Jackson 2 and 3, Gson, org.json, Jakarta.                                                                         |
+| Not involved in any Object serialization or deserialization                                               | The json-base lib just focuses on JSON data itself and nothing more.                                              |
+| All special features of the selected JSON implementation are kept                                         | For example, the Gson object, which is used to create GsonJsonCore, can be configurated in advanced.            |
+| All special manipulations, which require original Java types in selected JSON implementation, are capable | For example, the JsonNode object of Jackson library can always be retrieved by calling JsonSource#getSource.  |
+| Java 9 modularity                                                                                         | This lib supports Java 9 modularity, but keeps Java 8 as the minimum version. Since v3.0.0, Java 17 is required. |
+| Fully tested                                                                                              | The code coverage of json-base is 100%.                                                                           |
 
 ## Maven Repo
 ```xml
@@ -40,6 +40,8 @@ public void acceptJsonVal(JsonValueBase<?> val) {
 // At the same time, user can consume popular JSON implementations easily in zir library
 public void acceptJacksonVal(JsonNode jsonNode) {
   JsonValueCore<JacksonJsonValue> val = new JacksonJsonValue(jsonNode);
+  // If you are using Jackson 3:
+  // JsonValueCore<Jackson3JsonValue> val = new Jackson3JsonValue(jsonNode);
   acceptJsonVal(val);
   ...
 }
@@ -66,7 +68,7 @@ public void acceptJakartaVal(JsonValue jsonValue) {
 Sometimes, you may need a JSON parser in your library. Here is the wrapper:
 ```java
 // GsonJsonCore, OrgJsonCore and JakartaJsonCore are also available
-JsonCore<?> jsonCore = new JacksonJsonCore();
+JsonCore<?> jsonCore = new JacksonJsonCore(); // new Jackson3JsonCore() if you are using Jackson 3
 JsonValueCore<?> val = jsonCore.parse("{\"abc\":123}");
 ```
 
@@ -118,7 +120,7 @@ System.out.println(JsonPrinter.prettyPrint(obj.toJson()));
 ```
 
 ## Important
-Although this library provides wrappers for Jackson, Gson, org.json and Jakarta, you still need to include the JSON implementation library which you are using in your dependencies.
+Although this library provides wrappers for Jackson 2 and 3, Gson, org.json and Jakarta, you still need to include the JSON implementation library which you are using in your dependencies.
 
 ## JSON data common interfaces
 If user wants to implement zir own JSON data wrappers, here are some interfaces to work with.
